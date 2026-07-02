@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="trip-access-token" content="{{ access_token }}">
+  <title>День {{ day.num }} · {{ day.date[:5] }} · {{ day.city }}</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="day-page-body" style="--region-accent: {{ region.accent }}; --region-bg: {{ region.bg }}; --region-color: {{ region.color }};">
+  <div id="gate" class="gate hidden">
+    <div class="gate-box">
+      <div class="eyebrow">Live plan</div>
+      <h1>Доступ по ссылке</h1>
+      <p>Откройте страницу по ссылке с ключом или введите его ниже</p>
+      <input id="gate-input" type="text" placeholder="Ключ доступа" autocomplete="off">
+      <button id="gate-submit" type="button">Открыть</button>
+    </div>
+  </div>
+
+  <div id="app" class="day-wrap hidden">
+    <header class="day-hero">
+      <a class="back-link" href="../index.html{% if access_token %}?k={{ access_token }}{% endif %}">← К плану</a>
+      <div class="day-badge-lg">День {{ day.num }}</div>
+      <h1>{{ day.date[:5] }} · {{ day.weekday }}</h1>
+      <p class="day-city">{{ day.city }}</p>
+      <span class="region-tag">{{ region.name }}</span>
+    </header>
+
+    {% if photos %}
+    <section class="photo-gallery">
+      {% for photo in photos %}
+      <figure class="photo-card">
+        <img src="{{ photo.url }}" alt="{{ photo.caption or day.city }}" loading="lazy">
+        {% if photo.caption %}<figcaption>{{ photo.caption }}</figcaption>{% endif %}
+      </figure>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if intro %}
+    <section class="card day-intro-card">
+      <div class="card-label">О дне</div>
+      <p>{{ intro }}</p>
+    </section>
+    {% endif %}
+
+    <section class="info-grid">
+      {% if day.night %}
+      <div class="info-box">
+        <span class="info-label">Ночёвка</span>
+        <span class="info-value">{{ day.night }}</span>
+      </div>
+      {% endif %}
+      {% if day.weather %}
+      <div class="info-box">
+        <span class="info-label">Запас / погода</span>
+        <span class="info-value">{{ day.weather }}</span>
+      </div>
+      {% endif %}
+    </section>
+
+    <section class="card timeline-card">
+      <div class="card-label">Расписание дня</div>
+      <ul class="day-timeline">
+        {% for step in steps %}
+        <li class="timeline-row">
+          <div class="timeline-time">{{ step.time }}</div>
+          <div class="timeline-icon">{{ step.icon }}</div>
+          <div class="timeline-content">
+            <strong>{{ step.place }}</strong>
+            <span>{{ step.action }}</span>
+            {% if step.next and step.next != '—' %}
+            <em>→ {{ step.next }}{% if step.transit and step.transit != '—' %} · {{ step.transit }}{% endif %}</em>
+            {% endif %}
+            {% if step.note %}
+            <small>{{ step.note }}</small>
+            {% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    {% if day.totals %}
+    <section class="card totals-card">
+      <div class="card-label">Итого</div>
+      <p>{{ day.totals }}</p>
+    </section>
+    {% endif %}
+
+    <footer>
+      {{ traveler }} · {{ period }}
+    </footer>
+  </div>
+
+  <script src="../assets/day.js"></script>
+</body>
+</html>

@@ -5,7 +5,7 @@
     "subtitle": "Красноярск → Таиланд → Вьетнам → Китай → домой",
     "period_start": "2026-07-28",
     "period_end": "2026-08-25",
-    "built_at": "2026-07-02T17:37:36+00:00",
+    "built_at": "2026-07-03T01:00:29+07:00",
     "access_token": "trip2026live"
   },
   "status": {
@@ -89,6 +89,7 @@
       "region_name": "Россия",
       "night": "В полёте / стыковка CAN (без отеля) · check-in — / check-out —",
       "weather": "Жара в Таиланде с 29.07; сегодня только перелёт",
+      "totals": "сон ~0ч (ночной перелёт) · в дороге ~12ч · активности ~2ч · буфер ~1ч",
       "highlights": [
         {
           "time": "17:30",
@@ -130,7 +131,8 @@
         "next": "KJA терминал",
         "icon": "✈",
         "note": ""
-      }
+      },
+      "page_url": "days/01.html"
     },
     {
       "num": 2,
@@ -142,6 +144,7 @@
       "region_name": "Таиланд",
       "night": "Hotel Zing Pattaya (Z by Zing), Джомтьен · check-in 14:00 / check-out 05.08 утром",
       "weather": "Муссон: 30 мин буфер у пляжа; написать отелю 26–27.07 о раннем заезде",
+      "totals": "сон ~10ч30 · в дороге ~4ч30 · активности ~6ч · буфер ~1ч",
       "highlights": [
         {
           "time": "07:40",
@@ -183,7 +186,8 @@
         "next": "Автобусный терминал",
         "icon": "✈",
         "note": "Без багажа — быстрее"
-      }
+      },
+      "page_url": "days/02.html"
     },
     {
       "num": 3,
@@ -195,8 +199,10 @@
       "region_name": "Таиланд",
       "night": "Hotel Zing Pattaya, Джомтьен · check-in уже в номере / check-out 05.08",
       "weather": "Пляжный день 1; дождь — ТЦ Central Festival",
+      "totals": "сон ~10ч · в дороге ~0ч · активности ~11ч · буфер ~1ч",
       "highlights": [],
-      "main_event": null
+      "main_event": null,
+      "page_url": "days/03.html"
     },
     {
       "num": 4,
@@ -208,6 +214,7 @@
       "region_name": "Таиланд",
       "night": "Hotel Zing Pattaya · check-in — / check-out 05.08",
       "weather": "Запас: если паром отменён — второй день Джомтьен + Central Festival",
+      "totals": "сон ~9ч30 · в дороге ~2ч30 · активности ~9ч · буфер ~1ч",
       "highlights": [
         {
           "time": "07:30",
@@ -249,7 +256,8 @@
         "next": "Grab → Bali Hai Pier",
         "icon": "🚗",
         "note": "Выезд раньше — меньше очередь на паром"
-      }
+      },
+      "page_url": "days/04.html"
     },
     {
       "num": 5,
@@ -261,6 +269,7 @@
       "region_name": "Таиланд",
       "night": "Hotel Zing Pattaya · check-in — / check-out 05.08",
       "weather": "Активности : Большой Будда + Terminal 21",
+      "totals": "сон ~9ч30 · в дороге ~1ч30 · активности ~10ч · буфер ~1ч",
       "highlights": [
         {
           "time": "14:00",
@@ -286,7 +295,8 @@
         "next": "Grab → отель",
         "icon": "🚗",
         "note": "Буфер под дождь"
-      }
+      },
+      "page_url": "days/05.html"
     },
     {
       "num": 6,
@@ -298,6 +308,7 @@
       "region_name": "Таиланд",
       "night": "Hotel Zing Pattaya · check-in — / check-out 05.08",
       "weather": "Khao Kheow Open Zoo — активности ; выезд с утра",
+      "totals": "сон ~9ч30 · в дороге ~2ч · активности ~9ч · буфер ~1ч",
       "highlights": [
         {
           "time": "07:30",
@@ -331,7 +342,8 @@
         "next": "Зоопарк",
         "icon": "🚗",
         "note": "~400–600 ฿"
-      }
+      },
+      "page_url": "days/06.html"
     },
     {
       "num": 7,
@@ -343,6 +355,7 @@
       "region_name": "Таиланд",
       "night": "Hotel Zing Pattaya · check-in — / check-out 05.08 утром",
       "weather": "Wat Yan + Floating Market — ; дождь — сместить рынок",
+      "totals": "сон ~8ч30 · в дороге ~2ч · активности ~10ч · буфер ~1ч",
       "highlights": [
         {
           "time": "09:45",
@@ -384,7 +397,8 @@
         "next": "Grab → Floating Market",
         "icon": "🚗",
         "note": "Культура; платье закрытые плечи"
-      }
+      },
+      "page_url": "days/07.html"
     },
     {
       "num": 8,
@@ -396,6 +410,7 @@
       "region_name": "Таиланд",
       "night": "Hotel Zing Pattaya (последняя ночь) · check-in — / check-out 05.08 утром",
       "weather": "Central Festival + пляж + сборы —",
+      "totals": "сон ~8ч · в дороге ~40м · активности ~8ч · буфер ~1ч",
       "highlights": [
         {
           "time": "13:05",
@@ -413,7 +428,8 @@
         "next": "Отель",
         "icon": "🚗",
         "note": "Дождь — остаться в ТЦ"
-      }
+      },
+      "page_url": "days/08.html"
     },
     {
       "num": 9,
@@ -425,6 +441,7 @@
       "region_name": "Таиланд",
       "night": "12 The Residence Hotel (Don Mueang Airport) · check-in 15:00 / check-out 07.08 утром",
       "weather": "Заселение с 15:00 — весь день с кладовкой; залог наличными; написать отелю 02–03.08",
+      "totals": "сон ~8ч · в дороге ~4ч30 · активности ~10ч · буфер ~1ч",
       "highlights": [
         {
           "time": "05:00",
@@ -466,7 +483,8 @@
         "next": "Бангкок",
         "icon": "🚌",
         "note": "~150–350 ฿"
-      }
+      },
+      "page_url": "days/09.html"
     },
     {
       "num": 10,
@@ -478,6 +496,7 @@
       "region_name": "Таиланд",
       "night": "12 The Residence Hotel DMK · check-in — / check-out 07.08 утром",
       "weather": "Siam / Pratunam / Sukhumvit — ; Chatuchak закрыт (только сб/вс)",
+      "totals": "сон ~7ч · в дороге ~2ч30 · активности ~9ч · буфер ~1ч",
       "highlights": [
         {
           "time": "09:15",
@@ -519,7 +538,8 @@
         "next": "Siam",
         "icon": "🚇",
         "note": "BTS дешевле Grab в час пик"
-      }
+      },
+      "page_url": "days/10.html"
     },
     {
       "num": 11,
@@ -531,6 +551,7 @@
       "region_name": "Таиланд",
       "night": "Отель в Да Нанге · check-in 14:00 / check-out 14.08 утром",
       "weather": "FD636 без багажа; Grab из DAD ~15–20 мин; написать отелю 04–05.08",
+      "totals": "сон ~8ч30 · в дороге ~3ч30 · активности ~7ч · буфер ~1ч",
       "highlights": [
         {
           "time": "05:00",
@@ -572,7 +593,8 @@
         "next": "DMK",
         "icon": "🚗",
         "note": ""
-      }
+      },
+      "page_url": "days/11.html"
     },
     {
       "num": 12,
@@ -584,6 +606,7 @@
       "region_name": "Переезд",
       "night": "Отель в Да Нанге · check-in — / check-out 14.08",
       "weather": "Marble Mountains + My Khe —",
+      "totals": "сон ~9ч30 · в дороге ~1ч · активности ~10ч · буфер ~1ч",
       "highlights": [
         {
           "time": "15:00",
@@ -601,7 +624,8 @@
         "next": "Отель",
         "icon": "🚗",
         "note": ""
-      }
+      },
+      "page_url": "days/12.html"
     },
     {
       "num": 13,
@@ -613,6 +637,7 @@
       "region_name": "Переезд",
       "night": "Отель в Да Нанге · check-in — / check-out 14.08",
       "weather": "Son Tra + Dragon Bridge — ; **09.08 вс** — шоу моста **~21:00**",
+      "totals": "сон ~8ч30 · в дороге ~1ч30 · активности ~12ч · буфер ~1ч",
       "highlights": [
         {
           "time": "21:00",
@@ -638,7 +663,8 @@
         "next": "Grab → отель",
         "icon": "🚗",
         "note": ""
-      }
+      },
+      "page_url": "days/13.html"
     },
     {
       "num": 14,
@@ -650,8 +676,10 @@
       "region_name": "Переезд",
       "night": "Отель в Да Нанге · check-in — / check-out 14.08",
       "weather": "Дождевой запас — пляж или набережная",
+      "totals": "сон ~10ч · в дороге ~30м · активности ~9ч · буфер ~2ч",
       "highlights": [],
-      "main_event": null
+      "main_event": null,
+      "page_url": "days/14.html"
     },
     {
       "num": 15,
@@ -663,8 +691,10 @@
       "region_name": "Переезд",
       "night": "Отель в Да Нанге · check-in — / check-out 14.08",
       "weather": "Второй пляжный / запасной день",
+      "totals": "сон ~9ч · в дороге ~30м · активности ~10ч · буфер ~1ч",
       "highlights": [],
-      "main_event": null
+      "main_event": null,
+      "page_url": "days/15.html"
     },
     {
       "num": 16,
@@ -676,6 +706,7 @@
       "region_name": "Переезд",
       "night": "Отель в Да Нанге · check-in — / check-out 14.08",
       "weather": "Ba Na Hills ; туман — второй пляжный день; смотреть прогноз утром",
+      "totals": "сон ~8ч30 · в дороге ~2ч · активности ~11ч · буфер ~1ч",
       "highlights": [
         {
           "time": "07:00",
@@ -717,7 +748,8 @@
         "next": "Ba Na",
         "icon": "🚗",
         "note": "~250–350k VND"
-      }
+      },
+      "page_url": "days/16.html"
     },
     {
       "num": 17,
@@ -729,6 +761,7 @@
       "region_name": "Переезд",
       "night": "Отель в Да Нанге (последняя ночь) · check-in — / check-out 14.08 ~05:00",
       "weather": "Cham Museum + Con Market — ; сборы на ранний вылет",
+      "totals": "сон ~8ч · в дороге ~45м · активности ~5ч · буфер ~1ч",
       "highlights": [
         {
           "time": "12:45",
@@ -754,7 +787,8 @@
         "next": "Отдых",
         "icon": "📍",
         "note": "Вылет завтра 06:45"
-      }
+      },
+      "page_url": "days/17.html"
     },
     {
       "num": 18,
@@ -766,6 +800,7 @@
       "region_name": "Вьетнам",
       "night": "K'ool Hotels & Suites HCMC · check-in 14:00 / check-out 17.08 ~00:30",
       "weather": "Buu Long 11–14 закрыт внутрь; Bao's Niche утром; написать отелю 11–12.08",
+      "totals": "сон ~9ч · в дороге ~5ч30 · активности ~7ч · буфер ~1ч",
       "highlights": [
         {
           "time": "05:00",
@@ -807,7 +842,8 @@
         "next": "Grab → DAD",
         "icon": "🚗",
         "note": ""
-      }
+      },
+      "page_url": "days/18.html"
     },
     {
       "num": 19,
@@ -819,6 +855,7 @@
       "region_name": "Вьетнам",
       "night": "K'ool Hotels HCMC · check-in — / check-out 17.08",
       "weather": "District 1 —",
+      "totals": "сон ~8ч30 · в дороге ~2ч · активности ~9ч · буфер ~1ч",
       "highlights": [
         {
           "time": "16:25",
@@ -836,7 +873,8 @@
         "next": "Отель",
         "icon": "🚗",
         "note": ""
-      }
+      },
+      "page_url": "days/19.html"
     },
     {
       "num": 20,
@@ -848,6 +886,7 @@
       "region_name": "Вьетнам",
       "night": "K'ool Hotels HCMC (последняя ночь) · check-in — / check-out 17.08 ~00:30",
       "weather": "Cu Chi ; вечером опц. Bao's Niche",
+      "totals": "сон ~3ч · в дороге ~4ч30 · активности ~8ч · буфер ~1ч",
       "highlights": [
         {
           "time": "13:10",
@@ -881,7 +920,8 @@
         "next": "K'ool Hotels",
         "icon": "📍",
         "note": ""
-      }
+      },
+      "page_url": "days/20.html"
     },
     {
       "num": 21,
@@ -893,6 +933,7 @@
       "region_name": "Вьетнам",
       "night": "Country Inn & Suites (Shanghai Railway Station) · check-in 15:00 / check-out 21.08 утром",
       "weather": "CZ6096 02:35; 1 место багажа; заселение 15:00 — 7+ ч с кладовкой; написать отелю 14–15.08",
+      "totals": "сон ~9ч (включая дневной отдых) · в дороге ~4ч · активности ~6ч · буфер ~1ч",
       "highlights": [
         {
           "time": "00:15",
@@ -934,7 +975,8 @@
         "next": "Grab → SGN",
         "icon": "🚗",
         "note": ""
-      }
+      },
+      "page_url": "days/21.html"
     },
     {
       "num": 22,
@@ -946,6 +988,7 @@
       "region_name": "Китай",
       "night": "Country Inn Shanghai Railway Station · check-in — / check-out 21.08",
       "weather": "Disneyland ; метро линия 11; билет заранее",
+      "totals": "сон ~10ч10 · в дороге ~2ч30 · активности ~11ч · буфер ~30м",
       "highlights": [
         {
           "time": "08:00",
@@ -987,7 +1030,8 @@
         "next": "Disneyland",
         "icon": "🚇",
         "note": "~6–8 ¥"
-      }
+      },
+      "page_url": "days/22.html"
     },
     {
       "num": 23,
@@ -999,6 +1043,7 @@
       "region_name": "Китай",
       "night": "Country Inn Shanghai · check-in — / check-out 21.08",
       "weather": "Bund вечером + Yu Garden —",
+      "totals": "сон ~8ч30 · в дороге ~2ч · активности ~10ч · буфер ~1ч",
       "highlights": [
         {
           "time": "13:40",
@@ -1040,7 +1085,8 @@
         "next": "Метро → Bund",
         "icon": "🚇",
         "note": "Буфер"
-      }
+      },
+      "page_url": "days/23.html"
     },
     {
       "num": 24,
@@ -1052,6 +1098,7 @@
       "region_name": "Китай",
       "night": "Country Inn Shanghai (последняя ночь) · check-in — / check-out 21.08 утром",
       "weather": "Pudong + Tianzifang —",
+      "totals": "сон ~10ч · в дороге ~2ч15 · активности ~9ч · буфер ~1ч",
       "highlights": [
         {
           "time": "18:00",
@@ -1077,7 +1124,8 @@
         "next": "Отель",
         "icon": "🚇",
         "note": ""
-      }
+      },
+      "page_url": "days/24.html"
     },
     {
       "num": 25,
@@ -1089,6 +1137,7 @@
       "region_name": "Китай",
       "night": "Huitong Jiufang Beijing (м. Changchun Jie, линия 2) · check-in 14:00 / check-out 24.08 утром",
       "weather": "Поезд G2 06:43–11:32 ⏳ не куплен; написать отелю 18–19.08",
+      "totals": "сон ~9ч · в дороге ~6ч · активности ~5ч · буфер ~1ч",
       "highlights": [
         {
           "time": "05:30",
@@ -1130,7 +1179,8 @@
         "next": "Метро → Hongqiao",
         "icon": "🚇",
         "note": ""
-      }
+      },
+      "page_url": "days/25.html"
     },
     {
       "num": 26,
@@ -1142,6 +1192,7 @@
       "region_name": "Китай",
       "night": "Huitong Jiufang Beijing · check-in — / check-out 24.08",
       "weather": "Храм Неба + Tiananmen + Wangfujing + Lama Temple —",
+      "totals": "сон ~8ч30 · в дороге ~2ч · активности ~11ч · буфер ~1ч",
       "highlights": [
         {
           "time": "12:35",
@@ -1159,7 +1210,8 @@
         "next": "Отель / метро",
         "icon": "🚇",
         "note": "Дождь — APM ТЦ"
-      }
+      },
+      "page_url": "days/26.html"
     },
     {
       "num": 27,
@@ -1171,6 +1223,7 @@
       "region_name": "Китай",
       "night": "Huitong Jiufang Beijing (последняя ночь) · check-in — / check-out 24.08 ~09:00",
       "weather": "Летний дворец + 798 — ; дождь → Xidan + Houhai",
+      "totals": "сон ~9ч · в дороге ~2ч30 · активности ~10ч · буфер ~1ч",
       "highlights": [
         {
           "time": "18:35",
@@ -1188,7 +1241,8 @@
         "next": "Сон",
         "icon": "🌙",
         "note": "PEK T3 13:00"
-      }
+      },
+      "page_url": "days/27.html"
     },
     {
       "num": 28,
@@ -1200,6 +1254,7 @@
       "region_name": "Китай",
       "night": "Поезд 081 плацкарт (вагон 09) · check-in в поезде / check-out 25.08 16:12 KJA",
       "weather": "CA869 PEK T3 13:00; поезд 081 22:40 IKT; 1 место багажа PEK→IKT",
+      "totals": "сон ~17ч (в поезде) · в дороге ~10ч · активности ~3ч · буфер ~1ч",
       "highlights": [
         {
           "time": "06:00",
@@ -1241,7 +1296,8 @@
         "next": "Метро → PEK",
         "icon": "🚇",
         "note": ""
-      }
+      },
+      "page_url": "days/28.html"
     },
     {
       "num": 29,
@@ -1253,6 +1309,7 @@
       "region_name": "Россия",
       "night": "Дома · check-in — / check-out —",
       "weather": "Прибытие поезда 081 в 16:12",
+      "totals": "сон (в поезде) ~8ч ночью · в дороге ~18ч · активности ~0ч · буфер —",
       "highlights": [
         {
           "time": "07:00",
@@ -1294,7 +1351,8 @@
         "next": "Вагон-ресторан",
         "icon": "🚄",
         "note": ""
-      }
+      },
+      "page_url": "days/29.html"
     }
   ]
 }

@@ -97,40 +97,33 @@
     });
   }
 
-  function renderDaysList(days, today) {
+  function dayPageUrl(day, token) {
+    var url = (day.page_url || ("days/" + String(day.num).padStart(2, "0") + ".html"));
+    if (token) url += "?k=" + encodeURIComponent(token);
+    return url;
+  }
+
+  function renderDaysList(days, today, token) {
     const list = document.getElementById("days-list");
     if (!list) return;
     list.innerHTML = "";
 
     days.forEach(function (day) {
       const phase = dayPhase(day, today);
-      const details = document.createElement("details");
-      details.className = "day-item " + phase;
-      if (phase === "today") details.open = true;
+      const link = document.createElement("a");
+      link.className = "day-link " + phase;
+      link.href = dayPageUrl(day, token);
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
 
-      const summary = document.createElement("summary");
-      summary.innerHTML =
+      link.innerHTML =
         '<span class="day-num">День ' + day.num + "</span>" +
         '<div class="day-summary-text">' +
         '<div class="date">' + escapeHtml(day.date.slice(0, 5)) + " · " + escapeHtml(day.weekday) + "</div>" +
-        '<div class="city">' + escapeHtml(day.city) + "</div></div>";
+        '<div class="city">' + escapeHtml(day.city) + "</div></div>" +
+        '<span class="day-open">↗</span>';
 
-      const body = document.createElement("div");
-      body.className = "day-body";
-      let html = "";
-      if (day.night) html += '<div class="night-line">🛏 ' + escapeHtml(day.night) + "</div>";
-      if (day.highlights && day.highlights.length) {
-        html += day.highlights.map(function (h) {
-          return "• " + escapeHtml(h.time) + " — " + escapeHtml(h.action);
-        }).join("<br>");
-      } else {
-        html += "Без крупных переездов";
-      }
-      body.innerHTML = html;
-
-      details.appendChild(summary);
-      details.appendChild(body);
-      list.appendChild(details);
+      list.appendChild(link);
     });
   }
 
@@ -201,7 +194,7 @@
     }
 
     renderStatus(data.status);
-    renderDaysList(data.days, today);
+    renderDaysList(data.days, today, data.meta && data.meta.access_token);
   }
 
   function checkAccess(tokenRequired) {

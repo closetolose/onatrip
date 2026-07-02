@@ -18,8 +18,33 @@ MD_PATH = ROOT / "пошаговый_гид_2026.md"
 LIVE_DIR = ROOT / "live_plan"
 CONFIG_PATH = LIVE_DIR / "config.json"
 STATUS_PATH = LIVE_DIR / "status.json"
+MEDIA_CONFIG_PATH = LIVE_DIR / "day_media.json"
+MEDIA_SRC = LIVE_DIR / "media"
 DOCS_DIR = ROOT / "docs"
 ASSETS_SRC = LIVE_DIR / "assets"
+
+REGION_HERO = {
+    "ru": {
+        "url": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=900&q=80",
+        "caption": "Сибирь",
+    },
+    "th": {
+        "url": "https://images.unsplash.com/photo-1528183429752-a97d0bf99b5a?w=900&q=80",
+        "caption": "Таиланд",
+    },
+    "vn": {
+        "url": "https://images.unsplash.com/photo-1559592413-7e7a2656f235?w=900&q=80",
+        "caption": "Вьетнам",
+    },
+    "cn": {
+        "url": "https://images.unsplash.com/photo-1535354839856-604977947?w=900&q=80",
+        "caption": "Китай",
+    },
+    "travel": {
+        "url": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=900&q=80",
+        "caption": "В дороге",
+    },
+}
 
 IMPORTANT_KEYWORDS = (
     "полёт", "рейс", "борту", "аэропорт", "bkk", "can", "dmk", "dad", "sgn", "pvg", "pek", "kja", "ikt",
@@ -95,6 +120,58 @@ def pick_highlights(steps: list[dict], limit: int = 4) -> list[dict]:
     return picked
 
 
+def sanitize_step(step: dict) -> dict | None:
+    action = sanitize_text(step["action"]).lower()
+    place = sanitize_text(step["place"]).lower()
+    if action == "сон" or (action.startswith("сон") and "отель" not in place and "hotel" not in place):
+        return None
+    blob = step_blob(step)
+    return {
+        "time": step["time"],
+        "place": sanitize_text(step["place"]),
+        "action": sanitize_text(step["action"]),
+        "next": sanitize_text(step["next"]) if step["next"] != "—" else "",
+        "transit": sanitize_text(step["transit"]) if step["transit"] != "—" else "",
+        "note": sanitize_text(step["note"]),
+        "icon": transport_icon(blob),
+    }
+
+
+def build_day_steps(steps: list[dict]) -> list[dict]:
+    result = []
+    for step in steps:
+        cleaned = sanitize_step(step)
+        if cleaned and (cleaned["place"] or cleaned["action"]):
+            result.append(cleaned)
+    return result
+
+
+def resolve_photos(day_num: int, region: str, city: str, media_entry: dict) -> list[dict]:
+    photos = []
+    for item in media_entry.get("photos", []):
+        if isinstance(item, str):
+            photos.append({"url": item, "caption": ""})
+        elif isinstance(item, dict) and item.get("url"):
+            photos.append({
+                "url": item["url"],
+                "caption": item.get("caption", ""),
+            })
+
+    if not photos:
+        hero = REGION_HERO.get(region, REGION_HERO["travel"])
+        photos.append({
+            "url": hero["url"],
+            "caption": media_entry.get("photo_caption") or f"{hero['caption']} · {city}",
+        })
+    return photos
+
+
+def load_day_media() -> dict:
+    if not MEDIA_CONFIG_PATH.exists():
+        return {}
+    return json.loads(MEDIA_CONFIG_PATH.read_text(encoding="utf-8"))
+
+
 def main_highlight(steps: list[dict]) -> dict | None:
     highlights = pick_highlights(steps, limit=1)
     return highlights[0] if highlights else None
@@ -115,8 +192,10 @@ def build_trip_payload(config: dict, status: dict, data: dict) -> dict:
             "region_name": REGION[day["region"]]["name"],
             "night": sanitize_text(day["night"]),
             "weather": sanitize_text(day["weather"]),
+            "totals": sanitize_text(day.get("totals", "")),
             "highlights": highlights,
             "main_event": main_highlight(day["steps"]),
+            "page_url": f"days/{day['num']:02d}.html",
         })
 
     route = [
@@ -165,6 +244,35 @@ def render_index(payload: dict) -> str:
     )
 
 
+def render_day_pages(payload: dict, raw_days: list[dict], day_media: dict) -> None:
+    env = Environment(
+        loader=FileSystemLoader(str(LIVE_DIR)),
+        autoescape=select_autoescape(["html", "xml"]),
+    )
+    template = env.get_template("day_template.html")
+    days_dir = DOCS_DIR / "days"
+    days_dir.mkdir(parents=True, exist_ok=True)
+
+    raw_by_num = {day["num"]: day for day in raw_days}
+    token = payload["meta"]["access_token"]
+
+    for day in payload["days"]:
+        raw = raw_by_num[day["num"]]
+        media_entry = day_media.get(str(day["num"]), day_media.get(day["num"], {}))
+        region = REGION[day["region"]]
+        html = template.render(
+            day=day,
+            region=region,
+            steps=build_day_steps(raw["steps"]),
+            photos=resolve_photos(day["num"], day["region"], day["city"], media_entry),
+            intro=media_entry.get("intro", ""),
+            traveler=payload["meta"]["traveler"],
+            period=payload["meta"]["period"],
+            access_token=token,
+        )
+        (days_dir / f"{day['num']:02d}.html").write_text(html, encoding="utf-8")
+
+
 def verify_no_secrets(payload: dict) -> None:
     blob = json.dumps(payload, ensure_ascii=False)
     if re.search(r"PNR\s+\w+", blob, re.I):
@@ -184,20 +292,25 @@ def main() -> None:
     data = parse_md(MD_PATH.read_text(encoding="utf-8"))
     payload = build_trip_payload(config, status, data)
     verify_no_secrets(payload)
+    day_media = load_day_media()
 
     docs_assets = DOCS_DIR / "assets"
     docs_assets.mkdir(parents=True, exist_ok=True)
     shutil.copytree(ASSETS_SRC, docs_assets, dirs_exist_ok=True)
+    if MEDIA_SRC.exists():
+        shutil.copytree(MEDIA_SRC, DOCS_DIR / "media", dirs_exist_ok=True)
 
     (DOCS_DIR / "trip.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
     (DOCS_DIR / "index.html").write_text(render_index(payload), encoding="utf-8")
+    render_day_pages(payload, data["days"], day_media)
     (DOCS_DIR / ".nojekyll").touch()
 
     print(f"Built: {DOCS_DIR / 'index.html'}")
     print(f"Built: {DOCS_DIR / 'trip.json'} ({len(payload['days'])} days)")
+    print(f"Built: {DOCS_DIR / 'days'} ({len(payload['days'])} day pages)")
     if payload["meta"]["access_token"]:
         print(f"Share link: ...?k={payload['meta']['access_token']}")
 
