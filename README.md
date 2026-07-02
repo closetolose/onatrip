@@ -52,27 +52,29 @@ Action пересоберёт `docs/` автоматически. Локальн
 
 ## GitHub Pages
 
-### Вариант A — через GitHub Actions (рекомендуется для `onatrip`)
+### Важно: на Free Pages работает только для Public-репо
 
-1. Репозиторий должен быть **Public** (на Free private Pages не работает).
-2. Запушь проект на GitHub.
-3. **Settings → Pages → Build and deployment → Source:** **GitHub Actions**.
-4. **Settings → Actions → General → Workflow permissions:** **Read and write permissions**.
-5. Запушь изменения или **Actions → Deploy live plan to Pages → Run workflow**.
-6. Дождись зелёной галочки у job **deploy** (не отменяй вручную).
-7. Ссылка: `https://closetolose.github.io/onatrip/?k=trip2026live`
+Если repo **private** — deploy через Actions висит 10 минут и падает с `Timeout reached`.  
+Это не баг сайта, а ограничение GitHub.
 
-### Вариант B — Deploy from branch
+**Решение:** Settings → General → **Change visibility → Public**  
+(в `trip.json` нет PNR и бюджета; родным даёшь ссылку с ключом `?k=...`)
 
-1. **Settings → Pages → Source:** Deploy from a branch.
-2. Branch: **main**, folder: **/docs**.
-3. Ссылка та же.
+### Настройка (без Actions-deploy, надёжнее)
 
-### Если деплой завис или «Deployment cancelled»
+1. Запушь проект на GitHub.
+2. **Settings → Pages**
+3. **Source:** **Deploy from a branch** (не GitHub Actions!)
+4. Branch: **main**, folder: **`/docs`**
+5. Save → подожди 2–3 минуты.
 
-- Не жми Cancel в Actions — дождись 5–10 мин.
-- Проверь, что Source = **GitHub Actions**, а в workflow есть `pages: write` и `id-token: write`.
-- Перезапусти: **Actions → Run workflow**.
+Action `Build live plan` только собирает `docs/` и пушит в репо. Pages сам подхватывает из `/docs`.
+
+6. Ссылка: `https://closetolose.github.io/onatrip/?k=trip2026live`
+
+### Обновить заметку
+
+Правишь `live_plan/status.json` → push → Action пересоберёт `docs/` → Pages обновится через 1–2 мин.
 
 ## Настройки
 
