@@ -194,6 +194,7 @@ def main() -> None:
         encoding="utf-8",
     )
     (DOCS_DIR / "index.html").write_text(render_index(payload), encoding="utf-8")
+    (DOCS_DIR / ".nojekyll").touch()
 
     print(f"Built: {DOCS_DIR / 'index.html'}")
     print(f"Built: {DOCS_DIR / 'trip.json'} ({len(payload['days'])} days)")

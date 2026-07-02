@@ -52,12 +52,27 @@ Action пересоберёт `docs/` автоматически. Локальн
 
 ## GitHub Pages
 
-1. Создай репозиторий на GitHub и запушь проект.
-2. Settings → Pages → Source: **Deploy from branch**.
-3. Branch: **main**, folder: **/docs**.
-4. Ссылка: `https://<user>.github.io/<repo>/?k=trip2026live`
+### Вариант A — через GitHub Actions (рекомендуется для `onatrip`)
 
-Рекомендуется **private repo** — URL знают только те, кому скинул.
+1. Репозиторий должен быть **Public** (на Free private Pages не работает).
+2. Запушь проект на GitHub.
+3. **Settings → Pages → Build and deployment → Source:** **GitHub Actions**.
+4. **Settings → Actions → General → Workflow permissions:** **Read and write permissions**.
+5. Запушь изменения или **Actions → Deploy live plan to Pages → Run workflow**.
+6. Дождись зелёной галочки у job **deploy** (не отменяй вручную).
+7. Ссылка: `https://closetolose.github.io/onatrip/?k=trip2026live`
+
+### Вариант B — Deploy from branch
+
+1. **Settings → Pages → Source:** Deploy from a branch.
+2. Branch: **main**, folder: **/docs**.
+3. Ссылка та же.
+
+### Если деплой завис или «Deployment cancelled»
+
+- Не жми Cancel в Actions — дождись 5–10 мин.
+- Проверь, что Source = **GitHub Actions**, а в workflow есть `pages: write` и `id-token: write`.
+- Перезапусти: **Actions → Run workflow**.
 
 ## Настройки
 

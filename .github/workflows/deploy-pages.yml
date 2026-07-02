@@ -1,4 +1,4 @@
-name: Build live plan
+name: Deploy live plan to Pages
 
 on:
   push:
@@ -8,19 +8,22 @@ on:
       - "live_plan/**"
       - "build_live_plan.py"
       - "trip_parser.py"
-  pull_request:
-    paths:
-      - "пошаговый_гид_2026.md"
-      - "live_plan/**"
-      - "build_live_plan.py"
-      - "trip_parser.py"
+      - "docs/**"
+      - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -31,21 +34,24 @@ jobs:
       - name: Install dependencies
         run: pip install jinja2
 
-      - name: Build docs
+      - name: Build site
         run: python build_live_plan.py
 
       - name: Verify output
-        run: test -f docs/index.html && test -f docs/trip.json
+        run: test -f docs/index.html && test -f docs/trip.json && test -f docs/.nojekyll
 
-      - name: Commit and push docs
-        if: github.event_name != 'pull_request'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/
-          if git diff --staged --quiet; then
-            echo "docs/ unchanged, skip commit"
-          else
-            git commit -m "chore: rebuild live plan"
-            git push
-          fi
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
