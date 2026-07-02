@@ -146,14 +146,22 @@ def build_day_steps(steps: list[dict]) -> list[dict]:
     return result
 
 
+def public_photo_url(url: str) -> str:
+    if url.startswith("http://") or url.startswith("https://"):
+        return url
+    if url.startswith("media/"):
+        return "../" + url
+    return url
+
+
 def resolve_photos(day_num: int, region: str, city: str, media_entry: dict) -> list[dict]:
     photos = []
     for item in media_entry.get("photos", []):
         if isinstance(item, str):
-            photos.append({"url": item, "caption": ""})
+            photos.append({"url": public_photo_url(item), "caption": ""})
         elif isinstance(item, dict) and item.get("url"):
             photos.append({
-                "url": item["url"],
+                "url": public_photo_url(item["url"]),
                 "caption": item.get("caption", ""),
             })
 
