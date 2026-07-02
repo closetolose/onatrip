@@ -1,0 +1,1300 @@
+{
+  "meta": {
+    "traveler": "Никита",
+    "period": "28.07 — 25.08.2026",
+    "subtitle": "Красноярск → Таиланд → Вьетнам → Китай → домой",
+    "period_start": "2026-07-28",
+    "period_end": "2026-08-25",
+    "built_at": "2026-07-02T20:22:39+07:00",
+    "access_token": "trip2026live"
+  },
+  "status": {
+    "note": "",
+    "note_updated": "",
+    "status": "ok"
+  },
+  "route": [
+    {
+      "date": "28.07",
+      "code": "KJA",
+      "name": "Красноярск",
+      "region": "ru",
+      "accent": "#3b82f6"
+    },
+    {
+      "date": "29.07",
+      "code": "BKK",
+      "name": "Паттайя",
+      "region": "th",
+      "accent": "#f59e0b"
+    },
+    {
+      "date": "05.08",
+      "code": "DMK",
+      "name": "Бангкок",
+      "region": "th",
+      "accent": "#f59e0b"
+    },
+    {
+      "date": "07.08",
+      "code": "DAD",
+      "name": "Да Нанг",
+      "region": "vn",
+      "accent": "#ef4444"
+    },
+    {
+      "date": "14.08",
+      "code": "SGN",
+      "name": "Хошимин",
+      "region": "vn",
+      "accent": "#ef4444"
+    },
+    {
+      "date": "17.08",
+      "code": "PVG",
+      "name": "Шанхай",
+      "region": "cn",
+      "accent": "#e11d48"
+    },
+    {
+      "date": "21.08",
+      "code": "PEK",
+      "name": "Пекин",
+      "region": "cn",
+      "accent": "#e11d48"
+    },
+    {
+      "date": "24.08",
+      "code": "IKT",
+      "name": "Иркутск",
+      "region": "ru",
+      "accent": "#3b82f6"
+    },
+    {
+      "date": "25.08",
+      "code": "KJA",
+      "name": "Домой",
+      "region": "ru",
+      "accent": "#3b82f6"
+    }
+  ],
+  "days": [
+    {
+      "num": 1,
+      "date": "28.07.2026",
+      "date_iso": "2026-07-28",
+      "weekday": "вторник",
+      "city": "Красноярск → перелёт",
+      "region": "ru",
+      "region_name": "Россия",
+      "night": "В полёте / стыковка CAN (без отеля) · check-in — / check-out —",
+      "weather": "Жара в Таиланде с 29.07; сегодня только перелёт",
+      "highlights": [
+        {
+          "time": "17:30",
+          "place": "В пути",
+          "action": "Такси/каршеринг до аэропорта Красноярск (KJA)",
+          "next": "KJA терминал",
+          "icon": "✈",
+          "note": ""
+        },
+        {
+          "time": "18:10",
+          "place": "KJA",
+          "action": "Регистрация SU6637, досмотр, посадка",
+          "next": "Борт",
+          "icon": "📍",
+          "note": "вылет 18:20"
+        },
+        {
+          "time": "18:20",
+          "place": "В полёте",
+          "action": "SU6637 KJA → CAN (Гуанчжоу)",
+          "next": "CAN",
+          "icon": "✈",
+          "note": "Прилёт 01:00 **29.07** местное (UTC+8)"
+        },
+        {
+          "time": "01:00",
+          "place": "CAN (Гуанчжоу)",
+          "action": "Прилёт, иммиграция/транзит (два отдельных билета!)",
+          "next": "Зона ожидания CAN",
+          "icon": "✈",
+          "note": "Проверить TWOV/транзит; не выходить в город без визы"
+        }
+      ],
+      "main_event": {
+        "time": "17:30",
+        "place": "В пути",
+        "action": "Такси/каршеринг до аэропорта Красноярск (KJA)",
+        "next": "KJA терминал",
+        "icon": "✈",
+        "note": ""
+      }
+    },
+    {
+      "num": 2,
+      "date": "29.07.2026",
+      "date_iso": "2026-07-29",
+      "weekday": "среда",
+      "city": "Паттайя",
+      "region": "th",
+      "region_name": "Таиланд",
+      "night": "Hotel Zing Pattaya (Z by Zing), Джомтьен · check-in 14:00 / check-out 05.08 утром",
+      "weather": "Муссон: 30 мин буфер у пляжа; написать отелю 26–27.07 о раннем заезде",
+      "highlights": [
+        {
+          "time": "07:40",
+          "place": "BKK (Суварнабхуми)",
+          "action": "Прилёт, иммиграция Таиланд (безвиз)",
+          "next": "Автобусный терминал",
+          "icon": "✈",
+          "note": "Без багажа — быстрее"
+        },
+        {
+          "time": "08:45",
+          "place": "В пути",
+          "action": "Автобус BKK → Паттайя (Ekkamai/Mo Chit маршруты через BKK)",
+          "next": "Паттайя",
+          "icon": "✈",
+          "note": "Прибытие ~12:00–13:00"
+        },
+        {
+          "time": "12:30",
+          "place": "Hotel Zing Pattaya",
+          "action": "Регистрация, кладовка багажа (номер с 14:00)",
+          "next": "Пляж Джомтьен",
+          "icon": "🚶",
+          "note": "Шаблон письма — раздел 5б аудита"
+        },
+        {
+          "time": "15:45",
+          "place": "Hotel Zing",
+          "action": "Заселение в номер",
+          "next": "Пляж",
+          "icon": "🏖",
+          "note": "Check-in с 14:00"
+        }
+      ],
+      "main_event": {
+        "time": "07:40",
+        "place": "BKK (Суварнабхуми)",
+        "action": "Прилёт, иммиграция Таиланд (безвиз)",
+        "next": "Автобусный терминал",
+        "icon": "✈",
+        "note": "Без багажа — быстрее"
+      }
+    },
+    {
+      "num": 3,
+      "date": "30.07.2026",
+      "date_iso": "2026-07-30",
+      "weekday": "четверг",
+      "city": "Паттайя",
+      "region": "th",
+      "region_name": "Таиланд",
+      "night": "Hotel Zing Pattaya, Джомтьен · check-in уже в номере / check-out 05.08",
+      "weather": "Пляжный день 1; дождь — ТЦ Central Festival",
+      "highlights": [],
+      "main_event": null
+    },
+    {
+      "num": 4,
+      "date": "31.07.2026",
+      "date_iso": "2026-07-31",
+      "weekday": "пятница",
+      "city": "Паттайя (Ко Лан)",
+      "region": "th",
+      "region_name": "Таиланд",
+      "night": "Hotel Zing Pattaya · check-in — / check-out 05.08",
+      "weather": "Запас: если паром отменён — второй день Джомтьен + Central Festival",
+      "highlights": [
+        {
+          "time": "07:30",
+          "place": "Hotel Zing",
+          "action": "Подъём, завтрак",
+          "next": "Grab → Bali Hai Pier",
+          "icon": "🚗",
+          "note": "Выезд раньше — меньше очередь на паром"
+        },
+        {
+          "time": "08:40",
+          "place": "Bali Hai Pier",
+          "action": "Покупка билета паром (официальная касса)",
+          "next": "Паром",
+          "icon": "⛴",
+          "note": "30 ฿ one way; не у посредников"
+        },
+        {
+          "time": "08:55",
+          "place": "Паром",
+          "action": "Паром → Ко Лан (остров)",
+          "next": "Ко Лан, Tawaen",
+          "icon": "⛴",
+          "note": "Скоростной катер ~150 ฿ — опционально"
+        },
+        {
+          "time": "13:40",
+          "place": "Ко Лан",
+          "action": "Пляж или прогулка по острову",
+          "next": "Паром обратно",
+          "icon": "⛴",
+          "note": "Буфер 30 мин под дождь"
+        }
+      ],
+      "main_event": {
+        "time": "07:30",
+        "place": "Hotel Zing",
+        "action": "Подъём, завтрак",
+        "next": "Grab → Bali Hai Pier",
+        "icon": "🚗",
+        "note": "Выезд раньше — меньше очередь на паром"
+      }
+    },
+    {
+      "num": 5,
+      "date": "01.08.2026",
+      "date_iso": "2026-08-01",
+      "weekday": "суббота",
+      "city": "Паттайя",
+      "region": "th",
+      "region_name": "Таиланд",
+      "night": "Hotel Zing Pattaya · check-in — / check-out 05.08",
+      "weather": "Активности : Большой Будда + Terminal 21",
+      "highlights": [
+        {
+          "time": "14:00",
+          "place": "Terminal 21",
+          "action": "Продолжение шопинга / кино при дожде",
+          "next": "Grab → отель",
+          "icon": "🚗",
+          "note": "Буфер под дождь"
+        },
+        {
+          "time": "16:00",
+          "place": "В пути",
+          "action": "Grab → Hotel Zing",
+          "next": "Отель",
+          "icon": "🚗",
+          "note": ""
+        }
+      ],
+      "main_event": {
+        "time": "14:00",
+        "place": "Terminal 21",
+        "action": "Продолжение шопинга / кино при дожде",
+        "next": "Grab → отель",
+        "icon": "🚗",
+        "note": "Буфер под дождь"
+      }
+    },
+    {
+      "num": 6,
+      "date": "02.08.2026",
+      "date_iso": "2026-08-02",
+      "weekday": "воскресенье",
+      "city": "Паттайя",
+      "region": "th",
+      "region_name": "Таиланд",
+      "night": "Hotel Zing Pattaya · check-in — / check-out 05.08",
+      "weather": "Khao Kheow Open Zoo — активности ; выезд с утра",
+      "highlights": [
+        {
+          "time": "07:30",
+          "place": "В пути",
+          "action": "Grab → Khao Kheow Open Zoo",
+          "next": "Зоопарк",
+          "icon": "🚗",
+          "note": "~400–600 ฿"
+        },
+        {
+          "time": "08:20",
+          "place": "Khao Kheow Open Zoo",
+          "action": "Билет, вход",
+          "next": "Экспозиция",
+          "icon": "📍",
+          "note": ""
+        },
+        {
+          "time": "15:20",
+          "place": "В пути",
+          "action": "Grab → Hotel Zing",
+          "next": "Отель",
+          "icon": "🚗",
+          "note": ""
+        }
+      ],
+      "main_event": {
+        "time": "07:30",
+        "place": "В пути",
+        "action": "Grab → Khao Kheow Open Zoo",
+        "next": "Зоопарк",
+        "icon": "🚗",
+        "note": "~400–600 ฿"
+      }
+    },
+    {
+      "num": 7,
+      "date": "03.08.2026",
+      "date_iso": "2026-08-03",
+      "weekday": "понедельник",
+      "city": "Паттайя",
+      "region": "th",
+      "region_name": "Таиланд",
+      "night": "Hotel Zing Pattaya · check-in — / check-out 05.08 утром",
+      "weather": "Wat Yan + Floating Market — ; дождь — сместить рынок",
+      "highlights": [
+        {
+          "time": "09:45",
+          "place": "Wat Yan",
+          "action": "Храм, прогулка по территории",
+          "next": "Grab → Floating Market",
+          "icon": "🚗",
+          "note": "Культура; платье закрытые плечи"
+        },
+        {
+          "time": "11:15",
+          "place": "В пути",
+          "action": "Grab → Pattaya Floating Market",
+          "next": "Floating Market",
+          "icon": "🚗",
+          "note": ""
+        },
+        {
+          "time": "14:20",
+          "place": "Floating Market",
+          "action": "Продолжение, сувениры",
+          "next": "Grab → отель",
+          "icon": "🚗",
+          "note": "Буфер 30 мин под дождь"
+        },
+        {
+          "time": "15:50",
+          "place": "В пути",
+          "action": "Grab → Hotel Zing",
+          "next": "Отель",
+          "icon": "🚗",
+          "note": ""
+        }
+      ],
+      "main_event": {
+        "time": "09:45",
+        "place": "Wat Yan",
+        "action": "Храм, прогулка по территории",
+        "next": "Grab → Floating Market",
+        "icon": "🚗",
+        "note": "Культура; платье закрытые плечи"
+      }
+    },
+    {
+      "num": 8,
+      "date": "04.08.2026",
+      "date_iso": "2026-08-04",
+      "weekday": "вторник",
+      "city": "Паттайя",
+      "region": "th",
+      "region_name": "Таиланд",
+      "night": "Hotel Zing Pattaya (последняя ночь) · check-in — / check-out 05.08 утром",
+      "weather": "Central Festival + пляж + сборы —",
+      "highlights": [
+        {
+          "time": "13:05",
+          "place": "Пляж Pattaya Beach",
+          "action": "Короткий пляж / прогулка набережной",
+          "next": "Отель",
+          "icon": "🚗",
+          "note": "Дождь — остаться в ТЦ"
+        }
+      ],
+      "main_event": {
+        "time": "13:05",
+        "place": "Пляж Pattaya Beach",
+        "action": "Короткий пляж / прогулка набережной",
+        "next": "Отель",
+        "icon": "🚗",
+        "note": "Дождь — остаться в ТЦ"
+      }
+    },
+    {
+      "num": 9,
+      "date": "05.08.2026",
+      "date_iso": "2026-08-05",
+      "weekday": "среда",
+      "city": "Бангкок",
+      "region": "th",
+      "region_name": "Таиланд",
+      "night": "12 The Residence Hotel (Don Mueang Airport) · check-in 15:00 / check-out 07.08 утром",
+      "weather": "Заселение с 15:00 — весь день с кладовкой; залог наличными; написать отелю 02–03.08",
+      "highlights": [
+        {
+          "time": "05:00",
+          "place": "Паттайя",
+          "action": "Автобус Bell Travel / 389 → Бангкок (Mo Chit/Ekkamai)",
+          "next": "Бангкок",
+          "icon": "🚌",
+          "note": "~150–350 ฿"
+        },
+        {
+          "time": "07:30",
+          "place": "Бангкок, автовокзал",
+          "action": "Grab → 12 The Residence DMK",
+          "next": "12 The Residence",
+          "icon": "🚄",
+          "note": "Прибытие ~08:00"
+        },
+        {
+          "time": "08:00",
+          "place": "12 The Residence DMK",
+          "action": "Кладовка багажа, регистрация (номер с 15:00)",
+          "next": "Grab → Wat Pho",
+          "icon": "🚗",
+          "note": "Залог наличными при заезде"
+        },
+        {
+          "time": "08:20",
+          "place": "В пути",
+          "action": "Grab DMK → Wat Pho (~40–60 мин в пробках)",
+          "next": "Wat Pho",
+          "icon": "🚗",
+          "note": "~200–350 ฿"
+        }
+      ],
+      "main_event": {
+        "time": "05:00",
+        "place": "Паттайя",
+        "action": "Автобус Bell Travel / 389 → Бангкок (Mo Chit/Ekkamai)",
+        "next": "Бангкок",
+        "icon": "🚌",
+        "note": "~150–350 ฿"
+      }
+    },
+    {
+      "num": 10,
+      "date": "06.08.2026",
+      "date_iso": "2026-08-06",
+      "weekday": "четверг",
+      "city": "Бангкок",
+      "region": "th",
+      "region_name": "Таиланд",
+      "night": "12 The Residence Hotel DMK · check-in — / check-out 07.08 утром",
+      "weather": "Siam / Pratunam / Sukhumvit — ; Chatuchak закрыт (только сб/вс)",
+      "highlights": [
+        {
+          "time": "09:15",
+          "place": "В пути",
+          "action": "Grab/Songthaew DMK → BTS Mo Chit/Saphan Mai + BTS → Siam",
+          "next": "Siam",
+          "icon": "🚇",
+          "note": "BTS дешевле Grab в час пик"
+        },
+        {
+          "time": "15:30",
+          "place": "Sukhumvit",
+          "action": "Прогулка районом, кафе",
+          "next": "BTS → DMK",
+          "icon": "🚇",
+          "note": "Буфер под дождь"
+        },
+        {
+          "time": "17:00",
+          "place": "В пути",
+          "action": "BTS + Grab → 12 The Residence",
+          "next": "Отель",
+          "icon": "🚇",
+          "note": ""
+        },
+        {
+          "time": "17:40",
+          "place": "12 The Residence",
+          "action": "Сборы на вылет завтра",
+          "next": "Ужин",
+          "icon": "📍",
+          "note": "DMK в 10–15 мин от отеля"
+        }
+      ],
+      "main_event": {
+        "time": "09:15",
+        "place": "В пути",
+        "action": "Grab/Songthaew DMK → BTS Mo Chit/Saphan Mai + BTS → Siam",
+        "next": "Siam",
+        "icon": "🚇",
+        "note": "BTS дешевле Grab в час пик"
+      }
+    },
+    {
+      "num": 11,
+      "date": "07.08.2026",
+      "date_iso": "2026-08-07",
+      "weekday": "пятница",
+      "city": "Бангкок → Да Нанг",
+      "region": "th",
+      "region_name": "Таиланд",
+      "night": "Отель в Да Нанге · check-in 14:00 / check-out 14.08 утром",
+      "weather": "FD636 без багажа; Grab из DAD ~15–20 мин; написать отелю 04–05.08",
+      "highlights": [
+        {
+          "time": "05:00",
+          "place": "12 The Residence",
+          "action": "Подъём, check-out",
+          "next": "DMK",
+          "icon": "🚗",
+          "note": ""
+        },
+        {
+          "time": "05:30",
+          "place": "12 The Residence",
+          "action": "Выезд в DMK",
+          "next": "DMK терминал",
+          "icon": "📍",
+          "note": "Вылет 09:50 — прибыть к 08:00"
+        },
+        {
+          "time": "05:40",
+          "place": "DMK",
+          "action": "Регистрация FD636, досмотр",
+          "next": "Гейт",
+          "icon": "📍",
+          "note": "только ручная кладь"
+        },
+        {
+          "time": "07:00",
+          "place": "DMK",
+          "action": "Ожидание, посадка",
+          "next": "В полёте",
+          "icon": "✈",
+          "note": "Thai AirAsia"
+        }
+      ],
+      "main_event": {
+        "time": "05:00",
+        "place": "12 The Residence",
+        "action": "Подъём, check-out",
+        "next": "DMK",
+        "icon": "🚗",
+        "note": ""
+      }
+    },
+    {
+      "num": 12,
+      "date": "08.08.2026",
+      "date_iso": "2026-08-08",
+      "weekday": "суббота",
+      "city": "Да Нанг",
+      "region": "travel",
+      "region_name": "Переезд",
+      "night": "Отель в Да Нанге · check-in — / check-out 14.08",
+      "weather": "Marble Mountains + My Khe —",
+      "highlights": [
+        {
+          "time": "15:00",
+          "place": "В пути",
+          "action": "Grab → отель",
+          "next": "Отель",
+          "icon": "🚗",
+          "note": ""
+        }
+      ],
+      "main_event": {
+        "time": "15:00",
+        "place": "В пути",
+        "action": "Grab → отель",
+        "next": "Отель",
+        "icon": "🚗",
+        "note": ""
+      }
+    },
+    {
+      "num": 13,
+      "date": "09.08.2026",
+      "date_iso": "2026-08-09",
+      "weekday": "воскресенье",
+      "city": "Да Нанг",
+      "region": "travel",
+      "region_name": "Переезд",
+      "night": "Отель в Да Нанге · check-in — / check-out 14.08",
+      "weather": "Son Tra + Dragon Bridge — ; **09.08 вс** — шоу моста **~21:00**",
+      "highlights": [
+        {
+          "time": "21:00",
+          "place": "Dragon Bridge",
+          "action": "**Шоу огня и воды**",
+          "next": "Grab → отель",
+          "icon": "🚗",
+          "note": ""
+        },
+        {
+          "time": "21:15",
+          "place": "В пути",
+          "action": "Grab → отель",
+          "next": "Отель",
+          "icon": "🚗",
+          "note": ""
+        }
+      ],
+      "main_event": {
+        "time": "21:00",
+        "place": "Dragon Bridge",
+        "action": "**Шоу огня и воды**",
+        "next": "Grab → отель",
+        "icon": "🚗",
+        "note": ""
+      }
+    },
+    {
+      "num": 14,
+      "date": "10.08.2026",
+      "date_iso": "2026-08-10",
+      "weekday": "понедельник",
+      "city": "Да Нанг",
+      "region": "travel",
+      "region_name": "Переезд",
+      "night": "Отель в Да Нанге · check-in — / check-out 14.08",
+      "weather": "Дождевой запас — пляж или набережная",
+      "highlights": [],
+      "main_event": null
+    },
+    {
+      "num": 15,
+      "date": "11.08.2026",
+      "date_iso": "2026-08-11",
+      "weekday": "вторник",
+      "city": "Да Нанг",
+      "region": "travel",
+      "region_name": "Переезд",
+      "night": "Отель в Да Нанге · check-in — / check-out 14.08",
+      "weather": "Второй пляжный / запасной день",
+      "highlights": [],
+      "main_event": null
+    },
+    {
+      "num": 16,
+      "date": "12.08.2026",
+      "date_iso": "2026-08-12",
+      "weekday": "среда",
+      "city": "Да Нанг (Ba Na Hills)",
+      "region": "travel",
+      "region_name": "Переезд",
+      "night": "Отель в Да Нанге · check-in — / check-out 14.08",
+      "weather": "Ba Na Hills ; туман — второй пляжный день; смотреть прогноз утром",
+      "highlights": [
+        {
+          "time": "07:00",
+          "place": "В пути",
+          "action": "Grab → Ba Na Hills",
+          "next": "Ba Na",
+          "icon": "🚗",
+          "note": "~250–350k VND"
+        },
+        {
+          "time": "07:35",
+          "place": "Ba Na Hills",
+          "action": "Канатная дорога, билеты",
+          "next": "Golden Bridge",
+          "icon": "📍",
+          "note": "Билет в активностях"
+        },
+        {
+          "time": "14:05",
+          "place": "Ba Na Hills",
+          "action": "Доосмотр, шоу",
+          "next": "Спуск",
+          "icon": "📍",
+          "note": "Туман — уехать раньше"
+        },
+        {
+          "time": "16:05",
+          "place": "Ba Na",
+          "action": "Канатная дорога вниз",
+          "next": "Grab → отель",
+          "icon": "🚗",
+          "note": ""
+        }
+      ],
+      "main_event": {
+        "time": "07:00",
+        "place": "В пути",
+        "action": "Grab → Ba Na Hills",
+        "next": "Ba Na",
+        "icon": "🚗",
+        "note": "~250–350k VND"
+      }
+    },
+    {
+      "num": 17,
+      "date": "13.08.2026",
+      "date_iso": "2026-08-13",
+      "weekday": "четверг",
+      "city": "Да Нанг",
+      "region": "travel",
+      "region_name": "Переезд",
+      "night": "Отель в Да Нанге (последняя ночь) · check-in — / check-out 14.08 ~05:00",
+      "weather": "Cham Museum + Con Market — ; сборы на ранний вылет",
+      "highlights": [
+        {
+          "time": "12:45",
+          "place": "Отель",
+          "action": "Сборы, упаковка",
+          "next": "Отдых",
+          "icon": "📍",
+          "note": "Вылет завтра 06:45"
+        },
+        {
+          "time": "21:00",
+          "place": "Отель",
+          "action": "Сон",
+          "next": "",
+          "icon": "🌙",
+          "note": "Короткий сон — ранний вылет"
+        }
+      ],
+      "main_event": {
+        "time": "12:45",
+        "place": "Отель",
+        "action": "Сборы, упаковка",
+        "next": "Отдых",
+        "icon": "📍",
+        "note": "Вылет завтра 06:45"
+      }
+    },
+    {
+      "num": 18,
+      "date": "14.08.2026",
+      "date_iso": "2026-08-14",
+      "weekday": "пятница",
+      "city": "Хошимин",
+      "region": "vn",
+      "region_name": "Вьетнам",
+      "night": "K'ool Hotels & Suites HCMC · check-in 14:00 / check-out 17.08 ~00:30",
+      "weather": "Buu Long 11–14 закрыт внутрь; Bao's Niche утром; написать отелю 11–12.08",
+      "highlights": [
+        {
+          "time": "05:00",
+          "place": "Отель, Да Нанг",
+          "action": "Подъём, check-out",
+          "next": "Grab → DAD",
+          "icon": "🚗",
+          "note": ""
+        },
+        {
+          "time": "05:30",
+          "place": "В пути",
+          "action": "Grab Да Нанг → DAD аэропорт",
+          "next": "DAD",
+          "icon": "✈",
+          "note": "Быть к 05:15"
+        },
+        {
+          "time": "05:15",
+          "place": "DAD",
+          "action": "Регистрация VU671, досмотр",
+          "next": "Гейт",
+          "icon": "📍",
+          "note": "без багажа"
+        },
+        {
+          "time": "06:15",
+          "place": "DAD",
+          "action": "Посадка",
+          "next": "В полёте",
+          "icon": "✈",
+          "note": ""
+        }
+      ],
+      "main_event": {
+        "time": "05:00",
+        "place": "Отель, Да Нанг",
+        "action": "Подъём, check-out",
+        "next": "Grab → DAD",
+        "icon": "🚗",
+        "note": ""
+      }
+    },
+    {
+      "num": 19,
+      "date": "15.08.2026",
+      "date_iso": "2026-08-15",
+      "weekday": "суббота",
+      "city": "Хошимин",
+      "region": "vn",
+      "region_name": "Вьетнам",
+      "night": "K'ool Hotels HCMC · check-in — / check-out 17.08",
+      "weather": "District 1 —",
+      "highlights": [
+        {
+          "time": "16:25",
+          "place": "В пути",
+          "action": "Grab → K'ool Hotels",
+          "next": "Отель",
+          "icon": "🚗",
+          "note": ""
+        }
+      ],
+      "main_event": {
+        "time": "16:25",
+        "place": "В пути",
+        "action": "Grab → K'ool Hotels",
+        "next": "Отель",
+        "icon": "🚗",
+        "note": ""
+      }
+    },
+    {
+      "num": 20,
+      "date": "16.08.2026",
+      "date_iso": "2026-08-16",
+      "weekday": "воскресенье",
+      "city": "Хошимин",
+      "region": "vn",
+      "region_name": "Вьетнам",
+      "night": "K'ool Hotels HCMC (последняя ночь) · check-in — / check-out 17.08 ~00:30",
+      "weather": "Cu Chi ; вечером опц. Bao's Niche",
+      "highlights": [
+        {
+          "time": "13:10",
+          "place": "В пути",
+          "action": "Возврат в город",
+          "next": "K'ool Hotels",
+          "icon": "📍",
+          "note": ""
+        },
+        {
+          "time": "17:20",
+          "place": "Bao's Niche (опц.)",
+          "action": "Доп. покупки",
+          "next": "Grab → отель",
+          "icon": "🚗",
+          "note": ""
+        },
+        {
+          "time": "18:50",
+          "place": "K'ool Hotels",
+          "action": "Сборы, ужин, ранний отбой",
+          "next": "Сон",
+          "icon": "🌙",
+          "note": "Вылет 02:35 — выезд ~00:30"
+        }
+      ],
+      "main_event": {
+        "time": "13:10",
+        "place": "В пути",
+        "action": "Возврат в город",
+        "next": "K'ool Hotels",
+        "icon": "📍",
+        "note": ""
+      }
+    },
+    {
+      "num": 21,
+      "date": "17.08.2026",
+      "date_iso": "2026-08-17",
+      "weekday": "понедельник",
+      "city": "Хошимин → Шанхай",
+      "region": "vn",
+      "region_name": "Вьетнам",
+      "night": "Country Inn & Suites (Shanghai Railway Station) · check-in 15:00 / check-out 21.08 утром",
+      "weather": "CZ6096 02:35; 1 место багажа; заселение 15:00 — 7+ ч с кладовкой; написать отелю 14–15.08",
+      "highlights": [
+        {
+          "time": "00:15",
+          "place": "K'ool Hotels",
+          "action": "Подъём, check-out",
+          "next": "Grab → SGN",
+          "icon": "🚗",
+          "note": ""
+        },
+        {
+          "time": "00:30",
+          "place": "В пути",
+          "action": "Grab → SGN аэропорт",
+          "next": "SGN",
+          "icon": "✈",
+          "note": ""
+        },
+        {
+          "time": "01:00",
+          "place": "SGN",
+          "action": "Регистрация CZ6096, досмотр, багаж 1 место",
+          "next": "Гейт",
+          "icon": "📍",
+          "note": ""
+        },
+        {
+          "time": "02:20",
+          "place": "SGN",
+          "action": "Посадка",
+          "next": "В полёте",
+          "icon": "✈",
+          "note": "Вылет 02:35"
+        }
+      ],
+      "main_event": {
+        "time": "00:15",
+        "place": "K'ool Hotels",
+        "action": "Подъём, check-out",
+        "next": "Grab → SGN",
+        "icon": "🚗",
+        "note": ""
+      }
+    },
+    {
+      "num": 22,
+      "date": "18.08.2026",
+      "date_iso": "2026-08-18",
+      "weekday": "вторник",
+      "city": "Шанхай",
+      "region": "cn",
+      "region_name": "Китай",
+      "night": "Country Inn Shanghai Railway Station · check-in — / check-out 21.08",
+      "weather": "Disneyland ; метро линия 11; билет заранее",
+      "highlights": [
+        {
+          "time": "08:00",
+          "place": "В пути",
+          "action": "Метро линия 1/3/4 → пересадка линия 11 → Disney Resort (конечная)",
+          "next": "Disneyland",
+          "icon": "🚇",
+          "note": "~6–8 ¥"
+        },
+        {
+          "time": "09:05",
+          "place": "Shanghai Disneyland",
+          "action": "Вход, Security",
+          "next": "Аттракционы",
+          "icon": "🎢",
+          "note": "Открытие ~08:00; прибыть к открытию"
+        },
+        {
+          "time": "14:20",
+          "place": "Disneyland",
+          "action": "Аттракционы, парады",
+          "next": "Выход",
+          "icon": "🎢",
+          "note": "10–12 ч в парке"
+        },
+        {
+          "time": "19:00",
+          "place": "Disneyland",
+          "action": "Фейерверк / финал",
+          "next": "Метро",
+          "icon": "🚇",
+          "note": ""
+        }
+      ],
+      "main_event": {
+        "time": "08:00",
+        "place": "В пути",
+        "action": "Метро линия 1/3/4 → пересадка линия 11 → Disney Resort (конечная)",
+        "next": "Disneyland",
+        "icon": "🚇",
+        "note": "~6–8 ¥"
+      }
+    },
+    {
+      "num": 23,
+      "date": "19.08.2026",
+      "date_iso": "2026-08-19",
+      "weekday": "среда",
+      "city": "Шанхай",
+      "region": "cn",
+      "region_name": "Китай",
+      "night": "Country Inn Shanghai · check-in — / check-out 21.08",
+      "weather": "Bund вечером + Yu Garden —",
+      "highlights": [
+        {
+          "time": "13:40",
+          "place": "Кафе",
+          "action": "Перерыв от жары",
+          "next": "Метро → Bund",
+          "icon": "🚇",
+          "note": "Буфер"
+        },
+        {
+          "time": "15:40",
+          "place": "В пути",
+          "action": "Метро → East Nanjing Road / The Bund",
+          "next": "The Bund",
+          "icon": "🚇",
+          "note": ""
+        },
+        {
+          "time": "16:05",
+          "place": "The Bund",
+          "action": "Прогулка набережной (день)",
+          "next": "Кафе",
+          "icon": "📍",
+          "note": "Лучше на закате"
+        },
+        {
+          "time": "21:15",
+          "place": "В пути",
+          "action": "Метро → Country Inn",
+          "next": "Отель",
+          "icon": "🚇",
+          "note": ""
+        }
+      ],
+      "main_event": {
+        "time": "13:40",
+        "place": "Кафе",
+        "action": "Перерыв от жары",
+        "next": "Метро → Bund",
+        "icon": "🚇",
+        "note": "Буфер"
+      }
+    },
+    {
+      "num": 24,
+      "date": "20.08.2026",
+      "date_iso": "2026-08-20",
+      "weekday": "четверг",
+      "city": "Шанхай",
+      "region": "cn",
+      "region_name": "Китай",
+      "night": "Country Inn Shanghai (последняя ночь) · check-in — / check-out 21.08 утром",
+      "weather": "Pudong + Tianzifang —",
+      "highlights": [
+        {
+          "time": "18:00",
+          "place": "В пути",
+          "action": "Метро → Country Inn",
+          "next": "Отель",
+          "icon": "🚇",
+          "note": ""
+        },
+        {
+          "time": "18:30",
+          "place": "Country Inn",
+          "action": "Сборы на поезд завтра",
+          "next": "Сон",
+          "icon": "🚄",
+          "note": "Поезд ⏳ G2 06:43"
+        }
+      ],
+      "main_event": {
+        "time": "18:00",
+        "place": "В пути",
+        "action": "Метро → Country Inn",
+        "next": "Отель",
+        "icon": "🚇",
+        "note": ""
+      }
+    },
+    {
+      "num": 25,
+      "date": "21.08.2026",
+      "date_iso": "2026-08-21",
+      "weekday": "пятница",
+      "city": "Шанхай → Пекин",
+      "region": "cn",
+      "region_name": "Китай",
+      "night": "Huitong Jiufang Beijing (м. Changchun Jie, линия 2) · check-in 14:00 / check-out 24.08 утром",
+      "weather": "Поезд G2 06:43–11:32 ⏳ не куплен; написать отелю 18–19.08",
+      "highlights": [
+        {
+          "time": "05:30",
+          "place": "Country Inn",
+          "action": "Подъём, check-out",
+          "next": "Метро → Hongqiao",
+          "icon": "🚇",
+          "note": ""
+        },
+        {
+          "time": "06:25",
+          "place": "Hongqiao Station",
+          "action": "Ожидание, посадка",
+          "next": "Поезд G2",
+          "icon": "🚄",
+          "note": "⏳ Купить с 07.08"
+        },
+        {
+          "time": "06:43",
+          "place": "Поезд G2",
+          "action": "ВСМ Hongqiao → Beijing South",
+          "next": "Beijing South",
+          "icon": "🚄",
+          "note": "Прибытие 11:32"
+        },
+        {
+          "time": "12:22",
+          "place": "Huitong Jiufang",
+          "action": "Кладовка, регистрация",
+          "next": "Метро → Qianmen",
+          "icon": "🚇",
+          "note": "西便门东里12号楼; check-in 14:00"
+        }
+      ],
+      "main_event": {
+        "time": "05:30",
+        "place": "Country Inn",
+        "action": "Подъём, check-out",
+        "next": "Метро → Hongqiao",
+        "icon": "🚇",
+        "note": ""
+      }
+    },
+    {
+      "num": 26,
+      "date": "22.08.2026",
+      "date_iso": "2026-08-22",
+      "weekday": "суббота",
+      "city": "Пекин",
+      "region": "cn",
+      "region_name": "Китай",
+      "night": "Huitong Jiufang Beijing · check-in — / check-out 24.08",
+      "weather": "Храм Неба + Tiananmen + Wangfujing + Lama Temple —",
+      "highlights": [
+        {
+          "time": "12:35",
+          "place": "Wangfujing",
+          "action": "Шопинг, улица снеков",
+          "next": "Отель / метро",
+          "icon": "🚇",
+          "note": "Дождь — APM ТЦ"
+        }
+      ],
+      "main_event": {
+        "time": "12:35",
+        "place": "Wangfujing",
+        "action": "Шопинг, улица снеков",
+        "next": "Отель / метро",
+        "icon": "🚇",
+        "note": "Дождь — APM ТЦ"
+      }
+    },
+    {
+      "num": 27,
+      "date": "23.08.2026",
+      "date_iso": "2026-08-23",
+      "weekday": "воскресенье",
+      "city": "Пекин",
+      "region": "cn",
+      "region_name": "Китай",
+      "night": "Huitong Jiufang Beijing (последняя ночь) · check-in — / check-out 24.08 ~09:00",
+      "weather": "Летний дворец + 798 — ; дождь → Xidan + Houhai",
+      "highlights": [
+        {
+          "time": "18:35",
+          "place": "Huitong Jiufang",
+          "action": "Сборы на вылет завтра",
+          "next": "Сон",
+          "icon": "🌙",
+          "note": "PEK T3 13:00"
+        }
+      ],
+      "main_event": {
+        "time": "18:35",
+        "place": "Huitong Jiufang",
+        "action": "Сборы на вылет завтра",
+        "next": "Сон",
+        "icon": "🌙",
+        "note": "PEK T3 13:00"
+      }
+    },
+    {
+      "num": 28,
+      "date": "24.08.2026",
+      "date_iso": "2026-08-24",
+      "weekday": "понедельник",
+      "city": "Пекин → Иркутск → поезд",
+      "region": "cn",
+      "region_name": "Китай",
+      "night": "Поезд 081 плацкарт (вагон 09) · check-in в поезде / check-out 25.08 16:12 KJA",
+      "weather": "CA869 PEK T3 13:00; поезд 081 22:40 IKT; 1 место багажа PEK→IKT",
+      "highlights": [
+        {
+          "time": "06:00",
+          "place": "Huitong Jiufang",
+          "action": "Подъём, check-out",
+          "next": "Метро → PEK",
+          "icon": "🚇",
+          "note": ""
+        },
+        {
+          "time": "06:45",
+          "place": "В пути",
+          "action": "Метро линия 2 → Dongzhimen → Airport Express → PEK T3",
+          "next": "PEK T3",
+          "icon": "🚇",
+          "note": "Или DiDi ~90–120 ¥"
+        },
+        {
+          "time": "07:35",
+          "place": "PEK Terminal 3",
+          "action": "Регистрация CA869, багаж, досмотр",
+          "next": "Гейт",
+          "icon": "🛍",
+          "note": "выезд был ~09:00 в аудите"
+        },
+        {
+          "time": "10:00",
+          "place": "PEK T3",
+          "action": "Ожидание, посадка",
+          "next": "В полёте",
+          "icon": "✈",
+          "note": ""
+        }
+      ],
+      "main_event": {
+        "time": "06:00",
+        "place": "Huitong Jiufang",
+        "action": "Подъём, check-out",
+        "next": "Метро → PEK",
+        "icon": "🚇",
+        "note": ""
+      }
+    },
+    {
+      "num": 29,
+      "date": "25.08.2026",
+      "date_iso": "2026-08-25",
+      "weekday": "вторник",
+      "city": "Поезд → Красноярск",
+      "region": "ru",
+      "region_name": "Россия",
+      "night": "Дома · check-in — / check-out —",
+      "weather": "Прибытие поезда 081 в 16:12",
+      "highlights": [
+        {
+          "time": "07:00",
+          "place": "Поезд 081",
+          "action": "Подъём в поезде",
+          "next": "Вагон-ресторан",
+          "icon": "🚄",
+          "note": ""
+        },
+        {
+          "time": "08:00",
+          "place": "Поезд",
+          "action": "Завтрак (свой / вагон)",
+          "next": "Купе",
+          "icon": "🚄",
+          "note": ""
+        },
+        {
+          "time": "09:00",
+          "place": "Поезд 081",
+          "action": "Отдых, чтение, виды Сибири",
+          "next": "Сборы",
+          "icon": "🚄",
+          "note": "В пути IKT→KJA"
+        },
+        {
+          "time": "15:00",
+          "place": "Поезд",
+          "action": "Сборы к прибытию",
+          "next": "KJA вокзал",
+          "icon": "🚄",
+          "note": ""
+        }
+      ],
+      "main_event": {
+        "time": "07:00",
+        "place": "Поезд 081",
+        "action": "Подъём в поезде",
+        "next": "Вагон-ресторан",
+        "icon": "🚄",
+        "note": ""
+      }
+    }
+  ]
+}
