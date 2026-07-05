@@ -1,0 +1,165 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-neue-haas-unica, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif);
+  color: var(--color-charcoal, #23212c);
+  background: var(--color-paper, #f7f0e1);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hidden {
+  display: none;
+}
+
+/* --- 3D social tiles (Stockin / CodePen mzydLz, 1:1) --- */
+@import url("https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400");
+
+.trip-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem 1.25rem;
+}
+
+.social-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: "Roboto Condensed", sans-serif;
+}
+
+.social-tiles .tile {
+  list-style: none;
+  margin: 0 8px;
+  animation: tileIn 0.5s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+}
+
+.social-tiles .tile:nth-child(1) { animation-delay: 0.05s; }
+.social-tiles .tile:nth-child(2) { animation-delay: 0.12s; }
+.social-tiles .tile:nth-child(3) { animation-delay: 0.19s; }
+.social-tiles .tile:nth-child(4) { animation-delay: 0.26s; }
+
+.social-tiles .tile-link .tile-icon {
+  font-size: 52px;
+  color: #262626;
+  line-height: 104px;
+  transition: 0.5s;
+  padding-right: 18px;
+}
+
+.social-tiles .tile-link .tile-label {
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 38px;
+  color: #262626;
+  letter-spacing: 4px;
+  transition: 0.5s;
+  font-size: 1.15rem;
+}
+
+.social-tiles .tile-link {
+  position: relative;
+  text-decoration: none;
+  display: block;
+  width: 270px;
+  height: 104px;
+  background: #fff;
+  text-align: left;
+  padding-left: 26px;
+  transform: rotate(-30deg) skew(25deg) translate(0, 0);
+  transition: 0.5s;
+  box-shadow: -20px 20px 10px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.social-tiles .tile-link::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: -20px;
+  height: 100%;
+  width: 20px;
+  background: #b1b1b1;
+  transform: rotate(0deg) skewY(-45deg);
+}
+
+.social-tiles .tile-link::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: -10px;
+  height: 20px;
+  width: 100%;
+  background: #b1b1b1;
+  transform: rotate(0deg) skewX(-45deg);
+}
+
+.social-tiles .tile:hover .tile-link,
+.social-tiles .tile-link:focus-visible {
+  transform: rotate(-30deg) skew(25deg) translate(20px, -15px);
+  box-shadow: -50px 50px 50px rgba(0, 0, 0, 0.5);
+}
+
+.social-tiles .tile:hover .tile-icon,
+.social-tiles .tile:hover .tile-label,
+.social-tiles .tile-link:focus-visible .tile-icon,
+.social-tiles .tile-link:focus-visible .tile-label {
+  color: #fff;
+}
+
+@keyframes tileIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 960px) {
+  .social-tiles {
+    gap: 2.5rem 0.5rem;
+  }
+
+  .social-tiles .tile {
+    margin: 1.5rem 8px;
+  }
+}
+
+@media (max-width: 520px) {
+  .social-tiles {
+    transform: scale(0.85);
+    transform-origin: center center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-tiles .tile {
+    animation: none;
+  }
+
+  .social-tiles .tile-link,
+  .social-tiles .tile-link .tile-icon,
+  .social-tiles .tile-link .tile-label {
+    transition: none;
+  }
+}

@@ -1,0 +1,38 @@
+/* Generated layout overrides — edit in admin → Макет */
+.trip-main {
+  background-color: #89ceec;
+  color: #37ff00;
+}
+body.index-page { display: flex; flex-direction: column; }
+body.index-page > main { display: flex; flex-direction: column; }
+body.index-page .trip-main { order: 0; }
+body.chapter-body { display: flex; flex-direction: column; }
+body.chapter-body > main { display: flex; flex-direction: column; }
+body.chapter-body [data-section="back_link"] { order: 0; }
+body.chapter-body [data-section="hero_media"] { order: 1; }
+body.chapter-body [data-section="hero_content"] { order: 2; }
+body.chapter-body [data-section="badges"] { order: 3; }
+body.chapter-body [data-section="highlights"] { order: 4; }
+body.chapter-body [data-section="timeline_title"] { order: 5; }
+body.chapter-body [data-section="day_timeline"] { order: 6; }
+body.day-body { display: flex; flex-direction: column; }
+body.day-body > main { display: flex; flex-direction: column; }
+body.day-body [data-section="back_link"] { order: 0; }
+body.day-body [data-section="hero"] { order: 1; }
+body.day-body [data-section="gallery"] { order: 2; }
+body.day-body [data-section="intro"] { order: 3; }
+body.day-body [data-section="totals"] { order: 4; }
+body.day-body [data-section="pager"] { order: 5; }
+/* Tile colors — edit in admin → Макет or Визуально */
+body.index-page .social-tiles .tile-link[data-tile-id="thailand"] { background: #ffffff; }
+body.index-page .social-tiles .tile-link[data-tile-id="thailand"]::before { background: #365cce; }
+body.index-page .social-tiles .tile-link[data-tile-id="thailand"]::after { background: #365cce; }
+body.index-page .social-tiles .tile:hover .tile-link[data-tile-id="thailand"], body.index-page .social-tiles .tile-link[data-tile-id="thailand"]:focus-visible { background: #7d96e3; }
+body.index-page .social-tiles .tile-link[data-tile-id="vietnam"] { background: #ffffff; }
+body.index-page .social-tiles .tile-link[data-tile-id="vietnam"]::before { background: #c88a04; }
+body.index-page .social-tiles .tile-link[data-tile-id="vietnam"]::after { background: #c88a04; }
+body.index-page .social-tiles .tile:hover .tile-link[data-tile-id="vietnam"], body.index-page .social-tiles .tile-link[data-tile-id="vietnam"]:focus-visible { background: #f5bc7a; }
+body.index-page .social-tiles .tile-link[data-tile-id="china"] { background: #ffffff; }
+body.index-page .social-tiles .tile-link[data-tile-id="china"]::before { background: #b90404; }
+body.index-page .social-tiles .tile-link[data-tile-id="china"]::after { background: #b90404; }
+body.index-page .social-tiles .tile:hover .tile-link[data-tile-id="china"], body.index-page .social-tiles .tile-link[data-tile-id="china"]:focus-visible { background: #f37272; }

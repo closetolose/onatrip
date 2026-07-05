@@ -1,0 +1,435 @@
+{
+  "meta": {
+    "traveler": "Никита",
+    "period": "28.07 — 25.08.2026",
+    "subtitle": "Красноярск → Таиланд → Вьетнам → Китай → домой",
+    "built_at": "05.07.2026 11:11"
+  },
+  "chapters": [
+    {
+      "id": "departure",
+      "title": "Вылет",
+      "region": "travel",
+      "region_name": "Переезд",
+      "accent": "#23212c",
+      "bg": "#ddd0b4",
+      "hero_image": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=60",
+      "date_from": "28.07",
+      "date_to": "28.07",
+      "date_from_iso": "2026-07-28",
+      "date_to_iso": "2026-07-28",
+      "day_count": 1,
+      "cities": [
+        "Красноярск"
+      ],
+      "highlights": [
+        "📍 Регистрация SU6637, досмотр, посадка",
+        "✈ SU6637 KJA → CAN (Гуанчжоу)",
+        "✈ Прилёт, иммиграция/транзит (два отдельных билета!)",
+        "✈ Посадка 9C7419 CAN → BKK"
+      ],
+      "days": [
+        {
+          "num": 1,
+          "date": "28.07.2026",
+          "date_short": "28.07",
+          "weekday": "вторник",
+          "city": "Красноярск → перелёт",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/01.html",
+          "chapter_id": "departure"
+        }
+      ]
+    },
+    {
+      "id": "thailand",
+      "title": "Таиланд",
+      "region": "th",
+      "region_name": "Таиланд",
+      "accent": "#23212c",
+      "bg": "#fcbd1c",
+      "hero_image": "../media/chapters/thailand/hero-bdd6c53242.png",
+      "date_from": "29.07",
+      "date_to": "06.08",
+      "date_from_iso": "2026-07-29",
+      "date_to_iso": "2026-08-06",
+      "day_count": 9,
+      "cities": [
+        "Паттайя",
+        "Бангкок"
+      ],
+      "highlights": [
+        "✈ Прилёт, иммиграция Таиланд (безвиз)",
+        "✈ Автобус BKK → Паттайя (Ekkamai/Mo Chit маршруты через BKK)",
+        "⛴ Покупка билета паром (официальная касса)",
+        "⛴ Паром → Ко Лан (остров)"
+      ],
+      "days": [
+        {
+          "num": 2,
+          "date": "29.07.2026",
+          "date_short": "29.07",
+          "weekday": "среда",
+          "city": "Паттайя",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/02.html",
+          "chapter_id": "thailand"
+        },
+        {
+          "num": 3,
+          "date": "30.07.2026",
+          "date_short": "30.07",
+          "weekday": "четверг",
+          "city": "Паттайя",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/03.html",
+          "chapter_id": "thailand"
+        },
+        {
+          "num": 4,
+          "date": "31.07.2026",
+          "date_short": "31.07",
+          "weekday": "пятница",
+          "city": "Паттайя (Ко Лан)",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/04.html",
+          "chapter_id": "thailand"
+        },
+        {
+          "num": 5,
+          "date": "01.08.2026",
+          "date_short": "01.08",
+          "weekday": "суббота",
+          "city": "Паттайя",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/05.html",
+          "chapter_id": "thailand"
+        },
+        {
+          "num": 6,
+          "date": "02.08.2026",
+          "date_short": "02.08",
+          "weekday": "воскресенье",
+          "city": "Паттайя",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/06.html",
+          "chapter_id": "thailand"
+        },
+        {
+          "num": 7,
+          "date": "03.08.2026",
+          "date_short": "03.08",
+          "weekday": "понедельник",
+          "city": "Паттайя",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/07.html",
+          "chapter_id": "thailand"
+        },
+        {
+          "num": 8,
+          "date": "04.08.2026",
+          "date_short": "04.08",
+          "weekday": "вторник",
+          "city": "Паттайя",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/08.html",
+          "chapter_id": "thailand"
+        },
+        {
+          "num": 9,
+          "date": "05.08.2026",
+          "date_short": "05.08",
+          "weekday": "среда",
+          "city": "Бангкок",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/09.html",
+          "chapter_id": "thailand"
+        },
+        {
+          "num": 10,
+          "date": "06.08.2026",
+          "date_short": "06.08",
+          "weekday": "четверг",
+          "city": "Бангкок",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/10.html",
+          "chapter_id": "thailand"
+        }
+      ]
+    },
+    {
+      "id": "vietnam",
+      "title": "Вьетнам",
+      "region": "vn",
+      "region_name": "Вьетнам",
+      "accent": "#23212c",
+      "bg": "#a6dfff",
+      "hero_image": "../media/chapters/vietnam/hero-ca3fa4b16c.png",
+      "date_from": "07.08",
+      "date_to": "16.08",
+      "date_from_iso": "2026-08-07",
+      "date_to_iso": "2026-08-16",
+      "day_count": 10,
+      "cities": [
+        "Да Нанг",
+        "Хошимин"
+      ],
+      "highlights": [
+        "📍 Ожидание, посадка",
+        "✈ FD636 DMK → DAD (Дананг)",
+        "✈ Продолжение полёта",
+        "📍 Прилёт, иммиграция eVisa Вьетнам"
+      ],
+      "days": [
+        {
+          "num": 11,
+          "date": "07.08.2026",
+          "date_short": "07.08",
+          "weekday": "пятница",
+          "city": "Бангкок → Да Нанг",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/11.html",
+          "chapter_id": "vietnam"
+        },
+        {
+          "num": 12,
+          "date": "08.08.2026",
+          "date_short": "08.08",
+          "weekday": "суббота",
+          "city": "Да Нанг",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/12.html",
+          "chapter_id": "vietnam"
+        },
+        {
+          "num": 13,
+          "date": "09.08.2026",
+          "date_short": "09.08",
+          "weekday": "воскресенье",
+          "city": "Да Нанг",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/13.html",
+          "chapter_id": "vietnam"
+        },
+        {
+          "num": 14,
+          "date": "10.08.2026",
+          "date_short": "10.08",
+          "weekday": "понедельник",
+          "city": "Да Нанг",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/14.html",
+          "chapter_id": "vietnam"
+        },
+        {
+          "num": 15,
+          "date": "11.08.2026",
+          "date_short": "11.08",
+          "weekday": "вторник",
+          "city": "Да Нанг",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/15.html",
+          "chapter_id": "vietnam"
+        },
+        {
+          "num": 16,
+          "date": "12.08.2026",
+          "date_short": "12.08",
+          "weekday": "среда",
+          "city": "Да Нанг (Ba Na Hills)",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/16.html",
+          "chapter_id": "vietnam"
+        },
+        {
+          "num": 17,
+          "date": "13.08.2026",
+          "date_short": "13.08",
+          "weekday": "четверг",
+          "city": "Да Нанг",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/17.html",
+          "chapter_id": "vietnam"
+        },
+        {
+          "num": 18,
+          "date": "14.08.2026",
+          "date_short": "14.08",
+          "weekday": "пятница",
+          "city": "Хошимин",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/18.html",
+          "chapter_id": "vietnam"
+        },
+        {
+          "num": 19,
+          "date": "15.08.2026",
+          "date_short": "15.08",
+          "weekday": "суббота",
+          "city": "Хошимин",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/19.html",
+          "chapter_id": "vietnam"
+        },
+        {
+          "num": 20,
+          "date": "16.08.2026",
+          "date_short": "16.08",
+          "weekday": "воскресенье",
+          "city": "Хошимин",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/20.html",
+          "chapter_id": "vietnam"
+        }
+      ]
+    },
+    {
+      "id": "china",
+      "title": "Китай",
+      "region": "cn",
+      "region_name": "Китай",
+      "accent": "#006434",
+      "bg": "#efe4cf",
+      "hero_image": "../media/chapters/china/hero-a6f66aa14e.png",
+      "date_from": "17.08",
+      "date_to": "25.08",
+      "date_from_iso": "2026-08-17",
+      "date_to_iso": "2026-08-25",
+      "day_count": 9,
+      "cities": [
+        "Шанхай",
+        "Пекин",
+        "Иркутск",
+        "Красноярск"
+      ],
+      "highlights": [
+        "📍 Посадка",
+        "✈ CZ6096 SGN → PVG",
+        "📍 Прилёт, иммиграция Китай, багаж",
+        "🚇 Метро линия 1/3/4 → пересадка линия 11 → Disney Resort (конечная)"
+      ],
+      "days": [
+        {
+          "num": 21,
+          "date": "17.08.2026",
+          "date_short": "17.08",
+          "weekday": "понедельник",
+          "city": "Хошимин → Шанхай",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/21.html",
+          "chapter_id": "china"
+        },
+        {
+          "num": 22,
+          "date": "18.08.2026",
+          "date_short": "18.08",
+          "weekday": "вторник",
+          "city": "Шанхай",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/22.html",
+          "chapter_id": "china"
+        },
+        {
+          "num": 23,
+          "date": "19.08.2026",
+          "date_short": "19.08",
+          "weekday": "среда",
+          "city": "Шанхай",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/23.html",
+          "chapter_id": "china"
+        },
+        {
+          "num": 24,
+          "date": "20.08.2026",
+          "date_short": "20.08",
+          "weekday": "четверг",
+          "city": "Шанхай",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/24.html",
+          "chapter_id": "china"
+        },
+        {
+          "num": 25,
+          "date": "21.08.2026",
+          "date_short": "21.08",
+          "weekday": "пятница",
+          "city": "Шанхай → Пекин",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/25.html",
+          "chapter_id": "china"
+        },
+        {
+          "num": 26,
+          "date": "22.08.2026",
+          "date_short": "22.08",
+          "weekday": "суббота",
+          "city": "Пекин",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/26.html",
+          "chapter_id": "china"
+        },
+        {
+          "num": 27,
+          "date": "23.08.2026",
+          "date_short": "23.08",
+          "weekday": "воскресенье",
+          "city": "Пекин",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/27.html",
+          "chapter_id": "china"
+        },
+        {
+          "num": 28,
+          "date": "24.08.2026",
+          "date_short": "24.08",
+          "weekday": "понедельник",
+          "city": "Пекин → Иркутск → поезд",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/28.html",
+          "chapter_id": "china"
+        },
+        {
+          "num": 29,
+          "date": "25.08.2026",
+          "date_short": "25.08",
+          "weekday": "вторник",
+          "city": "Поезд → Красноярск",
+          "summary": "",
+          "tag": "",
+          "page_url": "../days/29.html",
+          "chapter_id": "china"
+        }
+      ]
+    }
+  ],
+  "current_chapter_id": null
+}
