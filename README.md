@@ -18,6 +18,12 @@ python -m http.server 8080
 
 Страница: http://localhost:8080/
 
-## Настройка
+## GitHub Pages
 
-Имя и подзаголовок — в [live_plan/site_settings.json](live_plan/site_settings.json).
+Сайт публикуется в ветку `gh-pages` через GitHub Actions.
+
+В **Settings → Pages → Build and deployment** выберите:
+- **Source:** Deploy from a branch
+- **Branch:** `gh-pages` / `/ (root)`
+
+Если деплой не обновляется, откройте **Actions → Deploy site → Run workflow**.
