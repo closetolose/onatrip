@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: build-live-plan
@@ -35,16 +35,9 @@ jobs:
         run: python build_live_plan.py
 
       - name: Verify output
-        run: test -f docs/index.html && test -f docs/assets/style.css && test -f docs/trip.json && test -f docs/assets/app.js
-
-      - name: Commit and push docs
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/
-          if git diff --staged --quiet; then
-            echo "docs/ unchanged"
-          else
-            git commit -m "chore: rebuild live plan [skip ci]"
-            git push
-          fi
+          test -f docs/index.html
+          test -f docs/assets/style.css
+          test -f docs/trip.json
+          test -f docs/chapters/thailand.html
+          test -d docs/days
