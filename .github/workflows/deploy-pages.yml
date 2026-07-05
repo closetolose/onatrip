@@ -35,7 +35,7 @@ jobs:
         run: python build_live_plan.py
 
       - name: Verify output
-        run: test -f docs/index.html && test -f docs/trip.json && test -f docs/days/01.html
+        run: test -f docs/index.html && test -f docs/assets/style.css && test -f docs/trip.json && test -f docs/assets/app.js
 
       - name: Commit and push docs
         run: |

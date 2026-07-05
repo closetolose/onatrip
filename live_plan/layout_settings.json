@@ -1,0 +1,133 @@
+{
+  "pages": {
+    "index": {
+      "sections": [
+        {
+          "id": "tiles",
+          "enabled": true,
+          "order": 0,
+          "styles": {
+            "background-color": "#89ceec",
+            "color": "#37ff00"
+          }
+        }
+      ]
+    },
+    "chapter": {
+      "sections": [
+        {
+          "id": "back_link",
+          "enabled": true,
+          "order": 0,
+          "styles": {}
+        },
+        {
+          "id": "hero_media",
+          "enabled": true,
+          "order": 1,
+          "styles": {}
+        },
+        {
+          "id": "hero_content",
+          "enabled": true,
+          "order": 2,
+          "styles": {}
+        },
+        {
+          "id": "badges",
+          "enabled": true,
+          "order": 3,
+          "styles": {}
+        },
+        {
+          "id": "highlights",
+          "enabled": true,
+          "order": 4,
+          "styles": {}
+        },
+        {
+          "id": "timeline_title",
+          "enabled": true,
+          "order": 5,
+          "styles": {}
+        },
+        {
+          "id": "day_timeline",
+          "enabled": true,
+          "order": 6,
+          "styles": {}
+        }
+      ]
+    },
+    "day": {
+      "sections": [
+        {
+          "id": "back_link",
+          "enabled": true,
+          "order": 0,
+          "styles": {}
+        },
+        {
+          "id": "hero",
+          "enabled": true,
+          "order": 1,
+          "styles": {}
+        },
+        {
+          "id": "gallery",
+          "enabled": true,
+          "order": 2,
+          "styles": {}
+        },
+        {
+          "id": "intro",
+          "enabled": true,
+          "order": 3,
+          "styles": {}
+        },
+        {
+          "id": "totals",
+          "enabled": true,
+          "order": 4,
+          "styles": {}
+        },
+        {
+          "id": "pager",
+          "enabled": true,
+          "order": 5,
+          "styles": {}
+        }
+      ]
+    }
+  },
+  "tiles": {
+    "china": {
+      "label": "",
+      "icon": "",
+      "visible": true,
+      "face_color": "#ffffff",
+      "hover_color": "#f37272",
+      "edge_dark": "#b90404",
+      "edge_light": "#b90404"
+    },
+    "thailand": {
+      "label": "",
+      "icon": "",
+      "visible": true,
+      "face_color": "#ffffff",
+      "hover_color": "#7d96e3",
+      "edge_dark": "#365cce",
+      "edge_light": "#365cce"
+    },
+    "vietnam": {
+      "label": "",
+      "icon": "",
+      "visible": true,
+      "face_color": "#ffffff",
+      "hover_color": "#f5bc7a",
+      "edge_dark": "#c88a04",
+      "edge_light": "#c88a04"
+    }
+  },
+  "custom_rules": []
+}

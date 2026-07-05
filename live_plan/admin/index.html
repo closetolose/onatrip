@@ -3,22 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Trip Admin</title>
+  <meta name="theme-color" content="#f7f0e1">
+  <title>Редактор · поездка</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css">
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
+  <div id="boot-banner" class="boot-banner hidden"></div>
   <div class="layout">
     <aside class="sidebar">
       <div class="sidebar-head">
-        <h1>Trip Admin</h1>
-        <p>Фото, текст, порядок</p>
+        <h1>Редактор</h1>
+        <p id="sidebar-subtitle">день и контент</p>
+      </div>
+      <nav class="sidebar-nav">
+        <button type="button" id="nav-days" class="nav-tab active">Дни</button>
+        <button type="button" id="nav-chapters" class="nav-tab">Главы</button>
+        <button type="button" id="nav-layout" class="nav-tab">Макет</button>
+        <button type="button" id="nav-visual" class="nav-tab">Визуально</button>
+        <button type="button" id="nav-site" class="nav-tab">Сайт</button>
+      </nav>
+      <div id="visual-sidebar" class="visual-sidebar hidden">
+        <label>страница
+          <select id="visual-page-type">
+            <option value="index">Главная</option>
+            <option value="chapter" selected>Глава</option>
+            <option value="day">День</option>
+          </select>
+        </label>
+        <label id="visual-chapter-wrap">глава
+          <select id="visual-chapter-select">
+            <option value="thailand">Таиланд</option>
+            <option value="vietnam">Вьетнам</option>
+            <option value="china">Китай</option>
+          </select>
+        </label>
+        <label id="visual-day-wrap" class="hidden">день
+          <input type="number" id="visual-day-num" min="1" max="29" value="2">
+        </label>
+        <button type="button" id="btn-visual-reload" class="btn secondary">Обновить превью</button>
+        <p class="hint visual-hint">Кликни по элементу на странице — справа откроются его стили.</p>
       </div>
       <div id="days-list" class="days-list"></div>
+      <div id="chapters-list" class="days-list hidden"></div>
     </aside>
 
     <main class="editor">
-      <div id="empty-state" class="empty-state">Выбери день слева</div>
+      <div id="empty-state" class="empty-state">выбери день слева</div>
 
       <div id="editor-panel" class="hidden">
         <header class="editor-head">
@@ -34,23 +65,180 @@
         </header>
 
         <section class="panel">
-          <label for="intro">Текст о дне</label>
-          <textarea id="intro" rows="3" placeholder="Короткое описание для родных"></textarea>
+          <div class="panel-head">
+            <h3>о дне</h3>
+            <div class="toolbar">
+              <button type="button" id="btn-add-text" class="btn secondary">+ Текст</button>
+              <label class="btn secondary upload-btn">
+                + Фото
+                <input type="file" id="photo-file-input" accept="image/*" hidden>
+              </label>
+            </div>
+          </div>
+          <p class="hint">Текст и фото для блока «О дне» на сайте. Перетаскивай блоки в любом порядке.</p>
+          <div id="blocks-list" class="blocks-list"></div>
         </section>
 
         <section class="panel">
-          <div class="panel-head">
-            <h3>Фото</h3>
-            <label class="btn secondary upload-btn">
-              + Загрузить
-              <input type="file" id="file-input" accept="image/*" multiple hidden>
-            </label>
-          </div>
-          <p class="hint">Перетаскивай карточки для смены порядка. Клик — обрезка и подпись.</p>
-          <div id="photo-grid" class="photo-grid"></div>
+          <div class="panel-head"><h3>итого</h3></div>
+          <label>текст<textarea id="meta-totals" rows="3" placeholder="Краткий итог дня"></textarea></label>
         </section>
 
         <div id="status" class="status"></div>
+      </div>
+
+      <div id="site-panel" class="site-panel hidden">
+        <header class="editor-head">
+          <div>
+            <div class="eyebrow">настройки</div>
+            <h2>Весь сайт</h2>
+          </div>
+          <div class="head-actions">
+            <button type="button" id="btn-preview-site" class="btn secondary">Главная</button>
+            <button type="button" id="btn-save-site" class="btn">Сохранить</button>
+            <button type="button" id="btn-build-site" class="btn accent">Собрать сайт</button>
+          </div>
+        </header>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h3>сообщение родным</h3>
+          </div>
+          <div class="status-grid">
+            <label>текст<textarea id="status-note" rows="2" placeholder="Прилетел, всё ок"></textarea></label>
+            <label>статус
+              <select id="status-kind">
+                <option value="ok">ok — обычный</option>
+                <option value="delay">delay — задержка</option>
+                <option value="issue">issue — проблема</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <div id="site-sections"></div>
+
+        <div class="site-actions-bottom">
+          <button type="button" id="btn-reset-site" class="btn danger secondary">Сбросить к умолчанию</button>
+        </div>
+
+        <div id="site-status" class="status"></div>
+      </div>
+
+      <div id="chapters-panel" class="site-panel hidden">
+        <header class="editor-head">
+          <div>
+            <div class="eyebrow">глава</div>
+            <h2 id="chapter-editor-title">Выбери главу</h2>
+          </div>
+          <div class="head-actions">
+            <button type="button" id="btn-preview-chapter" class="btn secondary">Предпросмотр</button>
+            <button type="button" id="btn-save-chapter" class="btn">Сохранить</button>
+            <button type="button" id="btn-build-chapter" class="btn accent">Собрать сайт</button>
+          </div>
+        </header>
+        <section class="panel">
+          <div class="panel-head"><h3>основное</h3></div>
+          <div class="site-fields">
+            <label>название<input type="text" id="chapter-title" placeholder="Таиланд"></label>
+            <label class="field-wide">описание<textarea id="chapter-description" rows="3" placeholder="Коротко о главе"></textarea></label>
+            <label class="field-wide">hero-фото (URL)<input type="text" id="chapter-hero-url" placeholder="https://... или media/chapters/..."></label>
+            <label class="upload-btn btn secondary">Загрузить hero<input type="file" id="chapter-hero-file" accept="image/*" hidden></label>
+          </div>
+          <div id="chapter-hero-preview" class="hero-preview"></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head">
+            <h3>бейджи</h3>
+            <button type="button" id="btn-add-badge" class="btn secondary">+ Бейдж</button>
+          </div>
+          <p class="hint">Пустой список — автоматические бейджи из маршрута.</p>
+          <div id="chapter-badges-list" class="tag-list"></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head">
+            <h3>ключевые события</h3>
+            <button type="button" id="btn-add-highlight" class="btn secondary">+ Событие</button>
+          </div>
+          <p class="hint">Пустой список — события из пошагового гида.</p>
+          <div id="chapter-highlights-list" class="tag-list"></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h3>дни главы</h3></div>
+          <p class="hint">Переопредели summary, tag или city для карточек дней.</p>
+          <div id="chapter-days-overrides" class="steps-list"></div>
+        </section>
+        <div id="chapter-status" class="status"></div>
+      </div>
+
+      <div id="layout-panel" class="site-panel hidden">
+        <header class="editor-head">
+          <div>
+            <div class="eyebrow">макет</div>
+            <h2>Порядок и стили секций</h2>
+          </div>
+          <div class="head-actions">
+            <button type="button" id="btn-preview-layout" class="btn secondary">Предпросмотр</button>
+            <button type="button" id="btn-save-layout" class="btn">Сохранить</button>
+            <button type="button" id="btn-build-layout" class="btn accent">Собрать сайт</button>
+          </div>
+        </header>
+        <section class="panel">
+          <div class="panel-head"><h3>страница</h3></div>
+          <label>тип страницы
+            <select id="layout-page-select">
+              <option value="index">Главная (плитки)</option>
+              <option value="chapter">Страница главы</option>
+              <option value="day">Страница дня</option>
+            </select>
+          </label>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h3>секции</h3></div>
+          <p class="hint">Перетаскивай секции для изменения порядка. Отключай ненужные. Стили — CSS-свойства.</p>
+          <div id="layout-sections-list" class="layout-sections"></div>
+        </section>
+        <section class="panel hidden" id="layout-tiles-panel">
+          <div class="panel-head"><h3>цвета плиток</h3></div>
+          <p class="hint">Лицо — верх плитки. Бока — 3D-грани слева и снизу (не тень на фоне). Hover — при наведении.</p>
+          <div id="layout-tiles-list" class="layout-tiles"></div>
+        </section>
+        <div class="layout-actions-bottom">
+          <button type="button" id="btn-reset-layout" class="btn danger secondary">Сбросить макет</button>
+        </div>
+        <div id="layout-status" class="status"></div>
+      </div>
+
+      <div id="visual-panel" class="visual-panel hidden">
+        <header class="editor-head visual-head">
+          <div>
+            <div class="eyebrow">визуальный редактор</div>
+            <h2 id="visual-target-label">Кликни по элементу</h2>
+          </div>
+          <div class="head-actions">
+            <button type="button" id="btn-visual-save" class="btn">Сохранить</button>
+            <button type="button" id="btn-visual-build" class="btn accent">Собрать сайт</button>
+          </div>
+        </header>
+        <div class="visual-workspace">
+          <div class="visual-frame-wrap">
+            <iframe id="visual-frame" title="Предпросмотр страницы"></iframe>
+          </div>
+          <aside class="visual-inspector">
+            <div id="visual-empty" class="blocks-empty">Выбери элемент на странице слева</div>
+            <div id="visual-inspector-body" class="hidden">
+              <p class="visual-selector" id="visual-selector"></p>
+              <label class="layout-toggle visual-section-toggle hidden">
+                <input type="checkbox" id="visual-section-enabled" checked> Показывать секцию
+              </label>
+              <div id="visual-style-fields" class="layout-styles"></div>
+              <div class="visual-inspector-actions">
+                <button type="button" id="btn-visual-clear-styles" class="btn secondary">Сбросить стили</button>
+              </div>
+            </div>
+            <div id="visual-status" class="status"></div>
+          </aside>
+        </div>
       </div>
     </main>
   </div>
@@ -58,23 +246,60 @@
   <div id="modal" class="modal hidden">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Редактор фото</h3>
+        <h3>фото</h3>
         <button type="button" id="modal-close" class="icon-btn">✕</button>
       </div>
       <div class="crop-wrap">
         <img id="crop-image" alt="">
       </div>
-      <label>Подпись</label>
+      <label>подпись</label>
       <input type="text" id="crop-caption" placeholder="Подпись под фото">
       <div class="modal-actions">
-        <button type="button" id="btn-delete-photo" class="btn danger">Удалить</button>
-        <button type="button" id="btn-apply-crop" class="btn accent">Применить обрезку</button>
+        <button type="button" id="btn-delete-block" class="btn danger">Удалить блок</button>
+        <button type="button" id="btn-apply-crop" class="btn accent">Применить</button>
       </div>
     </div>
   </div>
 
+  <script>
+    (function () {
+      var banner = document.getElementById("boot-banner");
+      function show(msg) {
+        if (!banner) return;
+        banner.innerHTML = msg;
+        banner.classList.remove("hidden");
+      }
+      if (location.protocol === "file:") {
+        show(
+          "<strong>Редактор нужно открывать через сервер.</strong> " +
+          "В терминале: <code>python admin_server.py</code>, " +
+          "затем открой <a href=\"http://127.0.0.1:5050/\">http://127.0.0.1:5050/</a>"
+        );
+        window.ADMIN_OFFLINE = true;
+        return;
+      }
+      fetch("/api/days")
+        .then(function (r) {
+          if (!r.ok) throw new Error("days " + r.status);
+          return r.json();
+        })
+        .then(function (days) {
+          if (!days.length) {
+            show("Сайт не собран. Нажми «Собрать сайт» или выполни <code>python build_live_plan.py</code>");
+          }
+        })
+        .catch(function () {
+          show(
+            "<strong>API не отвечает.</strong> Останови старый процесс и перезапусти: " +
+            "<code>python admin_server.py</code>, затем обнови страницу (F5)."
+          );
+        });
+    })();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
-  <script src="admin.js"></script>
+  <script src="admin.js?v=9"></script>
+  <script src="admin-pages.js?v=5"></script>
+  <script src="admin-visual.js?v=3"></script>
 </body>
 </html>

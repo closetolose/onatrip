@@ -3,259 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0b1220">
-  <meta name="trip-access-token" content="trip2026live">
+  <meta name="theme-color" content="#f7f0e1">
   <title>День 26 · 22.08 · Пекин</title>
-  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+  <link rel="stylesheet" href="../assets/day.css">
+  <link rel="stylesheet" href="../assets/layout.css">
 </head>
-<body class="day-page-body" style="--region-accent: #e11d48; --region-bg: #ffe4e6; --region-color: #881337;">
-  <div id="gate" class="gate hidden">
-    <div class="gate-box">
-      <div class="eyebrow">Live plan</div>
-      <h1>Доступ по ссылке</h1>
-      <p>Откройте страницу по ссылке с ключом или введите его ниже</p>
-      <input id="gate-input" type="text" placeholder="Ключ доступа" autocomplete="off">
-      <button id="gate-submit" type="button">Открыть</button>
-    </div>
-  </div>
+<body class="day-body" style="--region-accent: #efe4cf; --region-ink: #006434; --region-color: #23212c;">
+  <main class="day-page">
+    <a class="day-back" data-section="back_link" href="../chapters/china.html">← К маршруту</a>
 
-  <div id="app" class="day-wrap hidden">
-    <header class="day-hero">
-      <a class="back-link" href="../index.html?k=trip2026live">← К плану</a>
-      <div class="day-badge-lg">День 26</div>
+    <header class="day-hero" data-section="hero">
+      <span class="day-badge">День 26</span>
       <h1>22.08 · суббота</h1>
       <p class="day-city">Пекин</p>
-      <span class="region-tag">Китай</span>
+      <span class="day-region">Китай</span>
     </header>
 
     
-    <section class="photo-gallery">
+    <section class="day-gallery" data-section="gallery" aria-label="фото">
       
-      <figure class="photo-card">
-        <img src="https://images.unsplash.com/photo-1535354839856-604977947?w=900&amp;q=80" alt="Китай · Пекин" loading="lazy">
-        <figcaption>Китай · Пекин</figcaption>
+      <figure class="day-photo">
+        <img src="https://images.unsplash.com/photo-1535354839856-604977947?w=900&amp;q=80" alt="Пекин" loading="lazy">
+        
       </figure>
       
     </section>
     
 
-    
-
-    <section class="info-grid">
-      
-      <div class="info-box">
-        <span class="info-label">Ночёвка</span>
-        <span class="info-value">Huitong Jiufang Beijing · check-in — / check-out 24.08</span>
-      </div>
-      
-      
-      <div class="info-box">
-        <span class="info-label">Запас / погода</span>
-        <span class="info-value">Храм Неба + Tiananmen + Wangfujing + Lama Temple —</span>
-      </div>
-      
+    <section class="day-card day-intro" data-section="intro">
+      <h2 class="day-card-label">О дне</h2>
+      <p class="day-empty-field">&nbsp;</p>
     </section>
 
-    <section class="card timeline-card">
-      <div class="card-label">Расписание дня</div>
-      <ul class="day-timeline">
-        
-        <li class="timeline-row">
-          <div class="timeline-time">07:00</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>Huitong Jiufang</strong>
-            <span>Подъём, завтрак</span>
-            
-            <em>→ Метро → Temple of Heaven</em>
-            
-            
-            <small>Храм лучше 08:00–09:00</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">07:45</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>В пути</strong>
-            <span>Метро линия 2 → Chongwenmen → линия 5 → Tiantan Dongmen</span>
-            
-            <em>→ Temple of Heaven · ~20м</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">08:05</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>Temple of Heaven</strong>
-            <span>Осмотр парка и храма</span>
-            
-            <em>→ Метро → Tiananmen</em>
-            
-            
-            <small>~34 ¥</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">10:05</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>В пути</strong>
-            <span>Метро линия 5 → Qianmen</span>
-            
-            <em>→ Tiananmen · ~15м</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">10:20</div>
-          <div class="timeline-icon">📍</div>
-          <div class="timeline-content">
-            <strong>Tiananmen Square</strong>
-            <span>Площадь снаружи, досмотр</span>
-            
-            <em>→ Обед</em>
-            
-            
-            <small>Запретный город не в плане</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">11:20</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>Qianmen</strong>
-            <span>Обед</span>
-            
-            <em>→ Метро → Wangfujing</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">12:20</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>В пути</strong>
-            <span>Метро линия 2 → Jianguomen → линия 1 → Wangfujing</span>
-            
-            <em>→ Wangfujing · ~15м</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">12:35</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>Wangfujing</strong>
-            <span>Шопинг, улица снеков</span>
-            
-            <em>→ Отель / метро</em>
-            
-            
-            <small>Дождь — APM ТЦ</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">15:05</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>Huitong Jiufang</strong>
-            <span>Отдых от жары</span>
-            
-            <em>→ Метро → Lama Temple</em>
-            
-            
-            <small>Буфер</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">17:05</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>В пути</strong>
-            <span>Метро линия 2 → Yonghegong</span>
-            
-            <em>→ Lama Temple · ~25м</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">17:30</div>
-          <div class="timeline-icon">📍</div>
-          <div class="timeline-content">
-            <strong>Lama Temple (Yonghegong)</strong>
-            <span>Осмотр</span>
-            
-            <em>→ Ужин</em>
-            
-            
-            <small>~25 ¥; до 16:30 вход — проверить летнее время</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">19:00</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>Район Yonghegong</strong>
-            <span>Ужин</span>
-            
-            <em>→ Метро → отель</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">20:15</div>
-          <div class="timeline-icon">🌙</div>
-          <div class="timeline-content">
-            <strong>Huitong Jiufang</strong>
-            <span>Отдых</span>
-            
-            <em>→ Сон</em>
-            
-            
-          </div>
-        </li>
-        
-      </ul>
+    <section class="day-card day-totals" data-section="totals">
+      <h2 class="day-card-label">Итого</h2>
+      <p class="day-empty-field">&nbsp;</p>
     </section>
 
-    
-    <section class="card totals-card">
-      <div class="card-label">Итого</div>
-      <p>сон ~8ч30 · в дороге ~2ч · активности ~11ч · буфер ~1ч</p>
-    </section>
-    
-
-    <footer>
-      Никита · 28.07 — 25.08.2026
-    </footer>
-  </div>
-
-  <script src="../assets/day.js"></script>
+    <nav class="day-pager" data-section="pager" aria-label="Навигация по дням">
+      
+      <a class="day-pager-link" href="../days/25.html">← День 25</a>
+      
+      
+      <a class="day-pager-link day-pager-next" href="../days/27.html">День 27 →</a>
+      
+    </nav>
+  </main>
 </body>
 </html>

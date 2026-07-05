@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "traveler": "Никита",
+    "period": "28.07 — 25.08.2026",
+    "subtitle": "Красноярск → Таиланд → Вьетнам → Китай → домой"
+  },
+  "theme": {
+    "theme_color": "#f7f0e1",
+    "color_charcoal": "#23212c",
+    "color_paper": "#f7f0e1",
+    "color_paper_deep": "#ddd0b4",
+    "color_surface": "#efe4cf",
+    "color_surface_alt": "#e3d5bc",
+    "color_surface_inset": "#f5edd9",
+    "color_snow": "#ffffff",
+    "color_pine": "#006434",
+    "color_marigold": "#fcbd1c",
+    "color_morning_sky": "#a6dfff",
+    "color_ember": "#dd5000",
+    "page_max_width": "640px",
+    "font_family": "\"Inter\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+  }
+}

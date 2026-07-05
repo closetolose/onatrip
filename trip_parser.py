@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Shared parser for trip markdown guides."""
 import re
+from datetime import datetime
 
 ROUTE = [
     ("28.07", "KJA", "Красноярск", "ru"),
@@ -14,13 +15,51 @@ ROUTE = [
     ("25.08", "KJA", "Домой", "ru"),
 ]
 
+MAP_NODES = [
+    ("KJA", 56.17, 92.49),
+    ("BKK", 12.93, 100.88),
+    ("DMK", 13.91, 100.61),
+    ("DAD", 16.04, 108.20),
+    ("SGN", 10.82, 106.65),
+    ("PVG", 31.14, 121.81),
+    ("PEK", 40.08, 116.60),
+    ("IKT", 52.27, 104.39),
+    ("KJA", 56.17, 92.49),
+]
+
 REGION = {
-    "ru": {"name": "Россия", "color": "#1e3a5f", "bg": "#e8f0f8", "accent": "#3b82f6"},
-    "th": {"name": "Таиланд", "color": "#7c4a03", "bg": "#fef3c7", "accent": "#f59e0b"},
-    "vn": {"name": "Вьетнам", "color": "#7f1d1d", "bg": "#fee2e2", "accent": "#ef4444"},
-    "cn": {"name": "Китай", "color": "#881337", "bg": "#ffe4e6", "accent": "#e11d48"},
-    "travel": {"name": "Переезд", "color": "#374151", "bg": "#f3f4f6", "accent": "#6b7280"},
+    "ru": {"name": "Россия", "color": "#23212c", "bg": "#e3d5bc", "accent": "#006434"},
+    "th": {"name": "Таиланд", "color": "#23212c", "bg": "#fcbd1c", "accent": "#23212c"},
+    "vn": {"name": "Вьетнам", "color": "#23212c", "bg": "#a6dfff", "accent": "#23212c"},
+    "cn": {"name": "Китай", "color": "#23212c", "bg": "#efe4cf", "accent": "#006434"},
+    "travel": {"name": "Переезд", "color": "#23212c", "bg": "#ddd0b4", "accent": "#23212c"},
 }
+
+
+def _parse_day_date(date_str: str) -> datetime:
+    if "-" in date_str and len(date_str) >= 10:
+        return datetime.strptime(date_str[:10], "%Y-%m-%d")
+    parts = date_str.split(".")
+    if len(parts) == 3:
+        d, m, y = parts
+        return datetime(int(y), int(m), int(d))
+    raise ValueError(f"Unsupported date format: {date_str!r}")
+
+
+def _parse_route_date(dd_mm: str, year: int) -> datetime:
+    d, m = dd_mm.split(".")
+    return datetime(year, int(m), int(d))
+
+
+def waypoint_for_date(day_date_str: str, route=ROUTE) -> int:
+    """Return index of the latest route node whose date is on or before day_date_str."""
+    day_dt = _parse_day_date(day_date_str)
+    best_idx = 0
+    for idx, (date_str, *_rest) in enumerate(route):
+        route_dt = _parse_route_date(date_str, day_dt.year)
+        if route_dt <= day_dt:
+            best_idx = idx
+    return best_idx
 
 
 def detect_region(city: str, title: str) -> str:

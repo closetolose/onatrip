@@ -7,3 +7,4 @@ venv/
 _guide_print.html
 _xlsx_dump.txt
 .DS_Store
+.cursor/ui-workflow-runs/

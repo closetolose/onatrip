@@ -1,0 +1,254 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-neue-haas-unica, ui-sans-serif, system-ui, sans-serif);
+  color: var(--color-charcoal, #23212c);
+  background: var(--color-paper, #f7f0e1);
+  line-height: 1.5;
+}
+
+.day-body {
+  background:
+    radial-gradient(circle at top, color-mix(in srgb, var(--region-accent, #fcbd1c) 16%, transparent), transparent 48%),
+    var(--color-paper, #f7f0e1);
+}
+
+.day-page {
+  max-width: var(--day-page-max-width, 40rem);
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.day-back {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: var(--color-pine, #006434);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.day-back:hover {
+  text-decoration: underline;
+}
+
+.day-hero {
+  margin-bottom: 1.25rem;
+}
+
+.day-badge {
+  display: inline-block;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: var(--region-accent, #fcbd1c);
+  color: var(--region-ink, #23212c);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.day-hero h1 {
+  margin: 0.65rem 0 0.25rem;
+  font-size: clamp(1.55rem, 4vw, 2rem);
+}
+
+.day-city {
+  margin: 0;
+  font-size: 1.05rem;
+  color: color-mix(in srgb, var(--color-charcoal, #23212c) 72%, white);
+}
+
+.day-region {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(35, 33, 44, 0.08);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.day-gallery {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.day-photo {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--card-radius, 1rem);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(35, 33, 44, 0.08);
+  box-shadow: 0 10px 24px rgba(35, 33, 44, 0.06);
+}
+
+.day-photo img {
+  display: block;
+  width: 100%;
+  max-height: 18rem;
+  object-fit: cover;
+}
+
+.day-photo figcaption {
+  padding: 0.65rem 0.85rem;
+  font-size: 0.84rem;
+  color: color-mix(in srgb, var(--color-charcoal, #23212c) 68%, white);
+}
+
+.day-card {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: var(--card-radius, 1rem);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(35, 33, 44, 0.08);
+  box-shadow: 0 10px 24px rgba(35, 33, 44, 0.06);
+}
+
+.day-schedule {
+  border-left: 4px solid var(--region-accent, #fcbd1c);
+}
+
+.day-card-label {
+  margin: 0 0 0.75rem;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-charcoal, #23212c) 58%, white);
+}
+
+.day-intro p,
+.day-totals p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.day-empty-field {
+  min-height: 1.2em;
+}
+
+.day-step-template .day-step-time {
+  opacity: 0.45;
+}
+
+.day-info-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 520px) {
+  .day-info-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.day-info {
+  padding: 0.85rem 0.95rem;
+  border-radius: 0.95rem;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(35, 33, 44, 0.08);
+}
+
+.day-info-label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-charcoal, #23212c) 58%, white);
+  font-weight: 700;
+}
+
+.day-info-value {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.92rem;
+}
+
+.day-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.day-step {
+  display: grid;
+  grid-template-columns: 3.25rem 1.75rem 1fr;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid rgba(35, 33, 44, 0.08);
+}
+
+.day-step:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.day-step-time {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.82rem;
+  color: color-mix(in srgb, var(--color-charcoal, #23212c) 58%, white);
+  text-align: right;
+}
+
+.day-step-icon {
+  font-size: 1.05rem;
+}
+
+.day-step-body strong {
+  display: block;
+  font-size: 0.92rem;
+}
+
+.day-step-body span {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.86rem;
+  color: color-mix(in srgb, var(--color-charcoal, #23212c) 68%, white);
+}
+
+.day-step-body em {
+  display: block;
+  margin-top: 0.35rem;
+  font-style: normal;
+  font-size: 0.8rem;
+  color: var(--color-pine, #006434);
+}
+
+.day-step-body small {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: color-mix(in srgb, var(--color-charcoal, #23212c) 58%, white);
+}
+
+.day-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.day-pager-link {
+  color: var(--color-pine, #006434);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.day-pager-link:hover {
+  text-decoration: underline;
+}
+
+.day-pager-next {
+  margin-left: auto;
+}
+
+.day-pager-spacer {
+  flex: 1;
+}
+
+.day-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: color-mix(in srgb, var(--color-charcoal, #23212c) 58%, white);
+}

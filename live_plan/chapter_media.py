@@ -1,0 +1,115 @@
+# -*- coding: utf-8 -*-
+"""Per-chapter content overrides editable from admin."""
+from __future__ import annotations
+
+import json
+from copy import deepcopy
+from pathlib import Path
+from typing import Any
+
+LIVE_DIR = Path(__file__).resolve().parent
+CHAPTER_MEDIA_PATH = LIVE_DIR / "chapter_media.json"
+
+DEFAULT_ENTRY: dict[str, Any] = {
+    "title": "",
+    "description": "",
+    "hero_image": "",
+    "badges": [],
+    "highlights": [],
+    "day_overrides": {},
+}
+
+
+def load_chapter_media() -> dict[str, Any]:
+    if not CHAPTER_MEDIA_PATH.exists():
+        return {}
+    return json.loads(CHAPTER_MEDIA_PATH.read_text(encoding="utf-8"))
+
+
+def save_chapter_media(data: dict[str, Any]) -> dict[str, Any]:
+    cleaned = sanitize_chapter_media(data)
+    CHAPTER_MEDIA_PATH.write_text(
+        json.dumps(cleaned, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return cleaned
+
+
+def sanitize_chapter_media(data: dict | None) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for chapter_id, raw in (data or {}).items():
+        if not isinstance(raw, dict):
+            continue
+        entry = deepcopy(DEFAULT_ENTRY)
+        entry["title"] = str(raw.get("title", "")).strip()
+        entry["description"] = str(raw.get("description", "")).strip()
+        entry["hero_image"] = str(raw.get("hero_image", "")).strip()
+        entry["badges"] = [
+            str(item).strip()
+            for item in raw.get("badges", [])
+            if str(item).strip()
+        ]
+        entry["highlights"] = [
+            str(item).strip()
+            for item in raw.get("highlights", [])
+            if str(item).strip()
+        ]
+        overrides: dict[str, Any] = {}
+        for day_key, day_raw in (raw.get("day_overrides") or {}).items():
+            if not isinstance(day_raw, dict):
+                continue
+            overrides[str(day_key)] = {
+                key: str(day_raw.get(key, "")).strip()
+                for key in ("summary", "tag", "city")
+                if str(day_raw.get(key, "")).strip()
+            }
+        entry["day_overrides"] = overrides
+        if any([
+            entry["title"],
+            entry["description"],
+            entry["hero_image"],
+            entry["badges"],
+            entry["highlights"],
+            entry["day_overrides"],
+        ]):
+            result[str(chapter_id)] = entry
+    return result
+
+
+def chapter_entry(chapter_id: str, media: dict[str, Any] | None = None) -> dict[str, Any]:
+    media = media if media is not None else load_chapter_media()
+    return deepcopy(media.get(chapter_id, DEFAULT_ENTRY))
+
+
+def public_image_url(url: str) -> str:
+    if url.startswith("http://") or url.startswith("https://"):
+        return url
+    if url.startswith("media/"):
+        return "../" + url
+    return url
+
+
+def apply_chapter_overrides(chapter: dict, media: dict[str, Any] | None = None) -> dict:
+    entry = chapter_entry(chapter["id"], media)
+    result = deepcopy(chapter)
+    if entry["title"]:
+        result["title"] = entry["title"]
+    if entry["description"]:
+        result["description"] = entry["description"]
+    if entry["hero_image"]:
+        result["hero_image"] = public_image_url(entry["hero_image"])
+    if entry["badges"]:
+        result["badges"] = entry["badges"]
+    if entry["highlights"]:
+        result["highlights"] = entry["highlights"]
+    overrides = entry.get("day_overrides") or {}
+    days = []
+    for day in result.get("days", []):
+        day_copy = deepcopy(day)
+        override = overrides.get(str(day["num"]), {})
+        for key in ("summary", "tag", "city"):
+            if override.get(key):
+                day_copy[key] = override[key]
+        days.append(day_copy)
+    result["days"] = days
+    return result

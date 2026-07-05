@@ -3,315 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0b1220">
-  <meta name="trip-access-token" content="trip2026live">
+  <meta name="theme-color" content="#f7f0e1">
   <title>День 21 · 17.08 · Хошимин → Шанхай</title>
-  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+  <link rel="stylesheet" href="../assets/day.css">
+  <link rel="stylesheet" href="../assets/layout.css">
 </head>
-<body class="day-page-body" style="--region-accent: #ef4444; --region-bg: #fee2e2; --region-color: #7f1d1d;">
-  <div id="gate" class="gate hidden">
-    <div class="gate-box">
-      <div class="eyebrow">Live plan</div>
-      <h1>Доступ по ссылке</h1>
-      <p>Откройте страницу по ссылке с ключом или введите его ниже</p>
-      <input id="gate-input" type="text" placeholder="Ключ доступа" autocomplete="off">
-      <button id="gate-submit" type="button">Открыть</button>
-    </div>
-  </div>
+<body class="day-body" style="--region-accent: #a6dfff; --region-ink: #23212c; --region-color: #23212c;">
+  <main class="day-page">
+    <a class="day-back" data-section="back_link" href="../chapters/china.html">← К маршруту</a>
 
-  <div id="app" class="day-wrap hidden">
-    <header class="day-hero">
-      <a class="back-link" href="../index.html?k=trip2026live">← К плану</a>
-      <div class="day-badge-lg">День 21</div>
+    <header class="day-hero" data-section="hero">
+      <span class="day-badge">День 21</span>
       <h1>17.08 · понедельник</h1>
       <p class="day-city">Хошимин → Шанхай</p>
-      <span class="region-tag">Вьетнам</span>
+      <span class="day-region">Вьетнам</span>
     </header>
 
     
-    <section class="photo-gallery">
+    <section class="day-gallery" data-section="gallery" aria-label="фото">
       
-      <figure class="photo-card">
-        <img src="https://images.unsplash.com/photo-1559592413-7e7a2656f235?w=900&amp;q=80" alt="Вьетнам · Хошимин → Шанхай" loading="lazy">
-        <figcaption>Вьетнам · Хошимин → Шанхай</figcaption>
+      <figure class="day-photo">
+        <img src="https://images.unsplash.com/photo-1559592413-7e7a2656f235?w=900&amp;q=80" alt="Хошимин → Шанхай" loading="lazy">
+        
       </figure>
       
     </section>
     
 
-    
-
-    <section class="info-grid">
-      
-      <div class="info-box">
-        <span class="info-label">Ночёвка</span>
-        <span class="info-value">Country Inn &amp; Suites (Shanghai Railway Station) · check-in 15:00 / check-out 21.08 утром</span>
-      </div>
-      
-      
-      <div class="info-box">
-        <span class="info-label">Запас / погода</span>
-        <span class="info-value">CZ6096 02:35; 1 место багажа; заселение 15:00 — 7+ ч с кладовкой; написать отелю 14–15.08</span>
-      </div>
-      
+    <section class="day-card day-intro" data-section="intro">
+      <h2 class="day-card-label">О дне</h2>
+      <p class="day-empty-field">&nbsp;</p>
     </section>
 
-    <section class="card timeline-card">
-      <div class="card-label">Расписание дня</div>
-      <ul class="day-timeline">
-        
-        <li class="timeline-row">
-          <div class="timeline-time">00:15</div>
-          <div class="timeline-icon">🚗</div>
-          <div class="timeline-content">
-            <strong>K&#39;ool Hotels</strong>
-            <span>Подъём, check-out</span>
-            
-            <em>→ Grab → SGN</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">00:30</div>
-          <div class="timeline-icon">✈</div>
-          <div class="timeline-content">
-            <strong>В пути</strong>
-            <span>Grab → SGN аэропорт</span>
-            
-            <em>→ SGN · ~20–40м</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">01:00</div>
-          <div class="timeline-icon">📍</div>
-          <div class="timeline-content">
-            <strong>SGN</strong>
-            <span>Регистрация CZ6096, досмотр, багаж 1 место</span>
-            
-            <em>→ Гейт</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">02:20</div>
-          <div class="timeline-icon">✈</div>
-          <div class="timeline-content">
-            <strong>SGN</strong>
-            <span>Посадка</span>
-            
-            <em>→ В полёте</em>
-            
-            
-            <small>Вылет 02:35</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">02:35</div>
-          <div class="timeline-icon">✈</div>
-          <div class="timeline-content">
-            <strong>В полёте</strong>
-            <span>CZ6096 SGN → PVG</span>
-            
-            <em>→ PVG</em>
-            
-            
-            <small>Прилёт 07:40 местное</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">07:40</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>PVG (Пудун)</strong>
-            <span>Прилёт, иммиграция Китай, багаж</span>
-            
-            <em>→ Метро</em>
-            
-            
-            <small>Безвиз; Alipay</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">08:40</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>В пути</strong>
-            <span>Метро Maglev/линия 2 → Shanghai Railway Station</span>
-            
-            <em>→ Country Inn · ~50м</em>
-            
-            
-            <small>~7–10 ¥</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">09:30</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>Country Inn &amp; Suites</strong>
-            <span>Кладовка, регистрация</span>
-            
-            <em>→ Метро → West Nanjing Rd</em>
-            
-            
-            <small>Check-in 15:00</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">10:00</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>В пути</strong>
-            <span>Метро линия 1 → People&#39;s Square / пересадка линия 2 → Nanjing West Road</span>
-            
-            <em>→ West Nanjing Rd · ~35м</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">10:35</div>
-          <div class="timeline-icon">🚶</div>
-          <div class="timeline-content">
-            <strong>HKRI Taikoo Hui</strong>
-            <span>The Louis (корабль LV) — бронь My LV WeChat</span>
-            
-            <em>→ JC Plaza · пешком 10м</em>
-            
-            
-            <small>10:00–22:00; бесплатно с бронью</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">12:05</div>
-          <div class="timeline-icon">🛍</div>
-          <div class="timeline-content">
-            <strong>JC Plaza</strong>
-            <span>Maison Margiela Cafe + обед</span>
-            
-            <em>→ ТЦ</em>
-            
-            
-            <small>1225 West Nanjing Rd L2</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">13:35</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>Plaza 66 / Taikoo Hui</strong>
-            <span>Шопинг, кафе</span>
-            
-            <em>→ Метро → отель</em>
-            
-            
-            <small>Дождь — остаться в ТЦ</small>
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">16:00</div>
-          <div class="timeline-icon">🚇</div>
-          <div class="timeline-content">
-            <strong>В пути</strong>
-            <span>Метро → Shanghai Railway Station</span>
-            
-            <em>→ Country Inn · ~30м</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">16:30</div>
-          <div class="timeline-icon">📍</div>
-          <div class="timeline-content">
-            <strong>Country Inn</strong>
-            <span>Заселение в номер</span>
-            
-            <em>→ Отдых</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">17:00</div>
-          <div class="timeline-icon">📍</div>
-          <div class="timeline-content">
-            <strong>Country Inn</strong>
-            <span>Отдых после ночного вылета</span>
-            
-            <em>→ Ужин</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">20:00</div>
-          <div class="timeline-icon">🚄</div>
-          <div class="timeline-content">
-            <strong>Район вокзала</strong>
-            <span>Ужин</span>
-            
-            <em>→ Отель</em>
-            
-            
-          </div>
-        </li>
-        
-        <li class="timeline-row">
-          <div class="timeline-time">21:00</div>
-          <div class="timeline-icon">🌙</div>
-          <div class="timeline-content">
-            <strong>Country Inn</strong>
-            <span>Ранний сон (Disney завтра)</span>
-            
-            <em>→ Сон</em>
-            
-            
-          </div>
-        </li>
-        
-      </ul>
+    <section class="day-card day-totals" data-section="totals">
+      <h2 class="day-card-label">Итого</h2>
+      <p class="day-empty-field">&nbsp;</p>
     </section>
 
-    
-    <section class="card totals-card">
-      <div class="card-label">Итого</div>
-      <p>сон ~9ч (включая дневной отдых) · в дороге ~4ч · активности ~6ч · буфер ~1ч</p>
-    </section>
-    
-
-    <footer>
-      Никита · 28.07 — 25.08.2026
-    </footer>
-  </div>
-
-  <script src="../assets/day.js"></script>
+    <nav class="day-pager" data-section="pager" aria-label="Навигация по дням">
+      
+      <a class="day-pager-link" href="../days/20.html">← День 20</a>
+      
+      
+      <a class="day-pager-link day-pager-next" href="../days/22.html">День 22 →</a>
+      
+    </nav>
+  </main>
 </body>
 </html>

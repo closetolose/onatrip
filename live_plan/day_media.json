@@ -1,40 +1,20 @@
 {
   "1": {
-    "intro": "Старт из Красноярска: ночной перелёт через Гуанчжоу в Бангкок.",
-    "photos": [
-      {
-        "url": "media/day-01/5f7a33f77b.png",
-        "caption": ""
-      },
-      {
-        "url": "media/day-01/d5765663ca.jpg",
-        "caption": ""
-      },
-      {
-        "url": "media/day-01/8803e21e97.png",
-        "caption": ""
-      }
-    ]
+    "blocks": [],
+    "steps": [],
+    "meta": {
+      "night": "В полёте / стыковка CAN (без отеля) · check-in — / check-out —",
+      "weather": "Жара в Таиланде с 29.07; сегодня только перелёт",
+      "totals": "сон ~0ч (ночной перелёт) · в дороге ~12ч · активности ~2ч · буфер ~1ч"
+    }
   },
   "2": {
-    "intro": "Первый день в Паттайе — Джомтьен, заселение в Hotel Zing.",
-    "photos": [
-      {
-        "url": "media/day-02/1edb7a31f7.png",
-        "caption": ""
-      },
-      {
-        "url": "media/day-02/6a161b08ad.png",
-        "caption": ""
-      },
-      {
-        "url": "media/day-02/135f9ad40b.jpg",
-        "caption": ""
-      }
-    ]
+    "blocks": []
   },
   "4": {
-    "intro": "Остров Ко Лан — паром, пляжи, снорклинг.",
-    "photos": []
+    "blocks": []
+  },
+  "12": {
+    "blocks": []
   }
 }

@@ -1,258 +1,121 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Build public live trip page for GitHub Pages (docs/)."""
+"""Build the public "postcards" travel site for GitHub Pages (docs/)."""
 from __future__ import annotations
 
 import json
-import re
 import shutil
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from trip_parser import REGION, ROUTE, parse_md, transport_icon
+from live_plan.chapter_media import apply_chapter_overrides, load_chapter_media
+from live_plan.chapters import build_chapters, current_chapter_id
+from live_plan.day_pages import (
+    MEDIA_SRC,
+    blank_public_day,
+    chapter_badges,
+    enrich_chapter_days,
+    intro_from_media,
+    load_day_media,
+    media_entry,
+    missing_media_files,
+    photos_from_media,
+    verify_day_output,
+)
+from live_plan.layout import load_layout, render_layout_css
+from live_plan.site_settings import format_copy, load_site_settings, render_theme_css
+from trip_parser import REGION, parse_md
 
 ROOT = Path(__file__).parent
-MD_PATH = ROOT / "пошаговый_гид_2026.md"
 LIVE_DIR = ROOT / "live_plan"
-CONFIG_PATH = LIVE_DIR / "config.json"
-STATUS_PATH = LIVE_DIR / "status.json"
-MEDIA_CONFIG_PATH = LIVE_DIR / "day_media.json"
-MEDIA_SRC = LIVE_DIR / "media"
 DOCS_DIR = ROOT / "docs"
 ASSETS_SRC = LIVE_DIR / "assets"
+GUIDE_PATH = ROOT / "пошаговый_гид_2026.md"
 
-REGION_HERO = {
-    "ru": {
-        "url": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=900&q=80",
-        "caption": "Сибирь",
-    },
-    "th": {
-        "url": "https://images.unsplash.com/photo-1528183429752-a97d0bf99b5a?w=900&q=80",
-        "caption": "Таиланд",
-    },
-    "vn": {
-        "url": "https://images.unsplash.com/photo-1559592413-7e7a2656f235?w=900&q=80",
-        "caption": "Вьетнам",
-    },
-    "cn": {
-        "url": "https://images.unsplash.com/photo-1535354839856-604977947?w=900&q=80",
-        "caption": "Китай",
-    },
-    "travel": {
-        "url": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=900&q=80",
-        "caption": "В дороге",
-    },
-}
-
-IMPORTANT_KEYWORDS = (
-    "полёт", "рейс", "борту", "аэропорт", "bkk", "can", "dmk", "dad", "sgn", "pvg", "pek", "kja", "ikt",
-    "поезд", "вокзал", "081", "g2", "паром", "иммиграц", "регистрац", "посадка", "прилёт", "прилет",
-    "вылет", "заселен", "check-in", "check-out", "hotel", "отель", "стыковк", "пересад",
-    "ba na", "floating", "zoo", "disney", "forbidden", "bund", "остров", "ко лан",
-)
-
-SKIP_KEYWORDS = (
-    "сон", "завтрак", "обед", "ужин", "душ", "7-eleven", "отдых", "свободное время",
-    "сборы, проверка", "покупка билета airport bus",
-)
-
-SANITIZE_PATTERNS = [
-    (re.compile(r"PNR\s+\w+;?\s*", re.I), ""),
-    (re.compile(r"~\d[\d\s–-]*\s*₽"), ""),
-    (re.compile(r"\d[\d\s–-]*\s*₽"), ""),
-    (re.compile(r"[^.;]*бюджет[^.;]*[.;]?\s*", re.I), ""),
-    (re.compile(r"ориентир\s+\d+[^.;]*[.;]?\s*", re.I), ""),
-    (re.compile(r"активности\s+\d[\d\s]*₽[^.;]*[.;]?\s*", re.I), ""),
-    (re.compile(r"\s*;\s*;\s*"), "; "),
-]
+SECRET_MARKERS = ("PNR", "₽", "бюджет")
 
 
-def sanitize_text(text: str) -> str:
-    if not text or text == "—":
-        return ""
-    result = text.strip()
-    for pattern, repl in SANITIZE_PATTERNS:
-        result = pattern.sub(repl, result)
-    result = re.sub(r"\s+", " ", result).strip(" ;.")
-    return result
+def verify_no_secrets(blob: str) -> None:
+    """Abort the build if any secret marker leaked into the public JSON."""
+    found = [marker for marker in SECRET_MARKERS if marker in blob]
+    if found:
+        raise SystemExit(f"Secret markers leaked into trip.json: {', '.join(found)}")
 
 
-def step_blob(step: dict) -> str:
-    return " ".join(
-        step.get(k, "") for k in ("place", "action", "next", "note", "transit")
-    ).lower()
+def build_trip(site: dict, parsed_days: list[dict], day_media: dict, chapter_media: dict) -> dict:
+    chapters = build_chapters(parsed_days)
+    chapters = [apply_chapter_overrides(chapter, chapter_media) for chapter in chapters]
+    parsed_by_num = {day["num"]: day for day in parsed_days}
+    chapter_by_id = {chapter["id"]: chapter for chapter in chapters}
 
+    for chapter in chapters:
+        enrich_chapter_days(chapter, parsed_by_num, day_media)
 
-def is_important_step(step: dict) -> bool:
-    text = step_blob(step)
-    if any(k in text for k in SKIP_KEYWORDS):
-        if not any(k in text for k in ("рейс", "полёт", "полете", "аэропорт", "поезд", "паром", "прилёт", "прилет", "вылет", "иммиграц")):
-            return False
-    if any(k in text for k in IMPORTANT_KEYWORDS):
-        return True
-    icon = transport_icon(text)
-    return icon in ("✈", "🚄", "⛴", "🚌") and "grab" not in text and "сонгтео" not in text
-
-
-def date_to_iso(date_str: str) -> str:
-    d, m, y = date_str.split(".")
-    return f"{y}-{m}-{d}"
-
-
-def pick_highlights(steps: list[dict], limit: int = 4) -> list[dict]:
-    picked = []
-    for step in steps:
-        if not is_important_step(step):
-            continue
-        blob = step_blob(step)
-        picked.append({
-            "time": step["time"],
-            "place": sanitize_text(step["place"]),
-            "action": sanitize_text(step["action"]),
-            "next": sanitize_text(step["next"]) if step["next"] != "—" else "",
-            "icon": transport_icon(blob),
-            "note": sanitize_text(step["note"]),
-        })
-        if len(picked) >= limit:
-            break
-    return picked
-
-
-def sanitize_step(step: dict) -> dict | None:
-    action = sanitize_text(step["action"]).lower()
-    place = sanitize_text(step["place"]).lower()
-    if action == "сон" or (action.startswith("сон") and "отель" not in place and "hotel" not in place):
-        return None
-    blob = step_blob(step)
-    return {
-        "time": step["time"],
-        "place": sanitize_text(step["place"]),
-        "action": sanitize_text(step["action"]),
-        "next": sanitize_text(step["next"]) if step["next"] != "—" else "",
-        "transit": sanitize_text(step["transit"]) if step["transit"] != "—" else "",
-        "note": sanitize_text(step["note"]),
-        "icon": transport_icon(blob),
-    }
-
-
-def build_day_steps(steps: list[dict]) -> list[dict]:
-    result = []
-    for step in steps:
-        cleaned = sanitize_step(step)
-        if cleaned and (cleaned["place"] or cleaned["action"]):
-            result.append(cleaned)
-    return result
-
-
-def public_photo_url(url: str) -> str:
-    if url.startswith("http://") or url.startswith("https://"):
-        return url
-    if url.startswith("media/"):
-        return "../" + url
-    return url
-
-
-def resolve_photos(day_num: int, region: str, city: str, media_entry: dict) -> list[dict]:
-    photos = []
-    for item in media_entry.get("photos", []):
-        if isinstance(item, str):
-            photos.append({"url": public_photo_url(item), "caption": ""})
-        elif isinstance(item, dict) and item.get("url"):
-            photos.append({
-                "url": public_photo_url(item["url"]),
-                "caption": item.get("caption", ""),
-            })
-
-    if not photos:
-        hero = REGION_HERO.get(region, REGION_HERO["travel"])
-        photos.append({
-            "url": hero["url"],
-            "caption": media_entry.get("photo_caption") or f"{hero['caption']} · {city}",
-        })
-    return photos
-
-
-def load_day_media() -> dict:
-    if not MEDIA_CONFIG_PATH.exists():
-        return {}
-    return json.loads(MEDIA_CONFIG_PATH.read_text(encoding="utf-8"))
-
-
-def main_highlight(steps: list[dict]) -> dict | None:
-    highlights = pick_highlights(steps, limit=1)
-    return highlights[0] if highlights else None
-
-
-def build_trip_payload(config: dict, status: dict, data: dict) -> dict:
-    built_at = datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds")
-    days = []
-    for day in data["days"]:
-        highlights = pick_highlights(day["steps"])
-        days.append({
-            "num": day["num"],
-            "date": day["date"],
-            "date_iso": date_to_iso(day["date"]),
-            "weekday": day["weekday"],
-            "city": sanitize_text(day["city"]),
-            "region": day["region"],
-            "region_name": REGION[day["region"]]["name"],
-            "night": sanitize_text(day["night"]),
-            "weather": sanitize_text(day["weather"]),
-            "totals": sanitize_text(day.get("totals", "")),
-            "highlights": highlights,
-            "main_event": main_highlight(day["steps"]),
-            "page_url": f"days/{day['num']:02d}.html",
-        })
-
-    route = [
-        {
-            "date": date,
-            "code": code,
-            "name": name,
-            "region": reg,
-            "accent": REGION[reg]["accent"],
-        }
-        for date, code, name, reg in ROUTE
-    ]
-
+    meta = site["meta"]
+    today_iso = datetime.now().date().isoformat()
     return {
         "meta": {
-            "traveler": config.get("traveler", "Путешественник"),
-            "period": config.get("period", ""),
-            "subtitle": config.get("subtitle", ""),
-            "period_start": config.get("period_start", ""),
-            "period_end": config.get("period_end", ""),
-            "built_at": built_at,
-            "access_token": config.get("access_token") or "",
+            "traveler": meta.get("traveler", "Путешественник"),
+            "period": meta.get("period", ""),
+            "subtitle": meta.get("subtitle", ""),
+            "built_at": datetime.now().strftime("%d.%m.%Y %H:%M"),
         },
-        "status": {
-            "note": status.get("note", "").strip(),
-            "note_updated": status.get("note_updated", ""),
-            "status": status.get("status", "ok"),
-        },
-        "route": route,
-        "days": days,
+        "chapters": chapters,
+        "current_chapter_id": current_chapter_id(chapters, today_iso),
+        "_parsed_by_num": parsed_by_num,
+        "_chapter_by_id": chapter_by_id,
     }
 
 
-def render_index(payload: dict) -> str:
+def render_index(trip: dict, theme_color: str) -> str:
     env = Environment(
         loader=FileSystemLoader(str(LIVE_DIR)),
         autoescape=select_autoescape(["html", "xml"]),
     )
     template = env.get_template("template.html")
+    meta = trip["meta"]
     return template.render(
-        traveler=payload["meta"]["traveler"],
-        period=payload["meta"]["period"],
-        subtitle=payload["meta"]["subtitle"],
-        built_at=payload["meta"]["built_at"],
-        access_token=payload["meta"]["access_token"],
+        chapters=trip["chapters"],
+        traveler=meta["traveler"],
+        period=meta["period"],
+        subtitle=meta["subtitle"],
+        built_at=meta["built_at"],
+        theme_color=theme_color,
     )
 
 
-def render_day_pages(payload: dict, raw_days: list[dict], day_media: dict) -> None:
+def copy_context(site: dict) -> dict:
+    return site.get("copy", {})
+
+
+def render_chapter_pages(trip: dict, site: dict, theme_color: str) -> None:
+    """Generate chapter overview pages linked from the main tiles."""
+    env = Environment(
+        loader=FileSystemLoader(str(LIVE_DIR)),
+        autoescape=select_autoescape(["html", "xml"]),
+    )
+    template = env.get_template("chapter_template.html")
+    chapters_dir = DOCS_DIR / "chapters"
+    chapters_dir.mkdir(parents=True, exist_ok=True)
+    meta = trip["meta"]
+
+    for chapter in trip["chapters"]:
+        if chapter["id"] == "departure":
+            continue
+        html = template.render(
+            chapter=chapter,
+            badges=chapter_badges(chapter),
+            copy=copy_context(site),
+            period=meta["period"],
+            theme_color=theme_color,
+        )
+        (chapters_dir / f"{chapter['id']}.html").write_text(html, encoding="utf-8")
+
+
+def render_day_pages(trip: dict, site: dict, theme_color: str, day_media: dict) -> None:
+    """Generate day detail pages linked from chapter timelines."""
     env = Environment(
         loader=FileSystemLoader(str(LIVE_DIR)),
         autoescape=select_autoescape(["html", "xml"]),
@@ -261,66 +124,113 @@ def render_day_pages(payload: dict, raw_days: list[dict], day_media: dict) -> No
     days_dir = DOCS_DIR / "days"
     days_dir.mkdir(parents=True, exist_ok=True)
 
-    raw_by_num = {day["num"]: day for day in raw_days}
-    token = payload["meta"]["access_token"]
+    parsed_by_num = trip["_parsed_by_num"]
+    chapter_by_id = trip["_chapter_by_id"]
+    copy = copy_context(site)
+    meta = trip["meta"]
+    day_nums = sorted(parsed_by_num)
 
-    for day in payload["days"]:
-        raw = raw_by_num[day["num"]]
-        media_entry = day_media.get(str(day["num"]), day_media.get(day["num"], {}))
-        region = REGION[day["region"]]
+    for day_num in day_nums:
+        raw = parsed_by_num[day_num]
+        entry = media_entry(day_num, day_media)
+        public_day = blank_public_day(raw, entry)
+        chapter = chapter_by_id[public_day["chapter_id"]]
+        intro = intro_from_media(entry)
+        verify_day_output({"day": public_day, "intro": intro})
+
+        idx = day_nums.index(day_num)
+        prev_day = parsed_by_num[day_nums[idx - 1]] if idx > 0 else None
+        next_day = parsed_by_num[day_nums[idx + 1]] if idx + 1 < len(day_nums) else None
+
         html = template.render(
-            day=day,
-            region=region,
-            steps=build_day_steps(raw["steps"]),
-            photos=resolve_photos(day["num"], day["region"], day["city"], media_entry),
-            intro=media_entry.get("intro", ""),
-            traveler=payload["meta"]["traveler"],
-            period=payload["meta"]["period"],
-            access_token=token,
+            day=public_day,
+            chapter=chapter,
+            region=REGION[public_day["region"]],
+            photos=photos_from_media(day_num, public_day["region"], public_day["city"], entry),
+            intro=intro,
+            prev_day=prev_day,
+            next_day=next_day,
+            copy=copy,
+            pager_prev=format_copy(copy.get("day_pager_prev", "← День {n}"), n=prev_day["num"]) if prev_day else "",
+            pager_next=format_copy(copy.get("day_pager_next", "День {n} →"), n=next_day["num"]) if next_day else "",
+            footer_day=format_copy(copy.get("footer_day", "{traveler} · {period}"), traveler=meta["traveler"], period=meta["period"]),
+            traveler=meta["traveler"],
+            period=meta["period"],
+            theme_color=theme_color,
         )
-        (days_dir / f"{day['num']:02d}.html").write_text(html, encoding="utf-8")
-
-
-def verify_no_secrets(payload: dict) -> None:
-    blob = json.dumps(payload, ensure_ascii=False)
-    if re.search(r"PNR\s+\w+", blob, re.I):
-        raise SystemExit("Sanitization failed: PNR found in output")
-    if "₽" in blob:
-        raise SystemExit("Sanitization failed: ruble amounts found in output")
-    if "бюджет" in blob.lower():
-        raise SystemExit("Sanitization failed: budget references found in output")
+        (days_dir / f"{day_num:02d}.html").write_text(html, encoding="utf-8")
 
 
 def main() -> None:
-    if not MD_PATH.exists():
-        raise SystemExit(f"Guide not found: {MD_PATH}")
+    site = load_site_settings()
+    theme_color = site.get("theme", {}).get("theme_color", "#f7f0e1")
 
-    config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-    status = json.loads(STATUS_PATH.read_text(encoding="utf-8"))
-    data = parse_md(MD_PATH.read_text(encoding="utf-8"))
-    payload = build_trip_payload(config, status, data)
-    verify_no_secrets(payload)
+    if not GUIDE_PATH.exists():
+        raise SystemExit(f"Guide not found: {GUIDE_PATH}")
+
+    parsed = parse_md(GUIDE_PATH.read_text(encoding="utf-8"))
     day_media = load_day_media()
+    chapter_media = load_chapter_media()
+    absent_media = missing_media_files(day_media)
+    if absent_media:
+        raise SystemExit(
+            "Missing photo files referenced in live_plan/day_media.json:\n  "
+            + "\n  ".join(absent_media)
+            + "\nRestore them with: git checkout HEAD -- live_plan/media/"
+        )
+    trip = build_trip(site, parsed["days"], day_media, chapter_media)
+    layout = load_layout()
+
+    public_trip = {
+        "meta": trip["meta"],
+        "chapters": trip["chapters"],
+        "current_chapter_id": trip["current_chapter_id"],
+    }
+    trip_blob = json.dumps(public_trip, ensure_ascii=False, indent=2)
+    verify_no_secrets(trip_blob)
 
     docs_assets = DOCS_DIR / "assets"
     docs_assets.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(ASSETS_SRC, docs_assets, dirs_exist_ok=True)
-    if MEDIA_SRC.exists():
-        shutil.copytree(MEDIA_SRC, DOCS_DIR / "media", dirs_exist_ok=True)
 
-    (DOCS_DIR / "trip.json").write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2),
-        encoding="utf-8",
+    (DOCS_DIR / "trip.json").write_text(trip_blob + "\n", encoding="utf-8")
+    (DOCS_DIR / "index.html").write_text(
+        render_index(trip, theme_color), encoding="utf-8"
     )
-    (DOCS_DIR / "index.html").write_text(render_index(payload), encoding="utf-8")
-    render_day_pages(payload, data["days"], day_media)
+    render_chapter_pages(trip, site, theme_color)
+    render_day_pages(trip, site, theme_color, day_media)
     (DOCS_DIR / ".nojekyll").touch()
 
+    shutil.copy2(ASSETS_SRC / "style.css", docs_assets / "style.css")
+    shutil.copy2(ASSETS_SRC / "chapter.css", docs_assets / "chapter.css")
+    shutil.copy2(ASSETS_SRC / "day.css", docs_assets / "day.css")
+    shutil.copy2(ASSETS_SRC / "app.js", docs_assets / "app.js")
+    (docs_assets / "theme.css").write_text(render_theme_css(site), encoding="utf-8")
+    (docs_assets / "layout.css").write_text(render_layout_css(layout), encoding="utf-8")
+
+    if MEDIA_SRC.exists():
+        shutil.copytree(MEDIA_SRC, DOCS_DIR / "media", dirs_exist_ok=True)
+    elif missing_media_files(day_media):
+        raise SystemExit(f"Media folder not found: {MEDIA_SRC}")
+
+    _clean_stale(docs_assets)
+
     print(f"Built: {DOCS_DIR / 'index.html'}")
-    print(f"Built: {DOCS_DIR / 'trip.json'} ({len(payload['days'])} days)")
-    print(f"Built: {DOCS_DIR / 'days'} ({len(payload['days'])} day pages)")
-    if payload["meta"]["access_token"]:
-        print(f"Share link: ...?k={payload['meta']['access_token']}")
+    print(f"Built: {DOCS_DIR / 'chapters'} ({len(trip['chapters']) - 1} chapter pages)")
+    print(f"Built: {DOCS_DIR / 'days'} ({len(trip['_parsed_by_num'])} day pages)")
+    for chapter in trip["chapters"]:
+        print(f"  {chapter['title']}: {chapter['day_count']} дн.")
+
+
+def _clean_stale(docs_assets: Path) -> None:
+    """Remove artefacts from previous site iterations."""
+    podium_dir = docs_assets / "podium"
+    if podium_dir.exists():
+        shutil.rmtree(podium_dir)
+
+    for stale_asset in ("map.js", "day.js", "plane.png"):
+        path = docs_assets / stale_asset
+        if path.exists():
+            path.unlink()
 
 
 if __name__ == "__main__":

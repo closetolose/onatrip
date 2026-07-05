@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="{{ theme_color }}">
+  <title>{{ chapter.title }} · {{ period }}</title>
+  <link rel="stylesheet" href="../assets/theme.css">
+  <link rel="stylesheet" href="../assets/chapter.css">
+  <link rel="stylesheet" href="../assets/layout.css">
+</head>
+<body class="chapter-body" style="--chapter-accent: {{ chapter.bg }}; --chapter-ink: {{ chapter.accent }};">
+  <main class="chapter-page">
+    <a class="chapter-back" data-section="back_link" href="../index.html">{{ copy.chapter_back }}</a>
+
+    <header class="chapter-hero">
+      {% if chapter.hero_image %}
+      <div class="chapter-hero-media" data-section="hero_media" style="background-image: url('{{ chapter.hero_image }}');"></div>
+      {% endif %}
+      <div class="chapter-hero-content" data-section="hero_content">
+        <h1>{{ chapter.title }}</h1>
+        <p class="chapter-dates">{{ chapter.date_from }} — {{ chapter.date_to }} · {{ chapter.day_count }} дн.</p>
+        {% if chapter.cities %}<p class="chapter-route">{{ chapter.cities | join(' → ') }}</p>{% endif %}
+        <div class="chapter-badges" data-section="badges">
+          {% for badge in badges %}
+          <span class="chapter-badge">{{ badge }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    </header>
+
+    <section class="chapter-timeline" data-section="day_timeline" aria-label="{{ copy.chapter_timeline_title }}">
+      <h2 class="timeline-title" data-section="timeline_title">{{ copy.chapter_timeline_title }}</h2>
+      <ol class="day-timeline">
+        {% for d in chapter.days %}
+        <li class="day-card-item">
+          <a class="day-card" href="{{ d.page_url }}">
+            <span class="day-card-marker" aria-hidden="true"></span>
+            <span class="day-card-inner">
+              <span class="day-card-top">
+                <span class="day-card-num">День {{ d.num }}</span>
+                <span class="day-card-date">{{ d.date_short }}</span>
+              </span>
+              <span class="day-card-city">{{ d.city }}</span>
+              <span class="day-card-cta">{{ copy.chapter_cta }}</span>
+            </span>
+          </a>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+  </main>
+</body>
+</html>

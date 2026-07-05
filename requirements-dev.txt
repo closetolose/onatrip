@@ -1,0 +1,2 @@
+# Optional: UI workflow via Cursor SDK API
+cursor-sdk>=1.0.0
