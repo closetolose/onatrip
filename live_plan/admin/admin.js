@@ -4,7 +4,8 @@
   var days = [];
   var currentDay = null;
   var blocks = [];
-  var dayMeta = { totals: "" };
+  var dayHero = { eyebrow: "", title: "", meta: "" };
+  var heroDefaults = { eyebrow: "", title: "", meta: "" };
   var cropper = null;
   var editingBlockIndex = -1;
   var accessToken = "";
@@ -20,22 +21,24 @@
     editorDayLabel: document.getElementById("editor-day-label"),
     editorTitle: document.getElementById("editor-title"),
     blocksList: document.getElementById("blocks-list"),
-    metaTotals: document.getElementById("meta-totals"),
+    heroEyebrow: null,
+    heroTitle: null,
+    heroMeta: null,
     status: document.getElementById("status"),
     photoFileInput: document.getElementById("photo-file-input"),
     modal: document.getElementById("modal"),
     cropImage: document.getElementById("crop-image"),
     cropCaption: document.getElementById("crop-caption"),
-    sitePanel: document.getElementById("site-panel"),
     siteSections: document.getElementById("site-sections"),
-    siteStatus: document.getElementById("site-status"),
+    tilesStatus: document.getElementById("tiles-status"),
     statusNote: document.getElementById("status-note"),
     statusKind: document.getElementById("status-kind"),
   };
 
-  function setSiteStatus(text, kind) {
-    els.siteStatus.textContent = text || "";
-    els.siteStatus.className = "status" + (kind ? " " + kind : "");
+  function setTilesStatus(text, kind) {
+    if (!els.tilesStatus) return;
+    els.tilesStatus.textContent = text || "";
+    els.tilesStatus.className = "status" + (kind ? " " + kind : "");
   }
 
   function mediaUrl(url) {
@@ -70,22 +73,70 @@
     });
   }
 
+  function mediaPathFromSrc(src) {
+    if (!src) return "";
+    var marker = "media/day-";
+    var pos = src.indexOf(marker);
+    if (pos < 0) return "";
+    return src.slice(pos).split("?")[0];
+  }
+
+  function sideUrlFromNode(node, fallbackUrl) {
+    if (node.dataset.url) return node.dataset.url;
+    var img = node.querySelector(".side-photo-preview img");
+    if (img) {
+      var fromImg = mediaPathFromSrc(img.getAttribute("src") || "");
+      if (fromImg) return fromImg;
+    }
+    return fallbackUrl || "";
+  }
+
+  function syncBlockFromNode(node) {
+    var idx = Number(node.dataset.index);
+    var block = blocks[idx];
+    if (!block) return null;
+    if (block.type === "text") {
+      var ta = node.querySelector("textarea");
+      return { type: "text", content: ta ? ta.value : block.content };
+    }
+    if (block.type === "photo") {
+      return { type: "photo", url: block.url, caption: block.caption || "" };
+    }
+    if (block.type === "carousel") {
+      var photos = [];
+      node.querySelectorAll(".carousel-photo").forEach(function (photoNode, photoIndex) {
+        var source = block.photos && block.photos[photoIndex];
+        var img = photoNode.querySelector("img");
+        var url = (source && source.url) || mediaPathFromSrc(img ? img.getAttribute("src") || "" : "");
+        if (!url) return;
+        var captionInput = photoNode.querySelector(".carousel-caption");
+        photos.push({
+          url: url,
+          caption: captionInput ? captionInput.value.trim() : ((source && source.caption) || ""),
+        });
+      });
+      return { type: "carousel", photos: photos };
+    }
+    if (block.type === "side") {
+      var sideTa = node.querySelector(".side-content");
+      var sideCaption = node.querySelector(".side-caption");
+      var sideToggle = node.querySelector(".side-toggle-btn.is-active");
+      return {
+        type: "side",
+        side: sideToggle ? sideToggle.dataset.side : (block.side || "left"),
+        url: sideUrlFromNode(node, block.url),
+        caption: sideCaption ? sideCaption.value.trim() : (block.caption || "").trim(),
+        content: sideTa ? sideTa.value.trim() : (block.content || "").trim(),
+      };
+    }
+    return null;
+  }
+
   function syncBlocksFromDom() {
     var next = [];
     els.blocksList.querySelectorAll(".block-item").forEach(function (node) {
-      var idx = Number(node.dataset.index);
-      var block = blocks[idx];
-      if (!block) return;
-      if (block.type === "text") {
-        var ta = node.querySelector("textarea");
-        next.push({ type: "text", content: ta ? ta.value : block.content });
-      } else if (block.type === "photo") {
-        next.push({
-          type: "photo",
-          url: block.url,
-          caption: block.caption || "",
-        });
-      }
+      var synced = syncBlockFromNode(node);
+      if (synced) next.push(synced);
     });
     blocks = next;
   }
@@ -99,7 +150,7 @@
     els.blocksList.innerHTML = "";
 
     if (!blocks.length) {
-      els.blocksList.innerHTML = '<div class="blocks-empty">Нет блоков. Добавь текст или фото.</div>';
+      els.blocksList.innerHTML = '<div class="blocks-empty">Нет блоков. Добавь текст, фото или боковую секцию.</div>';
       return;
     }
 
@@ -130,6 +181,65 @@
           '<div class="photo-caption">' + escapeHtml(block.caption || "Без подписи") + "</div>" +
           '<button type="button" class="btn secondary btn-edit-photo">Редактировать</button>' +
           "</div></div>";
+      } else if (block.type === "carousel") {
+        var photosHtml = (block.photos || []).map(function (photo, photoIndex) {
+          return (
+            '<div class="carousel-photo" data-photo-index="' + photoIndex + '">' +
+            '<img src="' + mediaUrl(photo.url) + '" alt="">' +
+            '<input type="text" class="carousel-caption" placeholder="Подпись к фото" value="' +
+            escapeHtml(photo.caption || "") + '">' +
+            '<button type="button" class="icon-btn carousel-photo-delete" title="Удалить фото">✕</button>' +
+            "</div>"
+          );
+        }).join("");
+        item.innerHTML =
+          '<div class="block-head">' +
+          '<span class="block-type">Карусель</span>' +
+          '<span class="drag-handle">⠿</span>' +
+          '<button type="button" class="icon-btn block-delete" title="Удалить">✕</button>' +
+          "</div>" +
+          '<div class="carousel-photos">' + (photosHtml || '<div class="carousel-empty">Добавь фото в карусель</div>') + "</div>" +
+          '<label class="btn secondary upload-btn carousel-upload">' +
+          "+ Фото в карусель" +
+          '<input type="file" accept="image/*" hidden>' +
+          "</label>";
+      } else if (block.type === "side") {
+        var sidePosition = block.side === "right" ? "right" : "left";
+        if (block.url) item.dataset.url = block.url;
+        var sidePhotoHtml = block.url
+          ? (
+            '<div class="side-photo-preview">' +
+            '<img src="' + mediaUrl(block.url) + '" alt="">' +
+            '<label class="btn secondary upload-btn side-replace">' +
+            "Заменить" +
+            '<input type="file" accept="image/*" hidden>' +
+            "</label></div>"
+          )
+          : (
+            '<label class="btn secondary upload-btn side-upload">' +
+            "+ Загрузить фото" +
+            '<input type="file" accept="image/*" hidden>' +
+            "</label>"
+          );
+        item.innerHTML =
+          '<div class="block-head">' +
+          '<span class="block-type">Фото + текст</span>' +
+          '<span class="drag-handle">⠿</span>' +
+          '<button type="button" class="icon-btn block-delete" title="Удалить">✕</button>' +
+          "</div>" +
+          '<div class="side-layout">' +
+          '<div class="side-controls">' +
+          '<div class="side-toggle" role="group" aria-label="Позиция фото">' +
+          '<button type="button" class="btn secondary side-toggle-btn' + (sidePosition === "left" ? " is-active" : "") + '" data-side="left">Фото слева</button>' +
+          '<button type="button" class="btn secondary side-toggle-btn' + (sidePosition === "right" ? " is-active" : "") + '" data-side="right">Фото справа</button>' +
+          "</div>" +
+          sidePhotoHtml +
+          '<input type="text" class="side-caption" placeholder="Подпись к фото (необязательно)" value="' +
+          escapeAttr(block.caption || "") + '">' +
+          "</div>" +
+          '<textarea class="side-content" rows="5" placeholder="Текст рядом с фото"></textarea>' +
+          "</div>";
+        item.querySelector(".side-content").value = block.content || "";
       }
 
       item.querySelector(".block-delete").addEventListener("click", function (e) {
@@ -148,6 +258,53 @@
         });
       }
 
+      if (block.type === "carousel") {
+        var uploadInput = item.querySelector(".carousel-upload input");
+        if (uploadInput) {
+          uploadInput.addEventListener("change", function (e) {
+            if (e.target.files && e.target.files[0]) {
+              uploadPhotoToCarousel(Number(item.dataset.index), e.target.files[0]);
+            }
+            e.target.value = "";
+          });
+        }
+        item.querySelectorAll(".carousel-photo-delete").forEach(function (btn) {
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            syncBlocksFromDomIfPresent();
+            var blockIndex = Number(item.dataset.index);
+            var photoIndex = Number(btn.closest(".carousel-photo").dataset.photoIndex);
+            if (blocks[blockIndex] && blocks[blockIndex].photos) {
+              blocks[blockIndex].photos.splice(photoIndex, 1);
+              renderBlocks();
+              setStatus("Фото удалено из карусели. Нажми «Сохранить».", "ok");
+            }
+          });
+        });
+      }
+
+      if (block.type === "side") {
+        item.querySelectorAll(".side-toggle-btn").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            syncBlocksFromDomIfPresent();
+            var idx = Number(item.dataset.index);
+            if (blocks[idx]) {
+              blocks[idx].side = btn.dataset.side;
+              renderBlocks();
+            }
+          });
+        });
+        var sideUpload = item.querySelector(".side-upload input, .side-replace input");
+        if (sideUpload) {
+          sideUpload.addEventListener("change", function (e) {
+            if (e.target.files && e.target.files[0]) {
+              uploadPhotoToSide(Number(item.dataset.index), e.target.files[0]);
+            }
+            e.target.value = "";
+          });
+        }
+      }
+
       els.blocksList.appendChild(item);
     });
 
@@ -158,23 +315,50 @@
       draggable: ".block-item",
       onEnd: function () {
         syncBlocksFromDomIfPresent();
-        var next = [];
-        els.blocksList.querySelectorAll(".block-item").forEach(function (node) {
-          var block = blocks[Number(node.dataset.index)];
-          if (block) next.push(block);
-        });
-        blocks = next;
         renderBlocks();
       },
     });
   }
 
-  function syncMetaFromDom() {
-    dayMeta = { totals: els.metaTotals.value.trim() };
+  function heroInputs() {
+    var panel = document.getElementById("editor-panel");
+    if (!panel) return { eyebrow: null, title: null, meta: null };
+    return {
+      eyebrow: panel.querySelector("#hero-eyebrow"),
+      title: panel.querySelector("#hero-title"),
+      meta: panel.querySelector("#hero-meta"),
+    };
   }
 
-  function renderMetaFields() {
-    els.metaTotals.value = dayMeta.totals || "";
+  function syncHeroFromDom() {
+    var inputs = heroInputs();
+    if (!inputs.eyebrow || !inputs.title || !inputs.meta) {
+      throw new Error("поля hero не найдены — обнови страницу (Ctrl+Shift+R)");
+    }
+    dayHero = {
+      eyebrow: inputs.eyebrow.value.trim(),
+      title: inputs.title.value.trim(),
+      meta: inputs.meta.value.trim(),
+    };
+  }
+
+  function renderHeroFields() {
+    var inputs = heroInputs();
+    if (!inputs.eyebrow || !inputs.title || !inputs.meta) return;
+    inputs.eyebrow.value = dayHero.eyebrow || "";
+    inputs.title.value = dayHero.title || "";
+    inputs.meta.value = dayHero.meta || "";
+    inputs.eyebrow.placeholder = heroDefaults.eyebrow || "";
+    inputs.title.placeholder = heroDefaults.title || "";
+    inputs.meta.placeholder = heroDefaults.meta || "";
+  }
+
+  function heroPayloadMatches(written, expected) {
+    if (!written) return false;
+    expected = expected || {};
+    return (written.eyebrow || "").trim() === (expected.eyebrow || "").trim()
+      && (written.title || "").trim() === (expected.title || "").trim()
+      && (written.meta || "").trim() === (expected.meta || "").trim();
   }
 
   function escapeAttr(s) {
@@ -194,10 +378,32 @@
     blocks = (data.blocks || []).map(function (b) {
       if (b.type === "text") return { type: "text", content: b.content || "" };
       if (b.type === "photo") return { type: "photo", url: b.url, caption: b.caption || "" };
+      if (b.type === "carousel") {
+        return {
+          type: "carousel",
+          photos: (b.photos || []).map(function (p) {
+            return { url: p.url, caption: p.caption || "" };
+          }),
+        };
+      }
+      if (b.type === "side") {
+        return {
+          type: "side",
+          side: b.side === "right" ? "right" : "left",
+          url: b.url || "",
+          caption: b.caption || "",
+          content: b.content || "",
+        };
+      }
       return null;
     }).filter(Boolean);
 
-    dayMeta = { totals: (data.meta && data.meta.totals) || "" };
+    dayHero = {
+      eyebrow: (data.hero && data.hero.eyebrow) || "",
+      title: (data.hero && data.hero.title) || "",
+      meta: (data.hero && data.hero.meta) || "",
+    };
+    heroDefaults = data.defaults || heroDefaults;
   }
 
   function selectDay(dayNum) {
@@ -212,31 +418,140 @@
         els.emptyState.classList.add("hidden");
         els.editorPanel.classList.remove("hidden");
         els.editorDayLabel.textContent = "день " + dayNum;
-        els.editorTitle.textContent = meta ? meta.city : "";
-        renderMetaFields();
+        els.editorTitle.textContent = dayHero.title || (meta ? meta.city : "");
+        renderHeroFields();
         renderBlocks();
         setStatus("");
       })
       .catch(function () { setStatus("Не удалось загрузить день", "err"); });
   }
 
+  function cleanPhotoItem(item) {
+    if (!item) return null;
+    var url = typeof item === "string" ? item : item.url;
+    if (!url || !String(url).trim()) return null;
+    return {
+      url: String(url).trim(),
+      caption: (typeof item === "object" && item.caption ? item.caption : "").trim(),
+    };
+  }
+
+  function cleanBlocksClient(blocks) {
+    var cleaned = [];
+    (blocks || []).forEach(function (block) {
+      if (!block || !block.type) return;
+      if (block.type === "text") {
+        var text = (block.content || "").trim();
+        if (text) cleaned.push({ type: "text", content: text });
+      } else if (block.type === "photo") {
+        var photoUrl = (block.url || "").trim();
+        if (photoUrl) {
+          cleaned.push({
+            type: "photo",
+            url: photoUrl,
+            caption: (block.caption || "").trim(),
+          });
+        }
+      } else if (block.type === "carousel") {
+        var photos = [];
+        (block.photos || []).forEach(function (item) {
+          var photo = cleanPhotoItem(item);
+          if (photo) photos.push(photo);
+        });
+        if (photos.length) cleaned.push({ type: "carousel", photos: photos });
+      } else if (block.type === "side") {
+        var sideUrl = (block.url || "").trim();
+        var sideText = (block.content || "").trim();
+        if (sideUrl || sideText) {
+          cleaned.push({
+            type: "side",
+            side: block.side === "right" ? "right" : "left",
+            url: sideUrl,
+            caption: (block.caption || "").trim(),
+            content: sideText,
+          });
+        }
+      }
+    });
+    return cleaned;
+  }
+
+  function normalizeBlockForCompare(block) {
+    if (!block) return block;
+    if (block.type === "text") {
+      return { type: "text", content: (block.content || "").trim() };
+    }
+    if (block.type === "photo") {
+      return {
+        type: "photo",
+        url: (block.url || "").trim(),
+        caption: (block.caption || "").trim(),
+      };
+    }
+    if (block.type === "side") {
+      return {
+        type: "side",
+        side: block.side === "right" ? "right" : "left",
+        url: (block.url || "").trim(),
+        caption: (block.caption || "").trim(),
+        content: (block.content || "").trim(),
+      };
+    }
+    if (block.type === "carousel") {
+      return {
+        type: "carousel",
+        photos: (block.photos || []).map(function (photo) {
+          return {
+            url: (photo.url || "").trim(),
+            caption: (photo.caption || "").trim(),
+          };
+        }),
+      };
+    }
+    return block;
+  }
+
   function saveDay() {
-    if (!currentDay) return Promise.resolve();
-    syncBlocksFromDomIfPresent();
-    syncMetaFromDom();
-    return fetch("/api/media/" + currentDay, {
-      method: "PUT",
+    if (!currentDay) return Promise.reject(new Error("day not selected"));
+    try {
+      syncBlocksFromDomIfPresent();
+      syncHeroFromDom();
+    } catch (err) {
+      setStatus("Ошибка формы: " + err.message, "err");
+      return Promise.reject(err);
+    }
+    var payload = {
+      hero: dayHero,
+      blocks: cleanBlocksClient(blocks),
+    };
+    return fetch("/api/media/" + currentDay + "/save", {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        blocks: blocks,
-        meta: dayMeta,
-      }),
+      body: JSON.stringify(payload),
     })
-      .then(function (r) { return r.json(); })
-      .then(function () {
-        setStatus("Сохранено", "ok");
+      .then(function (r) {
+        return r.json().then(function (data) {
+          if (!r.ok || !data.ok) {
+            throw new Error((data && data.error) || ("HTTP " + r.status));
+          }
+          return data;
+        });
       })
-      .catch(function () { setStatus("Ошибка сохранения", "err"); });
+      .then(function (data) {
+        loadDayData(data);
+        renderHeroFields();
+        renderBlocks();
+        var day = days.find(function (d) { return d.num === currentDay; });
+        if (day && dayHero.title) day.city = dayHero.title;
+        renderDaysList();
+        els.editorTitle.textContent = dayHero.title || els.editorTitle.textContent;
+        setStatus("Сохранено", "ok");
+        return data;
+      })
+      .catch(function (err) {
+        setStatus("Ошибка сохранения: " + (err.message || "неизвестная"), "err");
+        throw err;
+      });
   }
 
   function buildSite() {
@@ -255,6 +570,7 @@
     buildSite: buildSite,
     saveSiteAll: saveSiteAll,
     switchView: switchView,
+    previewSite: previewSite,
     mediaUrl: mediaUrl,
     escapeHtml: escapeHtml,
   };
@@ -279,6 +595,68 @@
         blocks.push({ type: "photo", url: data.url, caption: "" });
         renderBlocks();
         setStatus("Фото добавлено. Нажми «Сохранить».", "ok");
+      })
+      .catch(function () { setStatus("Ошибка загрузки", "err"); });
+  }
+
+  function uploadPhotoToCarousel(blockIndex, file) {
+    if (!currentDay || !file) return;
+    setStatus("Загрузка…");
+    var form = new FormData();
+    form.append("file", file);
+    fetch("/api/upload/" + currentDay, { method: "POST", body: form })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        syncBlocksFromDomIfPresent();
+        var block = blocks[blockIndex];
+        if (!block || block.type !== "carousel") return;
+        if (!block.photos) block.photos = [];
+        block.photos.push({ url: data.url, caption: "" });
+        renderBlocks();
+        setStatus("Фото добавлено в карусель. Нажми «Сохранить».", "ok");
+      })
+      .catch(function () { setStatus("Ошибка загрузки", "err"); });
+  }
+
+  function addCarouselBlock() {
+    syncBlocksFromDomIfPresent();
+    blocks.push({ type: "carousel", photos: [] });
+    renderBlocks();
+    setStatus("Карусель добавлена. Загрузи в неё фото.", "ok");
+  }
+
+  function addSideBlock() {
+    syncBlocksFromDomIfPresent();
+    blocks.push({ type: "side", side: "left", url: "", caption: "", content: "" });
+    renderBlocks();
+    var last = els.blocksList.querySelector(".block-item:last-child .side-content");
+    if (last) last.focus();
+    setStatus("Боковой блок добавлен. Загрузи фото и напиши текст.", "ok");
+  }
+
+  function uploadPhotoToSide(blockIndex, file) {
+    if (!currentDay || !file) return;
+    setStatus("Загрузка…");
+    var form = new FormData();
+    form.append("file", file);
+    fetch("/api/upload/" + currentDay, { method: "POST", body: form })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data.url) throw new Error("no url");
+        syncBlocksFromDomIfPresent();
+        var block = blocks[blockIndex];
+        if (!block || block.type !== "side") {
+          block = blocks.find(function (b) { return b.type === "side" && !b.url; });
+        }
+        if (!block) {
+          throw new Error("side block not found");
+        }
+        block.url = data.url;
+        renderBlocks();
+        return saveDay();
+      })
+      .then(function () {
+        setStatus("Фото добавлено и сохранено.", "ok");
       })
       .catch(function () { setStatus("Ошибка загрузки", "err"); });
   }
@@ -369,31 +747,23 @@
 
   function switchView(view) {
     currentView = view;
-    document.getElementById("nav-days").classList.toggle("active", view === "days");
+    document.getElementById("nav-tiles").classList.toggle("active", view === "tiles");
     document.getElementById("nav-chapters").classList.toggle("active", view === "chapters");
-    document.getElementById("nav-layout").classList.toggle("active", view === "layout");
-    document.getElementById("nav-visual").classList.toggle("active", view === "visual");
-    document.getElementById("nav-site").classList.toggle("active", view === "site");
+    document.getElementById("nav-days").classList.toggle("active", view === "days");
     els.daysList.classList.toggle("hidden", view !== "days");
     var chaptersList = document.getElementById("chapters-list");
     if (chaptersList) chaptersList.classList.toggle("hidden", view !== "chapters");
+    var tilesHint = document.getElementById("tiles-sidebar-hint");
+    if (tilesHint) tilesHint.classList.toggle("hidden", view !== "tiles");
     els.emptyState.classList.toggle("hidden", view !== "days" || currentDay !== null);
     els.editorPanel.classList.toggle("hidden", view !== "days" || !currentDay);
-    document.querySelector(".layout").classList.toggle("layout-visual-mode", view === "visual");
-    els.sitePanel.classList.toggle("hidden", view !== "site");
+    var tilesPanel = document.getElementById("tiles-panel");
+    if (tilesPanel) tilesPanel.classList.toggle("hidden", view !== "tiles");
     var chaptersPanel = document.getElementById("chapters-panel");
     if (chaptersPanel) chaptersPanel.classList.toggle("hidden", view !== "chapters");
-    var layoutPanel = document.getElementById("layout-panel");
-    if (layoutPanel) layoutPanel.classList.toggle("hidden", view !== "layout");
-    var visualPanel = document.getElementById("visual-panel");
-    if (visualPanel) visualPanel.classList.toggle("hidden", view !== "visual");
-    var visualSidebar = document.getElementById("visual-sidebar");
-    if (visualSidebar) visualSidebar.classList.toggle("hidden", view !== "visual");
     document.getElementById("sidebar-subtitle").textContent =
-      view === "site" ? "оформление и тексты" :
-      view === "layout" ? "порядок и стили секций" :
-      view === "visual" ? "клик → стили элемента" :
-      view === "chapters" ? "главы и hero" :
+      view === "tiles" ? "плитки и оформление" :
+      view === "chapters" ? "главы — текст и цвета" :
       "день и контент";
     if (window.AdminPages && window.AdminPages.onViewChange) {
       window.AdminPages.onViewChange(view);
@@ -472,7 +842,7 @@
 
   function saveSiteSettings() {
     var payload = collectSiteSettingsFromForm();
-    setSiteStatus("Сохранение…");
+    setTilesStatus("Сохранение…");
     return fetch("/api/site-settings", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -482,9 +852,9 @@
       .then(function (data) {
         siteSettings = data.settings;
         accessToken = (siteSettings.meta && siteSettings.meta.access_token) || accessToken;
-        setSiteStatus("Настройки сайта сохранены", "ok");
+        setTilesStatus("Настройки сайта сохранены", "ok");
       })
-      .catch(function () { setSiteStatus("Ошибка сохранения", "err"); });
+      .catch(function () { setTilesStatus("Ошибка сохранения", "err"); });
   }
 
   function saveStatusNote() {
@@ -516,18 +886,20 @@
       .then(function (data) {
         siteSettings = data.settings;
         renderSiteForm();
-        setSiteStatus("Сброшено к умолчанию", "ok");
+        setTilesStatus("Сброшено к умолчанию", "ok");
       })
-      .catch(function () { setSiteStatus("Ошибка сброса", "err"); });
+      .catch(function () { setTilesStatus("Ошибка сброса", "err"); });
   }
 
   document.getElementById("btn-add-text").addEventListener("click", addTextBlock);
+  document.getElementById("btn-add-carousel").addEventListener("click", addCarouselBlock);
+  document.getElementById("btn-add-side").addEventListener("click", addSideBlock);
   document.getElementById("btn-save").addEventListener("click", saveDay);
   document.getElementById("btn-build").addEventListener("click", function () {
-    saveDay().then(buildSite);
+    saveDay().then(buildSite).catch(function () {});
   });
   document.getElementById("btn-preview").addEventListener("click", function () {
-    saveDay().then(buildSite).then(previewDay);
+    saveDay().then(buildSite).then(previewDay).catch(function () {});
   });
   document.getElementById("modal-close").addEventListener("click", closeModal);
   document.getElementById("btn-apply-crop").addEventListener("click", applyPhotoEdit);
@@ -537,18 +909,9 @@
     e.target.value = "";
   });
 
-  document.getElementById("nav-days").addEventListener("click", function () { switchView("days"); });
+  document.getElementById("nav-tiles").addEventListener("click", function () { switchView("tiles"); });
   document.getElementById("nav-chapters").addEventListener("click", function () { switchView("chapters"); });
-  document.getElementById("nav-layout").addEventListener("click", function () { switchView("layout"); });
-  document.getElementById("nav-visual").addEventListener("click", function () { switchView("visual"); });
-  document.getElementById("nav-site").addEventListener("click", function () { switchView("site"); });
-  document.getElementById("btn-save-site").addEventListener("click", saveSiteAll);
-  document.getElementById("btn-build-site").addEventListener("click", function () {
-    saveSiteAll().then(buildSite);
-  });
-  document.getElementById("btn-preview-site").addEventListener("click", function () {
-    saveSiteAll().then(buildSite).then(previewSite);
-  });
+  document.getElementById("nav-days").addEventListener("click", function () { switchView("days"); });
   document.getElementById("btn-reset-site").addEventListener("click", resetSiteSettings);
 
   function loadInitialData() {
@@ -561,6 +924,14 @@
       return;
     }
     setStatus("Загрузка…");
+    fetch("/api/version")
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (info) {
+        if (!info || !info.features || info.features.indexOf("hero") === -1) {
+          setStatus("Старый admin_server — останови и запусти заново: python admin_server.py", "err");
+        }
+      })
+      .catch(function () {});
     fetch("/api/days")
       .then(function (r) {
         if (!r.ok) throw new Error("days");
@@ -598,7 +969,7 @@
         renderSiteForm();
       })
       .catch(function () {
-        setSiteStatus("Вкладка «Сайт»: перезапусти admin_server.py (python admin_server.py)", "err");
+        setTilesStatus("Перезапусти admin_server.py (python admin_server.py)", "err");
       });
 
     fetch("/api/status")

@@ -6,36 +6,13 @@ import json
 import re
 from pathlib import Path
 
-from live_plan.blocks import normalize_blocks
+from live_plan.blocks import clean_hero, normalize_blocks
 from live_plan.chapters import assign_chapter, sanitize_text
 from trip_parser import REGION, transport_icon
 
 LIVE_DIR = Path(__file__).resolve().parent
 MEDIA_CONFIG_PATH = LIVE_DIR / "day_media.json"
 MEDIA_SRC = LIVE_DIR / "media"
-
-REGION_HERO = {
-    "ru": {
-        "url": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=900&q=80",
-        "caption": "Сибирь",
-    },
-    "th": {
-        "url": "https://images.unsplash.com/photo-1528183429752-a97d0bf99b5a?w=900&q=80",
-        "caption": "Таиланд",
-    },
-    "vn": {
-        "url": "https://images.unsplash.com/photo-1559592413-7e7a2656f235?w=900&q=80",
-        "caption": "Вьетнам",
-    },
-    "cn": {
-        "url": "https://images.unsplash.com/photo-1535354839856-604977947?w=900&q=80",
-        "caption": "Китай",
-    },
-    "travel": {
-        "url": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=900&q=80",
-        "caption": "В дороге",
-    },
-}
 
 IMPORTANT_KEYWORDS = (
     "полёт", "рейс", "борту", "аэропорт", "bkk", "can", "dmk", "dad", "sgn", "pvg", "pek", "kja", "ikt",
@@ -67,11 +44,20 @@ def missing_media_files(day_media: dict) -> list[str]:
     missing: list[str] = []
     for entry in day_media.values():
         for block in normalize_blocks(entry):
-            if block.get("type") != "photo":
-                continue
-            path = local_media_path(block.get("url", ""))
-            if path and not path.exists():
-                missing.append(str(path.relative_to(MEDIA_SRC.parent)))
+            if block.get("type") == "photo":
+                path = local_media_path(block.get("url", ""))
+                if path and not path.exists():
+                    missing.append(str(path.relative_to(MEDIA_SRC.parent)))
+            elif block.get("type") == "carousel":
+                for item in block.get("photos", []):
+                    if isinstance(item, dict):
+                        path = local_media_path(item.get("url", ""))
+                        if path and not path.exists():
+                            missing.append(str(path.relative_to(MEDIA_SRC.parent)))
+            elif block.get("type") == "side":
+                path = local_media_path(block.get("url", ""))
+                if path and not path.exists():
+                    missing.append(str(path.relative_to(MEDIA_SRC.parent)))
     return missing
 
 
@@ -143,15 +129,6 @@ def public_steps(raw_steps: list[dict] | None, entry: dict | None = None) -> lis
     return []
 
 
-def public_meta(raw_day: dict, entry: dict | None = None) -> dict[str, str]:
-    """Use admin overrides when present; never fall back to the guide on public pages."""
-    entry = entry or {}
-    if entry.get("meta"):
-        from live_plan.steps import clean_meta
-        return clean_meta(entry["meta"])
-    return {"totals": ""}
-
-
 def public_day_summary(_day: dict | None = None, _entry: dict | None = None) -> str:
     return ""
 
@@ -160,17 +137,44 @@ def public_day_tag(_city: str = "", _steps: list[dict] | None = None) -> str:
     return ""
 
 
-def blank_public_day(day: dict, entry: dict | None = None) -> dict:
-    """Metadata only — descriptive fields come from admin overrides, not the guide."""
-    meta = public_meta(day, entry)
+def default_hero(day: dict, region_name: str) -> dict[str, str]:
+    date = day.get("date", "")
+    date_short = date[:5] if len(date) >= 5 else date
+    weekday = day.get("weekday", "")
+    meta = f"{date_short} · {weekday}".strip(" ·")
+    return {
+        "eyebrow": f"День {day.get('num', '')} · {region_name}".strip(" ·"),
+        "title": sanitize_text(day.get("city", "")),
+        "meta": meta,
+    }
+
+
+def hero_from_entry(entry: dict, day: dict, region_name: str) -> dict[str, str]:
+    defaults = default_hero(day, region_name)
+    saved = clean_hero(entry.get("hero"))
+    if "hero" not in entry or not any(saved.values()):
+        return defaults
+    return {
+        "eyebrow": saved["eyebrow"] or defaults["eyebrow"],
+        "title": saved["title"] or defaults["title"],
+        "meta": saved["meta"] or defaults["meta"],
+    }
+
+
+def blank_public_day(day: dict, entry: dict | None = None, region_name: str = "") -> dict:
+    """Trip shell + hero text from admin (with guide defaults when fields are empty)."""
+    entry = entry or {}
+    hero = hero_from_entry(entry, day, region_name)
     return {
         "num": day["num"],
         "date": day["date"],
         "weekday": day["weekday"],
-        "city": sanitize_text(day["city"]),
+        "city": hero["title"],
         "region": day["region"],
-        "totals": meta["totals"],
         "chapter_id": assign_chapter(day["num"]),
+        "hero_eyebrow": hero["eyebrow"],
+        "hero_title": hero["title"],
+        "hero_meta": hero["meta"],
     }
 
 
@@ -180,7 +184,52 @@ def intro_from_media(entry: dict) -> str:
             content = sanitize_text(block.get("content", ""))
             if content:
                 return content
-    return sanitize_text(entry.get("intro", ""))
+    return ""
+
+
+def _public_photo_block(block: dict) -> dict:
+    return {
+        "type": "photo",
+        "url": public_photo_url(block["url"]),
+        "caption": sanitize_text(block.get("caption", "")),
+    }
+
+
+def public_blocks(day_num: int, region: str, city: str, entry: dict) -> list[dict]:
+    """Ordered longread blocks for the public day page."""
+    result: list[dict] = []
+    for block in normalize_blocks(entry):
+        block_type = block.get("type")
+        if block_type == "text":
+            content = sanitize_text(block.get("content", ""))
+            if content:
+                result.append({"type": "text", "content": content})
+        elif block_type == "photo" and block.get("url"):
+            result.append(_public_photo_block(block))
+        elif block_type == "carousel":
+            photos: list[dict] = []
+            for item in block.get("photos", []):
+                if isinstance(item, dict) and item.get("url"):
+                    photos.append(_public_photo_block(item))
+            if photos:
+                result.append({"type": "carousel", "photos": photos})
+        elif block_type == "side":
+            url = str(block.get("url", "")).strip()
+            content = sanitize_text(block.get("content", ""))
+            side = block.get("side", "left")
+            if side not in ("left", "right"):
+                side = "left"
+            if not url and not content:
+                continue
+            result.append({
+                "type": "side",
+                "side": side,
+                "url": public_photo_url(url) if url else "",
+                "caption": sanitize_text(block.get("caption", "")),
+                "content": content,
+            })
+
+    return result
 
 
 def photos_from_media(day_num: int, region: str, city: str, entry: dict) -> list[dict]:
@@ -202,12 +251,6 @@ def photos_from_media(day_num: int, region: str, city: str, entry: dict) -> list
                 "caption": item.get("caption", ""),
             })
 
-    if not photos:
-        hero = REGION_HERO.get(region, REGION_HERO["travel"])
-        photos.append({
-            "url": hero["url"],
-            "caption": "",
-        })
     return photos
 
 
@@ -280,7 +323,6 @@ def build_public_day(day: dict, day_media: dict) -> dict:
         "region": day["region"],
         "night": sanitize_text(day.get("night", "")),
         "weather": sanitize_text(day.get("weather", "")),
-        "totals": sanitize_text(day.get("totals", "")),
         "chapter_id": assign_chapter(day["num"]),
     }
 

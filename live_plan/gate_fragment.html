@@ -1,0 +1,13 @@
+<div id="gate-overlay" class="gate-overlay hidden" hidden aria-hidden="true" role="dialog" aria-labelledby="gate-title" aria-modal="true" data-access-token="{{ gate.token }}">
+  <div class="gate-overlay__panel">
+    <p class="gate-eyebrow">{{ copy.gate_eyebrow }}</p>
+    <h2 id="gate-title" class="gate-title">{{ copy.gate_title }}</h2>
+    <p class="gate-hint">{{ copy.gate_hint }}</p>
+    <form id="gate-form" class="gate-form" novalidate>
+      <label class="gate-sr-only" for="gate-input">{{ copy.gate_placeholder }}</label>
+      <input id="gate-input" class="gate-input" type="text" name="key" autocomplete="off" placeholder="{{ copy.gate_placeholder }}" required>
+      <button type="submit" class="gate-button">{{ copy.gate_button }}</button>
+    </form>
+    <p id="gate-error" class="gate-error hidden" role="alert">{{ copy.gate_error }}</p>
+  </div>
+</div>

@@ -45,25 +45,24 @@ body {
   margin: 0;
   padding: 0;
   list-style: none;
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: var(--font-tiles, "Roboto Condensed", sans-serif);
 }
 
 .social-tiles .tile {
   list-style: none;
   margin: 0 8px;
-  animation: tileIn 0.5s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+  animation: tileIn var(--duration-tile) var(--ease-tile-in) both;
 }
 
 .social-tiles .tile:nth-child(1) { animation-delay: 0.05s; }
 .social-tiles .tile:nth-child(2) { animation-delay: 0.12s; }
 .social-tiles .tile:nth-child(3) { animation-delay: 0.19s; }
-.social-tiles .tile:nth-child(4) { animation-delay: 0.26s; }
 
 .social-tiles .tile-link .tile-icon {
-  font-size: 52px;
-  color: #262626;
-  line-height: 104px;
-  transition: 0.5s;
+  font-size: var(--tile-icon-size, 52px);
+  color: var(--tile-ink, #262626);
+  line-height: var(--tile-height, 104px);
+  transition: var(--transition-tile);
   padding-right: 18px;
 }
 
@@ -72,24 +71,24 @@ body {
   margin: 0;
   position: absolute;
   top: 38px;
-  color: #262626;
-  letter-spacing: 4px;
-  transition: 0.5s;
-  font-size: 1.15rem;
+  color: var(--tile-ink, #262626);
+  letter-spacing: var(--letter-spacing-tile-label, 4px);
+  transition: var(--transition-tile);
+  font-size: var(--tile-label-size, 1.15rem);
 }
 
 .social-tiles .tile-link {
   position: relative;
   text-decoration: none;
   display: block;
-  width: 270px;
-  height: 104px;
-  background: #fff;
+  width: var(--tile-width, 270px);
+  height: var(--tile-height, 104px);
+  background: var(--tile-face, #fff);
   text-align: left;
   padding-left: 26px;
-  transform: rotate(-30deg) skew(25deg) translate(0, 0);
-  transition: 0.5s;
-  box-shadow: -20px 20px 10px rgba(0, 0, 0, 0.5);
+  transform: var(--tile-transform);
+  transition: var(--transition-tile);
+  box-shadow: var(--shadow-tile);
   cursor: pointer;
   color: inherit;
   -webkit-tap-highlight-color: transparent;
@@ -102,7 +101,7 @@ body {
   left: -20px;
   height: 100%;
   width: 20px;
-  background: #b1b1b1;
+  background: var(--tile-edge-default, #b1b1b1);
   transform: rotate(0deg) skewY(-45deg);
 }
 
@@ -113,21 +112,21 @@ body {
   left: -10px;
   height: 20px;
   width: 100%;
-  background: #b1b1b1;
+  background: var(--tile-edge-default, #b1b1b1);
   transform: rotate(0deg) skewX(-45deg);
 }
 
 .social-tiles .tile:hover .tile-link,
 .social-tiles .tile-link:focus-visible {
-  transform: rotate(-30deg) skew(25deg) translate(20px, -15px);
-  box-shadow: -50px 50px 50px rgba(0, 0, 0, 0.5);
+  transform: var(--tile-transform-hover);
+  box-shadow: var(--shadow-tile-hover);
 }
 
 .social-tiles .tile:hover .tile-icon,
 .social-tiles .tile:hover .tile-label,
 .social-tiles .tile-link:focus-visible .tile-icon,
 .social-tiles .tile-link:focus-visible .tile-label {
-  color: #fff;
+  color: var(--tile-hover-ink, #fff);
 }
 
 @keyframes tileIn {
@@ -147,7 +146,7 @@ body {
 
 @media (max-width: 520px) {
   .social-tiles {
-    transform: scale(0.85);
+    transform: scale(var(--tile-scale-narrow, 0.85));
     transform-origin: center center;
   }
 }

@@ -1,232 +1,341 @@
-body {
+/* Chapter pages — Karl / pop-up diorama (Refero + karlgonsalves.com), per-country vibe via CSS vars */
+
+.chapter-body.diorama-chapter {
   margin: 0;
   min-height: 100vh;
-  font-family: var(--font-neue-haas-unica, ui-sans-serif, system-ui, sans-serif);
-  color: var(--color-charcoal, #23212c);
-  background: var(--color-paper, #f7f0e1);
-  line-height: 1.5;
+  font-family: Arial, ui-sans-serif, system-ui, sans-serif;
+  color: var(--chapter-ink, #333333);
+  background: var(--chapter-sky, #ffe600);
+  line-height: 1.43;
 }
 
-.chapter-body {
-  background:
-    radial-gradient(circle at top right, color-mix(in srgb, var(--chapter-accent, #fcbd1c) 18%, transparent), transparent 42%),
-    var(--color-paper, #f7f0e1);
+/* —— Nav: 14px Arial, active = short 20px underline —— */
+.diorama-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 10px 20px;
+  position: relative;
+  z-index: 30;
+  background: var(--chapter-sky, #ffe600);
 }
 
-.chapter-page {
-  max-width: var(--chapter-page-max-width, 40rem);
-  margin: 0 auto;
-  padding: 1.5rem 1.25rem 3rem;
-}
-
-.chapter-back {
+.diorama-nav__link {
   display: inline-block;
-  margin-bottom: 1.25rem;
-  color: var(--color-pine, #006434);
-  font-weight: 600;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--chapter-ink, #333333);
   text-decoration: none;
+  position: relative;
 }
 
-.chapter-back:hover {
-  text-decoration: underline;
+.diorama-nav__link:hover {
+  text-decoration: none;
+  opacity: 0.75;
 }
 
-.chapter-hero {
-  margin-bottom: 2rem;
+.diorama-nav__link.is-active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 20px;
+  height: 3px;
+  transform: translateX(-50%);
+  background: var(--chapter-ink, #333333);
 }
 
-.chapter-hero-media {
-  height: 11rem;
-  border-radius: 1.25rem;
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 14px 32px rgba(35, 33, 44, 0.12);
-  margin-bottom: 1rem;
+/* —— Hero: full viewport, globe rises from bottom —— */
+.diorama-hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: var(--chapter-sky, #ffe600);
 }
 
-.chapter-hero-content h1 {
-  margin: 0.15rem 0 0;
-  font-size: clamp(1.85rem, 5vw, 2.35rem);
+.diorama-scene {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.diorama-globe {
+  position: absolute;
+  left: 50%;
+  bottom: -32%;
+  width: min(105vw, 62rem);
+  height: min(105vw, 62rem);
+  transform: translateX(-50%);
+  border-radius: 1440px;
+  background: var(--chapter-globe, #007fff);
+  z-index: 1;
+}
+
+.diorama-cloud {
+  position: absolute;
+  background: #ffffff;
+  border-radius: 1440px;
+  z-index: 0;
+}
+
+.diorama-cloud--1 { width: 6rem; height: 2.4rem; top: 14%; left: 7%; }
+.diorama-cloud--2 { width: 8rem; height: 3rem; top: 20%; right: 9%; }
+.diorama-cloud--3 { width: 4.5rem; height: 1.8rem; top: 10%; left: 44%; }
+
+/* Canal-house silhouettes in front of globe */
+.diorama-building {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+}
+
+.diorama-building__roof {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: transparent transparent var(--chapter-accent-art, #ef3b2c) transparent;
+}
+
+.diorama-building__body {
+  background: color-mix(in srgb, var(--chapter-ink, #333) 12%, #ffffff);
+  border: 3px solid var(--chapter-ink, #333333);
+  box-sizing: border-box;
+}
+
+.diorama-building--1 { left: 4%; bottom: 8%; }
+.diorama-building--1 .diorama-building__roof { border-width: 0 2.4rem 3.6rem 2.4rem; }
+.diorama-building--1 .diorama-building__body { width: 4.8rem; height: 5.5rem; }
+
+.diorama-building--2 { left: 14%; bottom: 5%; }
+.diorama-building--2 .diorama-building__roof { border-width: 0 1.8rem 2.8rem 1.8rem; }
+.diorama-building--2 .diorama-building__body { width: 3.6rem; height: 4.2rem; }
+
+.diorama-building--3 { right: 12%; bottom: 6%; }
+.diorama-building--3 .diorama-building__roof { border-width: 0 2.8rem 4rem 2.8rem; }
+.diorama-building--3 .diorama-building__body { width: 5.6rem; height: 6rem; }
+
+.diorama-building--4 { right: 3%; bottom: 9%; }
+.diorama-building--4 .diorama-building__roof { border-width: 0 2rem 3rem 2rem; }
+.diorama-building--4 .diorama-building__body { width: 4rem; height: 4.8rem; }
+
+[data-chapter-id="vietnam"] .diorama-building__roof {
+  border-bottom-color: var(--chapter-accent-art, #da251d);
+}
+
+[data-chapter-id="china"] .diorama-building__roof {
+  border-bottom-color: var(--chapter-accent-art, #ffd700);
+}
+
+[data-chapter-id="china"] .diorama-globe {
+  bottom: -38%;
+}
+
+/* Tagline on yellow sky, rotated signage */
+.diorama-eyebrow {
+  position: absolute;
+  top: 12%;
+  right: 6%;
+  margin: 0;
+  max-width: min(42vw, 14rem);
+  font-family: "Changa One", ui-sans-serif, sans-serif;
+  font-size: clamp(1.1rem, 2.8vw, 2rem);
+  line-height: 0.8;
+  font-weight: 400;
+  color: var(--chapter-text-on-sky, #333333);
+  text-transform: uppercase;
+  transform: rotate(var(--chapter-sign-rotate, -8deg));
+  z-index: 4;
+}
+
+/* Dates / route on sky — Arial body, not on globe */
+.diorama-sky-meta {
+  position: absolute;
+  top: 14%;
+  left: 5%;
+  z-index: 4;
+  max-width: min(48vw, 16rem);
+  transform: rotate(calc(var(--chapter-sign-rotate, -8deg) * 0.6));
+}
+
+.diorama-meta,
+.diorama-route,
+.diorama-badges {
+  margin: 0 0 0.35rem;
+  font-size: 14px;
+  line-height: 1.43;
+  color: var(--chapter-text-on-sky, #333333);
+}
+
+.diorama-route {
+  font-family: "Changa One", ui-sans-serif, sans-serif;
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
   line-height: 1.1;
 }
 
-.chapter-region {
-  margin: 0;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+.diorama-badges {
+  font-size: 12px;
   text-transform: uppercase;
-  color: var(--color-pine, #006434);
+  letter-spacing: 0.06em;
 }
 
-.chapter-dates {
-  margin: 0.55rem 0 0;
-  font-weight: 700;
-  color: var(--color-pine, #006434);
+@media (max-width: 640px) {
+  .diorama-badges {
+    display: none;
+  }
 }
 
-.chapter-route {
-  margin: 0.35rem 0 0;
-  color: color-mix(in srgb, var(--color-charcoal, #23212c) 72%, white);
-}
-
-.chapter-description {
-  margin: 0.75rem 0 0;
-  font-size: 0.95rem;
-  color: color-mix(in srgb, var(--color-charcoal, #23212c) 72%, white);
-}
-
-.chapter-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  margin-top: 1rem;
-}
-
-.chapter-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.35rem 0.7rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--chapter-accent, #fcbd1c) 28%, white);
-  color: var(--color-charcoal, #23212c);
-  font-size: 0.78rem;
-  font-weight: 700;
-}
-
-.chapter-highlights {
-  margin: 1rem 0 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 0.45rem;
-}
-
-.chapter-highlights li {
-  padding: 0.65rem 0.85rem;
-  border-radius: 0.85rem;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(35, 33, 44, 0.08);
-  font-size: 0.9rem;
-}
-
-.timeline-title {
-  margin: 0 0 1rem;
-  font-size: 1rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--color-charcoal, #23212c) 58%, white);
-}
-
-.day-timeline {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.day-card-item {
-  position: relative;
-  padding-left: 1.35rem;
-}
-
-.day-card-item:not(:last-child)::before {
-  content: "";
+/* Display headline on globe — 75px Changa, stacked lines, no shadow */
+.diorama-globe-title {
   position: absolute;
-  left: 0.42rem;
-  top: 1.35rem;
-  bottom: -0.35rem;
-  width: 2px;
-  background: color-mix(in srgb, var(--chapter-accent, #fcbd1c) 45%, var(--color-paper-deep, #ddd0b4));
+  left: 50%;
+  top: 46%;
+  z-index: 4;
+  width: min(92vw, 44rem);
+  transform: translate(-50%, -50%) rotate(var(--chapter-hero-rotate, -8deg));
+  text-align: center;
+  pointer-events: none;
 }
 
-.day-card {
+.diorama-display {
+  margin: 0;
+  font-family: "Changa One", ui-sans-serif, sans-serif;
+  font-weight: 400;
+  color: var(--chapter-text-on-globe, #ffffff);
+}
+
+.diorama-display__line {
   display: block;
-  position: relative;
-  margin-bottom: 0.85rem;
-  padding: 1rem 1rem 0.95rem;
-  border-radius: var(--card-radius, 1rem);
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(35, 33, 44, 0.08);
-  box-shadow: 0 10px 24px rgba(35, 33, 44, 0.06);
+  font-size: clamp(3rem, 12vw, 75px);
+  line-height: 0.72;
+}
+
+.diorama-display__line--2 {
+  margin-top: -0.08em;
+  font-size: clamp(2.5rem, 10vw, 60px);
+  opacity: 0.95;
+}
+
+/* —— Panels: hard-cut, same sky canvas —— */
+.diorama-panel {
+  padding: 45px 20px 55px;
+  background: var(--chapter-sky, #ffe600);
+  border: none;
+  box-shadow: none;
+}
+
+.diorama-panel__title {
+  margin: 0 0 28px;
+  font-family: "Changa One", ui-sans-serif, sans-serif;
+  font-size: clamp(2rem, 6vw, 50px);
+  line-height: 0.8;
+  font-weight: 400;
+  color: var(--chapter-text-on-sky, #333333);
+  transform: rotate(var(--chapter-sign-rotate, -6deg));
+  text-align: left;
+  padding-left: 6%;
+}
+
+.diorama-highlights {
+  list-style: none;
+  margin: 0;
+  padding: 0 6%;
+  display: grid;
+  gap: 20px;
+}
+
+.diorama-highlights li {
+  padding: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.43;
+  color: var(--chapter-ink, #333333);
+  border-bottom: 2px solid color-mix(in srgb, var(--chapter-ink, #333) 25%, transparent);
+}
+
+/* —— Day timeline: flat signage links —— */
+.diorama-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 6%;
+  display: grid;
+  gap: 20px;
+}
+
+.diorama-day {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  gap: 4px 16px;
+  padding: 16px 0;
   color: inherit;
   text-decoration: none;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  border-bottom: 2px solid var(--chapter-ink, #333333);
 }
 
-.day-card:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--chapter-accent, #fcbd1c) 55%, white);
-  box-shadow: 0 16px 28px rgba(35, 33, 44, 0.1);
+.diorama-day:hover {
+  opacity: 0.7;
 }
 
-.day-card-marker {
-  position: absolute;
-  left: -1.35rem;
-  top: 1.35rem;
-  width: 0.85rem;
-  height: 0.85rem;
-  border-radius: 50%;
-  background: var(--chapter-accent, #fcbd1c);
-  border: 2px solid var(--color-paper, #f7f0e1);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--chapter-accent, #fcbd1c) 35%, white);
+.diorama-day__num {
+  grid-row: 1 / 3;
+  align-self: center;
+  font-family: "Changa One", ui-sans-serif, sans-serif;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--chapter-globe, #007fff);
 }
 
-.day-card-inner {
-  display: grid;
-  gap: 0.35rem;
+.diorama-day__date {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: color-mix(in srgb, var(--chapter-ink, #333) 65%, white);
 }
 
-.day-card-top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.45rem;
+.diorama-day__city {
+  font-family: "Changa One", ui-sans-serif, sans-serif;
+  font-size: 20px;
+  line-height: 1.25;
 }
 
-.day-card-num {
-  font-weight: 800;
-  font-size: 0.92rem;
+.diorama-day__cta {
+  grid-column: 2;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--chapter-ink, #333333);
 }
 
-.day-card-date {
-  font-size: 0.82rem;
-  color: var(--color-pine, #006434);
-  font-weight: 700;
-}
-
-.day-card-tag {
-  margin-left: auto;
-  padding: 0.2rem 0.55rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--color-morning-sky, #a6dfff) 35%, white);
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: lowercase;
-}
-
-.day-card-city {
-  font-size: 1.05rem;
-  font-weight: 700;
-}
-
-.day-card-summary {
-  font-size: 0.9rem;
-  color: color-mix(in srgb, var(--color-charcoal, #23212c) 72%, white);
-}
-
-.day-card-cta {
-  margin-top: 0.15rem;
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: var(--color-pine, #006434);
-}
-
-@media (min-width: 640px) {
-  .chapter-page {
-    padding-inline: 1.75rem;
+@media (min-width: 900px) {
+  .diorama-globe-title {
+    top: 48%;
   }
 
-  .chapter-hero-media {
-    height: 13rem;
+  .diorama-eyebrow {
+    top: 16%;
+    right: 10%;
+    font-size: 2rem;
+  }
+
+  .diorama-sky-meta {
+    top: 18%;
+    left: 8%;
+  }
+
+  .diorama-panel {
+    padding-inline: 45px;
+  }
+
+  .diorama-panel__title,
+  .diorama-highlights,
+  .diorama-timeline {
+    padding-left: 10%;
+    padding-right: 10%;
   }
 }

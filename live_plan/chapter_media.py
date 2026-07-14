@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from copy import deepcopy
 from pathlib import Path
 from typing import Any
@@ -10,14 +11,43 @@ from typing import Any
 LIVE_DIR = Path(__file__).resolve().parent
 CHAPTER_MEDIA_PATH = LIVE_DIR / "chapter_media.json"
 
+HEX_COLOR = re.compile(r"^#[0-9a-fA-F]{6}$")
+
 DEFAULT_ENTRY: dict[str, Any] = {
     "title": "",
     "description": "",
     "hero_image": "",
+    "page_bg": "",
     "badges": [],
     "highlights": [],
     "day_overrides": {},
+    "karl": {},
 }
+
+from live_plan.chapter_vibes import KARL_COLOR_KEYS, KARL_TEXT_KEYS
+
+KARL_KEYS = KARL_TEXT_KEYS + KARL_COLOR_KEYS
+
+
+def _sanitize_karl(raw: Any) -> dict[str, str]:
+    if not isinstance(raw, dict):
+        return {}
+    result: dict[str, str] = {}
+    for key in KARL_KEYS:
+        value = str(raw.get(key, "")).strip()
+        if not value:
+            continue
+        if key in KARL_COLOR_KEYS:
+            if HEX_COLOR.match(value):
+                result[key] = value
+            continue
+        result[key] = value[:300]
+    return result
+
+
+def _sanitize_hex_color(value: Any) -> str:
+    text = str(value or "").strip()
+    return text if HEX_COLOR.match(text) else ""
 
 
 def load_chapter_media() -> dict[str, Any]:
@@ -44,6 +74,7 @@ def sanitize_chapter_media(data: dict | None) -> dict[str, Any]:
         entry["title"] = str(raw.get("title", "")).strip()
         entry["description"] = str(raw.get("description", "")).strip()
         entry["hero_image"] = str(raw.get("hero_image", "")).strip()
+        entry["page_bg"] = _sanitize_hex_color(raw.get("page_bg", ""))
         entry["badges"] = [
             str(item).strip()
             for item in raw.get("badges", [])
@@ -64,13 +95,16 @@ def sanitize_chapter_media(data: dict | None) -> dict[str, Any]:
                 if str(day_raw.get(key, "")).strip()
             }
         entry["day_overrides"] = overrides
+        entry["karl"] = _sanitize_karl(raw.get("karl"))
         if any([
             entry["title"],
             entry["description"],
             entry["hero_image"],
+            entry["page_bg"],
             entry["badges"],
             entry["highlights"],
             entry["day_overrides"],
+            entry["karl"],
         ]):
             result[str(chapter_id)] = entry
     return result
@@ -78,7 +112,13 @@ def sanitize_chapter_media(data: dict | None) -> dict[str, Any]:
 
 def chapter_entry(chapter_id: str, media: dict[str, Any] | None = None) -> dict[str, Any]:
     media = media if media is not None else load_chapter_media()
-    return deepcopy(media.get(chapter_id, DEFAULT_ENTRY))
+    entry = deepcopy(DEFAULT_ENTRY)
+    stored = media.get(chapter_id)
+    if isinstance(stored, dict):
+        entry.update(stored)
+    entry["page_bg"] = _sanitize_hex_color(entry.get("page_bg", ""))
+    entry["karl"] = _sanitize_karl(entry.get("karl"))
+    return entry
 
 
 def public_image_url(url: str) -> str:
@@ -98,6 +138,8 @@ def apply_chapter_overrides(chapter: dict, media: dict[str, Any] | None = None) 
         result["description"] = entry["description"]
     if entry["hero_image"]:
         result["hero_image"] = public_image_url(entry["hero_image"])
+    if entry["page_bg"]:
+        result["page_bg"] = entry["page_bg"]
     if entry["badges"]:
         result["badges"] = entry["badges"]
     if entry["highlights"]:

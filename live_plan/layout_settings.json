@@ -6,10 +6,7 @@
           "id": "tiles",
           "enabled": true,
           "order": 0,
-          "styles": {
-            "background-color": "#89ceec",
-            "color": "#37ff00"
-          }
+          "styles": {}
         }
       ]
     },
@@ -74,59 +71,47 @@
           "styles": {}
         },
         {
-          "id": "gallery",
+          "id": "content",
           "enabled": true,
           "order": 2,
           "styles": {}
         },
         {
-          "id": "intro",
-          "enabled": true,
-          "order": 3,
-          "styles": {}
-        },
-        {
-          "id": "totals",
-          "enabled": true,
-          "order": 4,
-          "styles": {}
-        },
-        {
           "id": "pager",
           "enabled": true,
-          "order": 5,
+          "order": 3,
           "styles": {}
         }
       ]
     }
   },
   "tiles": {
-    "china": {
-      "label": "",
-      "icon": "",
-      "visible": true,
-      "face_color": "#ffffff",
-      "hover_color": "#f37272",
-      "edge_dark": "#b90404",
-      "edge_light": "#b90404"
-    },
     "thailand": {
       "label": "",
       "icon": "",
       "visible": true,
       "face_color": "#ffffff",
-      "hover_color": "#7d96e3",
-      "edge_dark": "#365cce",
-      "edge_light": "#365cce"
+      "hover_color": "#fcbd1c",
+      "edge_dark": "#c99710",
+      "edge_light": "#fdd550"
     },
     "vietnam": {
       "label": "",
       "icon": "",
       "visible": true,
       "face_color": "#ffffff",
-      "hover_color": "#f5bc7a",
-      "edge_dark": "#c88a04",
-      "edge_light": "#c88a04"
+      "hover_color": "#a6dfff",
+      "edge_dark": "#7fb8e5",
+      "edge_light": "#c5ebff"
+    },
+    "china": {
+      "label": "",
+      "icon": "",
+      "visible": true,
+      "face_color": "#ffffff",
+      "hover_color": "#efe4cf",
+      "edge_dark": "#d5c9ad",
+      "edge_light": "#f7f2e5"
     }
   },
   "custom_rules": []

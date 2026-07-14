@@ -2,10 +2,48 @@
   "meta": {
     "traveler": "Никита",
     "period": "28.07 — 25.08.2026",
-    "subtitle": "Красноярск → Таиланд → Вьетнам → Китай → домой"
+    "period_start": "",
+    "period_end": "",
+    "subtitle": "Красноярск → Таиланд → Вьетнам → Китай → домой",
+    "access_token": "",
+    "timezone": "Asia/Krasnoyarsk"
+  },
+  "copy": {
+    "gate_eyebrow": "семейный маршрут",
+    "gate_title": "Вход по ключу",
+    "gate_hint": "Ключ есть в ссылке, которую тебе отправили",
+    "gate_placeholder": "Ключ доступа",
+    "gate_button": "Открыть",
+    "gate_error": "Неверный ключ",
+    "map_eyebrow": "семейный маршрут",
+    "map_hint": "нажмите на точку — откроется день",
+    "map_home_button": "← к карте",
+    "note_label": "сообщение",
+    "footer_updated": "Обновлено:",
+    "footer_day": "{traveler} · {period}",
+    "label_night": "ночёвка",
+    "label_weather": "запас",
+    "label_schedule": "расписание",
+    "label_schedule_suffix": "пунктов",
+    "label_journal": "из дороги",
+    "label_note_block": "заметка",
+    "label_photo_block": "фото",
+    "pager_prev_day": "← день {n}",
+    "pager_next_day": "день {n} →",
+    "pager_prev_date": "← {date}",
+    "pager_next_date": "{date} →",
+    "day_eyebrow": "день {n} · {region}",
+    "chapter_back": "Назад",
+    "chapter_timeline_title": "Маршрут по дням",
+    "chapter_cta": "Подробнее →",
+    "day_back": "← К маршруту",
+    "day_intro_label": "О дне",
+    "day_schedule_label": "Расписание дня",
+    "day_pager_prev": "← День {n}",
+    "day_pager_next": "День {n} →"
   },
   "theme": {
-    "theme_color": "#f7f0e1",
+    "theme_color": "#aad3e4",
     "color_charcoal": "#23212c",
     "color_paper": "#f7f0e1",
     "color_paper_deep": "#ddd0b4",
@@ -18,6 +56,11 @@
     "color_morning_sky": "#a6dfff",
     "color_ember": "#dd5000",
     "page_max_width": "640px",
-    "font_family": "\"Inter\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif"
-  }
+    "font_family": "\"Inter\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+    "chapter_page_max_width": "40rem",
+    "day_page_max_width": "40rem",
+    "section_gap": "1rem",
+    "card_radius": "1rem"
+  },
+  "custom_css": ""
 }

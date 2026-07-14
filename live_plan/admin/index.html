@@ -16,36 +16,14 @@
         <h1>Редактор</h1>
         <p id="sidebar-subtitle">день и контент</p>
       </div>
-      <nav class="sidebar-nav">
-        <button type="button" id="nav-days" class="nav-tab active">Дни</button>
+      <nav class="sidebar-nav sidebar-nav--main">
+        <button type="button" id="nav-tiles" class="nav-tab">Плитки</button>
         <button type="button" id="nav-chapters" class="nav-tab">Главы</button>
-        <button type="button" id="nav-layout" class="nav-tab">Макет</button>
-        <button type="button" id="nav-visual" class="nav-tab">Визуально</button>
-        <button type="button" id="nav-site" class="nav-tab">Сайт</button>
+        <button type="button" id="nav-days" class="nav-tab active">Дни</button>
       </nav>
-      <div id="visual-sidebar" class="visual-sidebar hidden">
-        <label>страница
-          <select id="visual-page-type">
-            <option value="index">Главная</option>
-            <option value="chapter" selected>Глава</option>
-            <option value="day">День</option>
-          </select>
-        </label>
-        <label id="visual-chapter-wrap">глава
-          <select id="visual-chapter-select">
-            <option value="thailand">Таиланд</option>
-            <option value="vietnam">Вьетнам</option>
-            <option value="china">Китай</option>
-          </select>
-        </label>
-        <label id="visual-day-wrap" class="hidden">день
-          <input type="number" id="visual-day-num" min="1" max="29" value="2">
-        </label>
-        <button type="button" id="btn-visual-reload" class="btn secondary">Обновить превью</button>
-        <p class="hint visual-hint">Кликни по элементу на странице — справа откроются его стили.</p>
-      </div>
       <div id="days-list" class="days-list"></div>
       <div id="chapters-list" class="days-list hidden"></div>
+      <p id="tiles-sidebar-hint" class="sidebar-hint hidden">Цвета плиток Таиланд · Вьетнам · Китай на главной.</p>
     </aside>
 
     <main class="editor">
@@ -65,45 +43,54 @@
         </header>
 
         <section class="panel">
+          <div class="panel-head"><h3>hero</h3></div>
+          <p class="hint">Верх страницы дня: eyebrow, заголовок и строка с датой.</p>
+          <div class="hero-fields site-fields">
+            <label>eyebrow<input type="text" id="hero-eyebrow" placeholder="День 1 · Таиланд"></label>
+            <label class="field-wide">заголовок<input type="text" id="hero-title" placeholder="Красноярск → перелёт"></label>
+            <label>мета<input type="text" id="hero-meta" placeholder="28.07 · вторник"></label>
+          </div>
+        </section>
+
+        <section class="panel">
           <div class="panel-head">
-            <h3>о дне</h3>
+            <h3>контент</h3>
             <div class="toolbar">
               <button type="button" id="btn-add-text" class="btn secondary">+ Текст</button>
               <label class="btn secondary upload-btn">
                 + Фото
                 <input type="file" id="photo-file-input" accept="image/*" hidden>
               </label>
+              <button type="button" id="btn-add-carousel" class="btn secondary">+ Карусель</button>
+              <button type="button" id="btn-add-side" class="btn secondary">+ Фото + текст</button>
             </div>
           </div>
-          <p class="hint">Текст и фото для блока «О дне» на сайте. Перетаскивай блоки в любом порядке.</p>
+          <p class="hint">Собери лонгрид из блоков: текст, фото, карусели и боковые секции. Перетаскивай в любом порядке.</p>
           <div id="blocks-list" class="blocks-list"></div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-head"><h3>итого</h3></div>
-          <label>текст<textarea id="meta-totals" rows="3" placeholder="Краткий итог дня"></textarea></label>
         </section>
 
         <div id="status" class="status"></div>
       </div>
 
-      <div id="site-panel" class="site-panel hidden">
+      <div id="tiles-panel" class="site-panel hidden">
         <header class="editor-head">
           <div>
-            <div class="eyebrow">настройки</div>
-            <h2>Весь сайт</h2>
+            <div class="eyebrow">главная</div>
+            <h2>Плитки</h2>
           </div>
           <div class="head-actions">
-            <button type="button" id="btn-preview-site" class="btn secondary">Главная</button>
-            <button type="button" id="btn-save-site" class="btn">Сохранить</button>
-            <button type="button" id="btn-build-site" class="btn accent">Собрать сайт</button>
+            <button type="button" id="btn-preview-tiles" class="btn secondary">Главная</button>
+            <button type="button" id="btn-save-tiles" class="btn">Сохранить</button>
+            <button type="button" id="btn-build-tiles" class="btn accent">Собрать сайт</button>
           </div>
         </header>
-
         <section class="panel">
-          <div class="panel-head">
-            <h3>сообщение родным</h3>
-          </div>
+          <div class="panel-head"><h3>цвета плиток</h3></div>
+          <p class="hint">Лицо — верх плитки. Бока — 3D-грани. Hover — при наведении.</p>
+          <div id="layout-tiles-list" class="layout-tiles"></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h3>сообщение родным</h3></div>
           <div class="status-grid">
             <label>текст<textarea id="status-note" rows="2" placeholder="Прилетел, всё ок"></textarea></label>
             <label>статус
@@ -115,15 +102,16 @@
             </label>
           </div>
         </section>
-
-        <div id="site-sections"></div>
-
-        <div class="site-actions-bottom">
-          <button type="button" id="btn-reset-site" class="btn danger secondary">Сбросить к умолчанию</button>
-        </div>
-
-        <div id="site-status" class="status"></div>
+        <details class="panel panel-details">
+          <summary>общие тексты и цвета сайта</summary>
+          <div id="site-sections"></div>
+          <div class="site-actions-bottom">
+            <button type="button" id="btn-reset-site" class="btn danger secondary">Сбросить к умолчанию</button>
+          </div>
+        </details>
+        <div id="tiles-status" class="status"></div>
       </div>
+
 
       <div id="chapters-panel" class="site-panel hidden">
         <header class="editor-head">
@@ -144,8 +132,59 @@
             <label class="field-wide">описание<textarea id="chapter-description" rows="3" placeholder="Коротко о главе"></textarea></label>
             <label class="field-wide">hero-фото (URL)<input type="text" id="chapter-hero-url" placeholder="https://... или media/chapters/..."></label>
             <label class="upload-btn btn secondary">Загрузить hero<input type="file" id="chapter-hero-file" accept="image/*" hidden></label>
+            <label>фон страницы
+              <div class="color-field-row">
+                <input type="color" id="chapter-page-bg-picker" value="#f7f0e1">
+                <input type="text" id="chapter-page-bg" placeholder="#f7f0e1 — пусто = Paper из «Сайт»">
+                <button type="button" id="btn-clear-chapter-bg" class="btn secondary">Сброс</button>
+              </div>
+            </label>
+            <p class="hint" id="chapter-page-bg-hint">Пусто — общий Paper. Акцент страны (бейджи, таймлайн) задаётся отдельно в маршруте.</p>
           </div>
           <div id="chapter-hero-preview" class="hero-preview"></div>
+        </section>
+        <section class="panel" id="chapter-karl-colors-panel">
+          <div class="panel-head">
+            <h3>глобус — цвета</h3>
+            <button type="button" id="btn-reset-karl-colors" class="btn secondary">Сбросить цвета</button>
+          </div>
+          <p class="hint" id="chapter-karl-colors-hint">Меняет фон (небо), цвет дуги глобуса и цвет надписей. Домики и облака — картинки, их цвет не меняется. После правок — «Собрать сайт» и Ctrl+Shift+R на странице.</p>
+          <div class="site-fields karl-fields karl-fields--colors">
+            <label>небо (фон)<input type="color" id="karl-sky" data-karl-key="sky"></label>
+            <label>глобус<input type="color" id="karl-globe" data-karl-key="globe"></label>
+            <label>меню (чернила)<input type="color" id="karl-ink" data-karl-key="ink"></label>
+            <label>текст на глобусе<input type="color" id="karl-text-globe" data-karl-key="text_on_globe"></label>
+            <label>меню при наведении<input type="color" id="karl-text-sky" data-karl-key="text_on_sky"></label>
+          </div>
+        </section>
+        <section class="panel" id="chapter-karl-panel">
+          <div class="panel-head">
+            <h3>глобус Karl — надписи</h3>
+            <button type="button" id="btn-reset-karl" class="btn secondary">Сбросить к пресету</button>
+          </div>
+          <p class="hint" id="chapter-karl-hint">Точная копия karlgonsalves.com. Пустое поле = пресет страны. Перенос строки = &lt;br&gt; на экране. После правок — «Собрать сайт».</p>
+          <div class="site-fields karl-fields karl-fields--text">
+            <h4 class="karl-fields__group">меню</h4>
+            <label>экран 1 · HOME<input type="text" id="karl-nav-home" data-karl-key="nav_home" placeholder="СТАРТ"></label>
+            <label>экран 2 · ABOUT<input type="text" id="karl-nav-route" data-karl-key="nav_route" placeholder="МАРШРУТ"></label>
+            <label>экран 3 · WORK<input type="text" id="karl-nav-main" data-karl-key="nav_main" placeholder="ГЛАВНОЕ"></label>
+            <label>экран 4 · PLAY<input type="text" id="karl-nav-play" data-karl-key="nav_play" placeholder="ЕЩЁ"></label>
+            <label>экран 5 · CONTACT<input type="text" id="karl-nav-contact" data-karl-key="nav_contact" placeholder="ИТОГ"></label>
+            <h4 class="karl-fields__group">экран 1 — заголовок</h4>
+            <label>текст (2 строки)<textarea id="karl-panel-a" data-karl-key="panel_a" rows="2" placeholder="Поехали&#10;в Таиланд.."></textarea></label>
+            <h4 class="karl-fields__group">экран 2 — о маршруте</h4>
+            <label>строка 1<input type="text" id="karl-panel-b-a" data-karl-key="panel_b_a" placeholder="Таиланд,"></label>
+            <label>строка 2<input type="text" id="karl-panel-b-b" data-karl-key="panel_b_b" placeholder="семейный маршрут"></label>
+            <h4 class="karl-fields__group">экран 3 — маршрут (лого Vimeo остаётся)</h4>
+            <label>до лого<input type="text" id="karl-panel-c-before" data-karl-key="panel_c_before" placeholder="Бангкок"></label>
+            <label>после лого<input type="text" id="karl-panel-c-after" data-karl-key="panel_c_after" placeholder="Чиангмай · Пхукет"></label>
+            <h4 class="karl-fields__group">экран 4 — детали</h4>
+            <label>строка 1<textarea id="karl-panel-d-b" data-karl-key="panel_d_b" rows="2" placeholder="Пляжи · храмы"></textarea></label>
+            <label>строка 2<input type="text" id="karl-panel-d-c" data-karl-key="panel_d_c" placeholder="тропики"></label>
+            <h4 class="karl-fields__group">экран 5 — финал</h4>
+            <label>заголовок<input type="text" id="karl-panel-e-c" data-karl-key="panel_e_c" placeholder="29 дней"></label>
+            <label>подзаголовок<input type="text" id="karl-panel-e-b" data-karl-key="panel_e_b" placeholder="листай к дням"></label>
+          </div>
         </section>
         <section class="panel">
           <div class="panel-head">
@@ -169,76 +208,6 @@
           <div id="chapter-days-overrides" class="steps-list"></div>
         </section>
         <div id="chapter-status" class="status"></div>
-      </div>
-
-      <div id="layout-panel" class="site-panel hidden">
-        <header class="editor-head">
-          <div>
-            <div class="eyebrow">макет</div>
-            <h2>Порядок и стили секций</h2>
-          </div>
-          <div class="head-actions">
-            <button type="button" id="btn-preview-layout" class="btn secondary">Предпросмотр</button>
-            <button type="button" id="btn-save-layout" class="btn">Сохранить</button>
-            <button type="button" id="btn-build-layout" class="btn accent">Собрать сайт</button>
-          </div>
-        </header>
-        <section class="panel">
-          <div class="panel-head"><h3>страница</h3></div>
-          <label>тип страницы
-            <select id="layout-page-select">
-              <option value="index">Главная (плитки)</option>
-              <option value="chapter">Страница главы</option>
-              <option value="day">Страница дня</option>
-            </select>
-          </label>
-        </section>
-        <section class="panel">
-          <div class="panel-head"><h3>секции</h3></div>
-          <p class="hint">Перетаскивай секции для изменения порядка. Отключай ненужные. Стили — CSS-свойства.</p>
-          <div id="layout-sections-list" class="layout-sections"></div>
-        </section>
-        <section class="panel hidden" id="layout-tiles-panel">
-          <div class="panel-head"><h3>цвета плиток</h3></div>
-          <p class="hint">Лицо — верх плитки. Бока — 3D-грани слева и снизу (не тень на фоне). Hover — при наведении.</p>
-          <div id="layout-tiles-list" class="layout-tiles"></div>
-        </section>
-        <div class="layout-actions-bottom">
-          <button type="button" id="btn-reset-layout" class="btn danger secondary">Сбросить макет</button>
-        </div>
-        <div id="layout-status" class="status"></div>
-      </div>
-
-      <div id="visual-panel" class="visual-panel hidden">
-        <header class="editor-head visual-head">
-          <div>
-            <div class="eyebrow">визуальный редактор</div>
-            <h2 id="visual-target-label">Кликни по элементу</h2>
-          </div>
-          <div class="head-actions">
-            <button type="button" id="btn-visual-save" class="btn">Сохранить</button>
-            <button type="button" id="btn-visual-build" class="btn accent">Собрать сайт</button>
-          </div>
-        </header>
-        <div class="visual-workspace">
-          <div class="visual-frame-wrap">
-            <iframe id="visual-frame" title="Предпросмотр страницы"></iframe>
-          </div>
-          <aside class="visual-inspector">
-            <div id="visual-empty" class="blocks-empty">Выбери элемент на странице слева</div>
-            <div id="visual-inspector-body" class="hidden">
-              <p class="visual-selector" id="visual-selector"></p>
-              <label class="layout-toggle visual-section-toggle hidden">
-                <input type="checkbox" id="visual-section-enabled" checked> Показывать секцию
-              </label>
-              <div id="visual-style-fields" class="layout-styles"></div>
-              <div class="visual-inspector-actions">
-                <button type="button" id="btn-visual-clear-styles" class="btn secondary">Сбросить стили</button>
-              </div>
-            </div>
-            <div id="visual-status" class="status"></div>
-          </aside>
-        </div>
       </div>
     </main>
   </div>
@@ -298,8 +267,7 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
-  <script src="admin.js?v=9"></script>
-  <script src="admin-pages.js?v=5"></script>
-  <script src="admin-visual.js?v=3"></script>
+  <script src="admin.js?v=19"></script>
+  <script src="admin-pages.js?v=9"></script>
 </body>
 </html>

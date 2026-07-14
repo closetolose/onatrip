@@ -1,8 +1,4 @@
 /* Generated layout overrides — edit in admin → Макет */
-.trip-main {
-  background-color: #89ceec;
-  color: #37ff00;
-}
 body.index-page { display: flex; flex-direction: column; }
 body.index-page > main { display: flex; flex-direction: column; }
 body.index-page .trip-main { order: 0; }
@@ -19,20 +15,18 @@ body.day-body { display: flex; flex-direction: column; }
 body.day-body > main { display: flex; flex-direction: column; }
 body.day-body [data-section="back_link"] { order: 0; }
 body.day-body [data-section="hero"] { order: 1; }
-body.day-body [data-section="gallery"] { order: 2; }
-body.day-body [data-section="intro"] { order: 3; }
-body.day-body [data-section="totals"] { order: 4; }
-body.day-body [data-section="pager"] { order: 5; }
+body.day-body [data-section="content"] { order: 2; }
+body.day-body [data-section="pager"] { order: 3; }
 /* Tile colors — edit in admin → Макет or Визуально */
 body.index-page .social-tiles .tile-link[data-tile-id="thailand"] { background: #ffffff; }
-body.index-page .social-tiles .tile-link[data-tile-id="thailand"]::before { background: #365cce; }
-body.index-page .social-tiles .tile-link[data-tile-id="thailand"]::after { background: #365cce; }
-body.index-page .social-tiles .tile:hover .tile-link[data-tile-id="thailand"], body.index-page .social-tiles .tile-link[data-tile-id="thailand"]:focus-visible { background: #7d96e3; }
+body.index-page .social-tiles .tile-link[data-tile-id="thailand"]::before { background: #c99710; }
+body.index-page .social-tiles .tile-link[data-tile-id="thailand"]::after { background: #fdd550; }
+body.index-page .social-tiles .tile:hover .tile-link[data-tile-id="thailand"], body.index-page .social-tiles .tile-link[data-tile-id="thailand"]:focus-visible { background: #fcbd1c; }
 body.index-page .social-tiles .tile-link[data-tile-id="vietnam"] { background: #ffffff; }
-body.index-page .social-tiles .tile-link[data-tile-id="vietnam"]::before { background: #c88a04; }
-body.index-page .social-tiles .tile-link[data-tile-id="vietnam"]::after { background: #c88a04; }
-body.index-page .social-tiles .tile:hover .tile-link[data-tile-id="vietnam"], body.index-page .social-tiles .tile-link[data-tile-id="vietnam"]:focus-visible { background: #f5bc7a; }
+body.index-page .social-tiles .tile-link[data-tile-id="vietnam"]::before { background: #7fb8e5; }
+body.index-page .social-tiles .tile-link[data-tile-id="vietnam"]::after { background: #c5ebff; }
+body.index-page .social-tiles .tile:hover .tile-link[data-tile-id="vietnam"], body.index-page .social-tiles .tile-link[data-tile-id="vietnam"]:focus-visible { background: #a6dfff; }
 body.index-page .social-tiles .tile-link[data-tile-id="china"] { background: #ffffff; }
-body.index-page .social-tiles .tile-link[data-tile-id="china"]::before { background: #b90404; }
-body.index-page .social-tiles .tile-link[data-tile-id="china"]::after { background: #b90404; }
-body.index-page .social-tiles .tile:hover .tile-link[data-tile-id="china"], body.index-page .social-tiles .tile-link[data-tile-id="china"]:focus-visible { background: #f37272; }
+body.index-page .social-tiles .tile-link[data-tile-id="china"]::before { background: #d5c9ad; }
+body.index-page .social-tiles .tile-link[data-tile-id="china"]::after { background: #f7f2e5; }
+body.index-page .social-tiles .tile:hover .tile-link[data-tile-id="china"], body.index-page .social-tiles .tile-link[data-tile-id="china"]:focus-visible { background: #efe4cf; }

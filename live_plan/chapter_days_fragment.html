@@ -1,0 +1,24 @@
+<section id="chapter-days" class="chapter-karl-days" aria-label="{{ copy.chapter_timeline_title }}">
+  <h2 class="chapter-karl-days__title">{{ copy.chapter_timeline_title }}</h2>
+  {% if chapter.highlights %}
+  <div class="chapter-karl-days__highlights" aria-label="Ключевые события">
+    <h3 class="chapter-karl-days__subtitle">Главное</h3>
+    <ul>
+      {% for item in chapter.highlights %}
+      <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  <ol class="chapter-karl-days__list">
+    {% for d in chapter.days %}
+    <li>
+      <a class="chapter-karl-day" href="{{ d.page_url }}">
+        <span class="chapter-karl-day__num">День {{ d.num }}</span>
+        <span class="chapter-karl-day__meta">{{ d.date_short }} · {{ d.city }}</span>
+        <span class="chapter-karl-day__cta">{{ copy.chapter_cta }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+</section>

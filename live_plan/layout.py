@@ -93,9 +93,7 @@ SECTION_CATALOG: dict[str, list[dict[str, str]]] = {
     "day": [
         {"id": "back_link", "label": "Ссылка «К маршруту»", "selector": '[data-section="back_link"]'},
         {"id": "hero", "label": "Hero дня", "selector": '[data-section="hero"]'},
-        {"id": "gallery", "label": "Галерея фото", "selector": '[data-section="gallery"]'},
-        {"id": "intro", "label": "Блок «О дне»", "selector": '[data-section="intro"]'},
-        {"id": "totals", "label": "Итого", "selector": '[data-section="totals"]'},
+        {"id": "content", "label": "Лонгрид", "selector": '[data-section="content"]'},
         {"id": "pager", "label": "Навигация между днями", "selector": '[data-section="pager"]'},
     ],
 }

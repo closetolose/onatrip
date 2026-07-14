@@ -1,0 +1,321 @@
+/**
+
+ * Live Plan — design tokens (pipeline step 3)
+
+ * Source: pipeline/design-brief.md, live_plan/site_settings.json, trip_parser.REGION
+
+ * Contract: .cursor/rules/travel-tiles-ui.mdc (tile geometry & hover — do not break)
+
+ *
+
+ * Canonical copy: pipeline/design/tokens.css — sync on token changes.
+
+ * theme.css (generated) may override admin-editable subset after this file.
+
+ */
+
+
+
+:root {
+
+  /* ── Meta / browser chrome ───────────────────────────────────────── */
+
+  --theme-color: #aad3e4;
+
+
+
+  /* ── Core palette (paper theme, site_settings.theme) ─────────────── */
+
+  --color-charcoal: #23212c;
+
+  --color-paper: #f7f0e1;
+
+  --color-paper-deep: #ddd0b4;
+
+  --color-surface: #efe4cf;
+
+  --color-surface-alt: #e3d5bc;
+
+  --color-surface-inset: #f5edd9;
+
+  --color-snow: #ffffff;
+
+
+
+  /* ── Semantic accents ────────────────────────────────────────────── */
+
+  --color-pine: #006434;
+
+  --color-marigold: #fcbd1c;
+
+  --color-morning-sky: #a6dfff;
+
+  --color-ember: #dd5000;
+
+
+
+  /* ── Text & links (inner pages) ──────────────────────────────────── */
+
+  --color-ink: var(--color-charcoal);
+
+  --color-ink-muted: color-mix(in srgb, var(--color-charcoal) 72%, white);
+
+  --color-link: var(--color-pine);
+
+  --color-link-hover: var(--color-charcoal);
+
+
+
+  /* ── Typography — main UI (design-brief §3: Inter from site_settings) */
+
+  --font-neue-haas-unica: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --font-tiles: "Roboto Condensed", sans-serif;
+
+
+
+  --font-weight-light: 300;
+
+  --font-weight-regular: 400;
+
+  --font-weight-semibold: 600;
+
+  --font-weight-bold: 700;
+
+  --font-weight-extra-bold: 800;
+
+
+
+  --line-height-body: 1.5;
+
+  --line-height-tight: 1.1;
+
+  --letter-spacing-eyebrow: 0.08em;
+
+  --letter-spacing-tile-label: 4px;
+
+
+
+  /* ── Layout & density (mobile-first, brief §3) ───────────────────── */
+
+  --page-max-width: 640px;
+
+  --chapter-page-max-width: 40rem;
+
+  --day-page-max-width: 40rem;
+
+  --section-gap: 1rem;
+
+  --page-padding-x: 1.25rem;
+
+  --page-padding-y: 1.5rem;
+
+  --page-padding-bottom: 3rem;
+
+
+
+  /* ── Radius ──────────────────────────────────────────────────────── */
+
+  --card-radius: 1rem;
+
+  --radius-hero: 1.25rem;
+
+  --radius-pill: 999px;
+
+  --radius-cards: 20px;
+
+  --radius-buttons: 20px;
+
+  --radius-nav-pills: 99px;
+
+  --radius-small-chips: 8px;
+
+
+
+  /* ── Borders & surfaces ──────────────────────────────────────────── */
+
+  --inset-border: 1px solid color-mix(in srgb, var(--color-charcoal) 18%, transparent);
+
+  --border-subtle: 1px solid color-mix(in srgb, var(--color-charcoal) 8%, transparent);
+
+
+
+  /* ── Shadows (tiles + cards; solid rgba, not gradients) ─────────── */
+
+  --shadow-tile: -20px 20px 10px rgba(0, 0, 0, 0.5);
+
+  --shadow-tile-hover: -50px 50px 50px rgba(0, 0, 0, 0.5);
+
+  --shadow-hero: 0 14px 32px rgba(35, 33, 44, 0.12);
+
+  --shadow-card: 0 4px 16px rgba(35, 33, 44, 0.08);
+
+
+
+  /* ── Motion (brief §6) ───────────────────────────────────────────── */
+
+  --duration-tile: 0.5s;
+
+  --duration-fast: 0.2s;
+
+  --ease-tile-in: cubic-bezier(0.34, 1.2, 0.64, 1);
+
+  --transition-tile: var(--duration-tile) ease;
+
+
+
+  /* ── 3D social tiles — geometry (travel-tiles-ui.mdc) ──────────── */
+
+  --tile-width: 270px;
+
+  --tile-height: 104px;
+
+  --tile-transform: rotate(-30deg) skew(25deg) translate(0, 0);
+
+  --tile-transform-hover: rotate(-30deg) skew(25deg) translate(20px, -15px);
+
+  --tile-face: var(--color-snow);
+
+  --tile-ink: #262626;
+
+  --tile-edge-default: #b1b1b1;
+
+  --tile-icon-size: 52px;
+
+  --tile-label-size: 1.15rem;
+
+  --tile-scale-narrow: 0.85;
+
+  --tile-breakpoint-scale: 520px;
+
+  --tile-breakpoint-wrap: 960px;
+
+
+
+  /* ── Tile hover — per region (travel-tiles-ui.mdc + layout.py defaults) */
+
+  --tile-thailand-face: #ffffff;
+
+  --tile-thailand-hover: #fcbd1c;
+
+  --tile-thailand-edge-dark: #c99710;
+
+  --tile-thailand-edge-light: #fdd550;
+
+
+
+  --tile-vietnam-face: #ffffff;
+
+  --tile-vietnam-hover: #a6dfff;
+
+  --tile-vietnam-edge-dark: #7fb8e5;
+
+  --tile-vietnam-edge-light: #c5ebff;
+
+
+
+  --tile-china-face: #ffffff;
+
+  --tile-china-hover: #efe4cf;
+
+  --tile-china-edge-dark: #d5c9ad;
+
+  --tile-china-edge-light: #f7f2e5;
+
+
+
+
+
+
+
+
+
+  --tile-hover-ink: var(--color-snow);
+
+
+
+  /* ── Regions — trip_parser.REGION (chapters & days) ──────────────── */
+
+  --region-ru-name: "Россия";
+
+  --region-ru-ink: #23212c;
+
+  --region-ru-bg: #e3d5bc;
+
+  --region-ru-accent: #006434;
+
+
+
+  --region-th-name: "Таиланд";
+
+  --region-th-ink: #23212c;
+
+  --region-th-bg: #fcbd1c;
+
+  --region-th-accent: #23212c;
+
+
+
+  --region-vn-name: "Вьетнам";
+
+  --region-vn-ink: #23212c;
+
+  --region-vn-bg: #a6dfff;
+
+  --region-vn-accent: #23212c;
+
+
+
+  --region-cn-name: "Китай";
+
+  --region-cn-ink: #23212c;
+
+  --region-cn-bg: #efe4cf;
+
+  --region-cn-accent: #006434;
+
+
+
+  --region-travel-name: "Переезд";
+
+  --region-travel-ink: #23212c;
+
+  --region-travel-bg: #ddd0b4;
+
+  --region-travel-accent: #23212c;
+
+
+
+  /* Runtime aliases set per chapter/day page (--chapter-accent, --region-accent) */
+
+  --chapter-page-bg: var(--color-paper);
+
+  --chapter-accent: var(--color-marigold);
+
+  --region-accent: var(--color-marigold);
+
+  --region-ink: var(--color-charcoal);
+
+
+
+  /* ── Gate overlay (brief §4.4) ───────────────────────────────────── */
+
+  --gate-backdrop: color-mix(in srgb, var(--color-charcoal) 40%, transparent);
+
+  --gate-surface: var(--color-surface);
+
+  --gate-radius: var(--card-radius);
+
+
+
+  /* ── Focus (brief §6) ────────────────────────────────────────────── */
+
+  --focus-outline-width: 2px;
+
+  --focus-outline-offset: 2px;
+
+  --focus-outline-color: var(--color-pine);
+
+}
+
+

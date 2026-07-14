@@ -10,18 +10,19 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from live_plan.karl_index import KARL_CHAPTER_IDS, render_karl_chapter, render_karl_mirror
 from live_plan.chapter_media import apply_chapter_overrides, load_chapter_media
-from live_plan.chapters import build_chapters, current_chapter_id
+from live_plan.chapter_vibes import chapter_vibe
+from live_plan.chapters import build_chapters, current_chapter_id, assign_chapter
 from live_plan.day_pages import (
     MEDIA_SRC,
     blank_public_day,
     chapter_badges,
     enrich_chapter_days,
-    intro_from_media,
     load_day_media,
     media_entry,
     missing_media_files,
-    photos_from_media,
+    public_blocks,
     verify_day_output,
 )
 from live_plan.layout import load_layout, render_layout_css
@@ -69,7 +70,7 @@ def build_trip(site: dict, parsed_days: list[dict], day_media: dict, chapter_med
     }
 
 
-def render_index(trip: dict, theme_color: str) -> str:
+def render_index(trip: dict, site: dict, theme_color: str) -> str:
     env = Environment(
         loader=FileSystemLoader(str(LIVE_DIR)),
         autoescape=select_autoescape(["html", "xml"]),
@@ -83,11 +84,17 @@ def render_index(trip: dict, theme_color: str) -> str:
         subtitle=meta["subtitle"],
         built_at=meta["built_at"],
         theme_color=theme_color,
+        copy=copy_context(site),
+        gate=gate_context(site),
     )
 
 
 def copy_context(site: dict) -> dict:
     return site.get("copy", {})
+
+
+def gate_context(site: dict) -> dict:
+    return {"token": site.get("meta", {}).get("access_token", "")}
 
 
 def render_chapter_pages(trip: dict, site: dict, theme_color: str) -> None:
@@ -96,21 +103,38 @@ def render_chapter_pages(trip: dict, site: dict, theme_color: str) -> None:
         loader=FileSystemLoader(str(LIVE_DIR)),
         autoescape=select_autoescape(["html", "xml"]),
     )
-    template = env.get_template("chapter_template.html")
+    diorama_template = env.get_template("chapter_template.html")
     chapters_dir = DOCS_DIR / "chapters"
     chapters_dir.mkdir(parents=True, exist_ok=True)
     meta = trip["meta"]
+    copy = copy_context(site)
+    gate = gate_context(site)
+    chapter_media = load_chapter_media()
 
     for chapter in trip["chapters"]:
-        if chapter["id"] == "departure":
-            continue
-        html = template.render(
-            chapter=chapter,
-            badges=chapter_badges(chapter),
-            copy=copy_context(site),
-            period=meta["period"],
-            theme_color=theme_color,
-        )
+        vibe = chapter_vibe(chapter["id"], chapter_media)
+        if chapter["id"] in KARL_CHAPTER_IDS:
+            gate_html = env.get_template("gate_fragment.html").render(
+                copy=copy,
+                gate=gate,
+            )
+            html = render_karl_chapter(
+                chapter=chapter,
+                vibe=vibe,
+                page_title=f"{chapter['title']} · {meta['period']}",
+                gate_html=gate_html,
+                media=chapter_media,
+            )
+        else:
+            html = diorama_template.render(
+                chapter=chapter,
+                badges=chapter_badges(chapter),
+                copy=copy,
+                gate=gate,
+                period=meta["period"],
+                theme_color=vibe["sky"],
+                vibe=vibe,
+            )
         (chapters_dir / f"{chapter['id']}.html").write_text(html, encoding="utf-8")
 
 
@@ -133,30 +157,39 @@ def render_day_pages(trip: dict, site: dict, theme_color: str, day_media: dict) 
     for day_num in day_nums:
         raw = parsed_by_num[day_num]
         entry = media_entry(day_num, day_media)
-        public_day = blank_public_day(raw, entry)
-        chapter = chapter_by_id[public_day["chapter_id"]]
-        intro = intro_from_media(entry)
-        verify_day_output({"day": public_day, "intro": intro})
+        chapter = chapter_by_id[assign_chapter(day_num)]
+        if day_num == 1:
+            chapter = chapter_by_id["thailand"]
 
         idx = day_nums.index(day_num)
         prev_day = parsed_by_num[day_nums[idx - 1]] if idx > 0 else None
         next_day = parsed_by_num[day_nums[idx + 1]] if idx + 1 < len(day_nums) else None
 
+        region_key = raw["region"]
+        if day_num == 1:
+            region_key = "th"
+
+        region_name = REGION[region_key]["name"]
+        public_day = blank_public_day(raw, entry, region_name)
+
+        blocks_out = public_blocks(day_num, public_day["region"], public_day["city"], entry)
+        verify_day_output({"day": public_day, "blocks": blocks_out})
+
         html = template.render(
             day=public_day,
             chapter=chapter,
-            region=REGION[public_day["region"]],
-            photos=photos_from_media(day_num, public_day["region"], public_day["city"], entry),
-            intro=intro,
+            region=REGION[region_key],
+            blocks=blocks_out,
             prev_day=prev_day,
             next_day=next_day,
             copy=copy,
+            gate=gate_context(site),
             pager_prev=format_copy(copy.get("day_pager_prev", "← День {n}"), n=prev_day["num"]) if prev_day else "",
             pager_next=format_copy(copy.get("day_pager_next", "День {n} →"), n=next_day["num"]) if next_day else "",
             footer_day=format_copy(copy.get("footer_day", "{traveler} · {period}"), traveler=meta["traveler"], period=meta["period"]),
             traveler=meta["traveler"],
             period=meta["period"],
-            theme_color=theme_color,
+            theme_color=REGION[region_key]["bg"],
         )
         (days_dir / f"{day_num:02d}.html").write_text(html, encoding="utf-8")
 
@@ -173,10 +206,12 @@ def main() -> None:
     chapter_media = load_chapter_media()
     absent_media = missing_media_files(day_media)
     if absent_media:
-        raise SystemExit(
-            "Missing photo files referenced in live_plan/day_media.json:\n  "
+        import sys
+        print(
+            "Warning: missing photo files referenced in live_plan/day_media.json:\n  "
             + "\n  ".join(absent_media)
-            + "\nRestore them with: git checkout HEAD -- live_plan/media/"
+            + "\nBuild continues; upload photos in admin or restore files under live_plan/media/.",
+            file=sys.stderr,
         )
     trip = build_trip(site, parsed["days"], day_media, chapter_media)
     layout = load_layout()
@@ -194,15 +229,20 @@ def main() -> None:
 
     (DOCS_DIR / "trip.json").write_text(trip_blob + "\n", encoding="utf-8")
     (DOCS_DIR / "index.html").write_text(
-        render_index(trip, theme_color), encoding="utf-8"
+        render_index(trip, site, theme_color), encoding="utf-8"
     )
     render_chapter_pages(trip, site, theme_color)
     render_day_pages(trip, site, theme_color, day_media)
     (DOCS_DIR / ".nojekyll").touch()
 
+    shutil.copy2(ASSETS_SRC / "tokens.css", docs_assets / "tokens.css")
+    shutil.copy2(ASSETS_SRC / "main.css", docs_assets / "main.css")
     shutil.copy2(ASSETS_SRC / "style.css", docs_assets / "style.css")
     shutil.copy2(ASSETS_SRC / "chapter.css", docs_assets / "chapter.css")
+    shutil.copy2(ASSETS_SRC / "karl-chapter.css", docs_assets / "karl-chapter.css")
+    shutil.copy2(ASSETS_SRC / "karl-chapter-days.js", docs_assets / "karl-chapter-days.js")
     shutil.copy2(ASSETS_SRC / "day.css", docs_assets / "day.css")
+    shutil.copy2(ASSETS_SRC / "day.js", docs_assets / "day.js")
     shutil.copy2(ASSETS_SRC / "app.js", docs_assets / "app.js")
     (docs_assets / "theme.css").write_text(render_theme_css(site), encoding="utf-8")
     (docs_assets / "layout.css").write_text(render_layout_css(layout), encoding="utf-8")
@@ -213,12 +253,30 @@ def main() -> None:
         raise SystemExit(f"Media folder not found: {MEDIA_SRC}")
 
     _clean_stale(docs_assets)
+    _copy_karl_assets()
+    (DOCS_DIR / "karl" / "index.html").write_text(render_karl_mirror(), encoding="utf-8")
 
     print(f"Built: {DOCS_DIR / 'index.html'}")
-    print(f"Built: {DOCS_DIR / 'chapters'} ({len(trip['chapters']) - 1} chapter pages)")
+    print(f"Built: {DOCS_DIR / 'chapters'} ({len(trip['chapters'])} chapter pages)")
     print(f"Built: {DOCS_DIR / 'days'} ({len(trip['_parsed_by_num'])} day pages)")
     for chapter in trip["chapters"]:
         print(f"  {chapter['title']}: {chapter['day_count']} дн.")
+
+
+def _copy_karl_assets() -> None:
+    src = LIVE_DIR / "karl_home"
+    dest = DOCS_DIR / "karl"
+    for sub in ("css", "js", "images"):
+        from_dir = src / sub
+        to_dir = dest / sub
+        if not from_dir.exists():
+            raise FileNotFoundError(
+                f"Missing {from_dir}. Run: python scripts/mirror_karl_home.py"
+            )
+        to_dir.mkdir(parents=True, exist_ok=True)
+        for path in from_dir.iterdir():
+            if path.is_file():
+                shutil.copy2(path, to_dir / path.name)
 
 
 def _clean_stale(docs_assets: Path) -> None:
@@ -227,7 +285,7 @@ def _clean_stale(docs_assets: Path) -> None:
     if podium_dir.exists():
         shutil.rmtree(podium_dir)
 
-    for stale_asset in ("map.js", "day.js", "plane.png"):
+    for stale_asset in ("map.js", "plane.png"):
         path = docs_assets / stale_asset
         if path.exists():
             path.unlink()

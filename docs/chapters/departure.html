@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e3d5bc">
+  <title>Вылет · 28.07 — 25.08.2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Changa+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/tokens.css">
+  <link rel="stylesheet" href="../assets/theme.css">
+  <link rel="stylesheet" href="../assets/main.css">
+  <link rel="stylesheet" href="../assets/chapter.css">
+  <link rel="stylesheet" href="../assets/layout.css">
+</head>
+<body
+  class="chapter-body diorama-chapter"
+  data-chapter-id="departure"
+  style="
+    --chapter-sky: #e3d5bc;
+    --chapter-globe: #007fff;
+    --chapter-accent-art: #333333;
+    --chapter-ink: #333333;
+    --chapter-text-on-globe: #ffffff;
+    --chapter-text-on-sky: #333333;
+    --chapter-hero-rotate: 0deg;
+    --chapter-sign-rotate: 0deg;
+  "
+>
+  <nav class="diorama-nav" aria-label="Навигация по главам">
+    <a class="diorama-nav__link" href="../index.html">Главная</a>
+    <span class="diorama-nav__link is-active" aria-current="page">ВЫЛЕТ</span>
+  </nav>
+
+  <section class="diorama-hero" data-section="hero">
+    <div class="diorama-scene" aria-hidden="true">
+      <span class="diorama-cloud diorama-cloud--1"></span>
+      <span class="diorama-cloud diorama-cloud--2"></span>
+      <span class="diorama-cloud diorama-cloud--3"></span>
+      <div class="diorama-globe"></div>
+      <div class="diorama-building diorama-building--1">
+        <span class="diorama-building__roof"></span>
+        <span class="diorama-building__body"></span>
+      </div>
+      <div class="diorama-building diorama-building--2">
+        <span class="diorama-building__roof"></span>
+        <span class="diorama-building__body"></span>
+      </div>
+      <div class="diorama-building diorama-building--3">
+        <span class="diorama-building__roof"></span>
+        <span class="diorama-building__body"></span>
+      </div>
+      <div class="diorama-building diorama-building--4">
+        <span class="diorama-building__roof"></span>
+        <span class="diorama-building__body"></span>
+      </div>
+    </div>
+
+    <p class="diorama-eyebrow" data-section="hero_eyebrow">Старт маршрута</p>
+
+    <div class="diorama-sky-meta" data-section="hero_meta">
+      <p class="diorama-meta">28.07 — 28.07</p>
+      <p class="diorama-route">Красноярск</p>
+      
+      <p class="diorama-badges" data-section="badges">1 дней · Красноярск</p>
+      
+    </div>
+
+    <div class="diorama-globe-title" data-section="hero_content">
+      <h1 class="diorama-display">
+        <span class="diorama-display__line diorama-display__line--1">Вылет</span>
+        <span class="diorama-display__line diorama-display__line--2">1 дн.</span>
+      </h1>
+    </div>
+  </section>
+
+  
+  <section class="diorama-panel diorama-panel--highlights" data-section="highlights" aria-label="Ключевые события">
+    <h2 class="diorama-panel__title">Главное</h2>
+    <ul class="diorama-highlights">
+      
+      <li>📍 Регистрация SU6637, досмотр, посадка</li>
+      
+      <li>✈ SU6637 KJA → CAN (Гуанчжоу)</li>
+      
+      <li>✈ Прилёт, иммиграция/транзит (два отдельных билета!)</li>
+      
+      <li>✈ Посадка 9C7419 CAN → BKK</li>
+      
+    </ul>
+  </section>
+  
+
+  <section class="diorama-panel diorama-panel--days" data-section="day_timeline" aria-label="Маршрут по дням">
+    <h2 class="diorama-panel__title">Маршрут по дням</h2>
+    <ol class="diorama-timeline">
+      
+      <li>
+        <a class="diorama-day" href="../days/01.html">
+          <span class="diorama-day__num">День 1</span>
+          <span class="diorama-day__date">28.07</span>
+          <span class="diorama-day__city">Красноярск → перелёт</span>
+          <span class="diorama-day__cta">Подробнее →</span>
+        </a>
+      </li>
+      
+    </ol>
+  </section>
+
+  <div id="gate-overlay" class="gate-overlay hidden" hidden aria-hidden="true" role="dialog" aria-labelledby="gate-title" aria-modal="true" data-access-token="">
+  <div class="gate-overlay__panel">
+    <p class="gate-eyebrow">семейный маршрут</p>
+    <h2 id="gate-title" class="gate-title">Вход по ключу</h2>
+    <p class="gate-hint">Ключ есть в ссылке, которую тебе отправили</p>
+    <form id="gate-form" class="gate-form" novalidate>
+      <label class="gate-sr-only" for="gate-input">Ключ доступа</label>
+      <input id="gate-input" class="gate-input" type="text" name="key" autocomplete="off" placeholder="Ключ доступа" required>
+      <button type="submit" class="gate-button">Открыть</button>
+    </form>
+    <p id="gate-error" class="gate-error hidden" role="alert">Неверный ключ</p>
+  </div>
+</div>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

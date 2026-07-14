@@ -5,25 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="{{ theme_color }}">
   <title>{{ traveler }} · {{ period }}</title>
+  <link rel="stylesheet" href="assets/tokens.css">
   <link rel="stylesheet" href="assets/theme.css">
+  <link rel="stylesheet" href="assets/main.css">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/layout.css">
 </head>
 <body class="index-page">
   <main class="trip-main">
+    <h1 class="gate-sr-only">{{ traveler }} · {{ period }}</h1>
     <ul class="social-tiles" aria-label="Главы поездки">
       {% for ch in chapters %}
       {% if ch.id != 'departure' %}
       <li class="tile">
         <a class="tile-link" data-tile-id="{{ ch.id }}" href="chapters/{{ ch.id }}.html" aria-label="{{ ch.title }}">
           <span class="tile-icon" aria-hidden="true">{% if ch.id == 'thailand' %}🇹🇭{% elif ch.id == 'vietnam' %}🇻🇳{% elif ch.id == 'china' %}🇨🇳{% endif %}</span>
-          <span class="tile-label"> - {{ ch.title }}</span>
+          <span class="tile-label">{{ ch.title }}</span>
         </a>
       </li>
       {% endif %}
       {% endfor %}
     </ul>
   </main>
+
+  {% include "gate_fragment.html" %}
 
   <script src="assets/app.js"></script>
 </body>

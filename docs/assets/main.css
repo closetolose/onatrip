@@ -1,0 +1,265 @@
+/**
+
+ * Live Plan — global scaffold (architect step 4)
+
+ * Component styles: style.css | chapter.css | day.css
+
+ * Tokens: tokens.css → theme.css (admin overrides) → this file → components
+
+ */
+
+
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap");
+
+
+
+*,
+
+*::before,
+
+*::after {
+
+  box-sizing: border-box;
+
+}
+
+
+
+html {
+
+  -webkit-text-size-adjust: 100%;
+
+  overflow-x: clip;
+
+}
+
+
+
+body {
+
+  margin: 0;
+
+  min-height: 100%;
+
+  font-family: var(--font-neue-haas-unica);
+
+  color: var(--color-ink);
+
+  line-height: var(--line-height-body);
+
+}
+
+
+
+.hidden,
+
+[hidden] {
+
+  display: none !important;
+
+}
+
+
+
+/* Gate overlay scaffold — implementer step 5 (spec §7) */
+
+.gate-overlay {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: var(--gate-backdrop);
+
+  padding: var(--page-padding-x);
+
+}
+
+
+
+.gate-overlay__panel {
+
+  width: min(100%, var(--page-max-width));
+
+  padding: var(--page-padding-y) var(--page-padding-x);
+
+  background: var(--gate-surface);
+
+  border-radius: var(--gate-radius);
+
+  border: var(--inset-border);
+
+}
+
+
+
+.gate-eyebrow {
+
+  margin: 0 0 0.35rem;
+
+  font-size: 0.78rem;
+
+  font-weight: var(--font-weight-bold);
+
+  letter-spacing: var(--letter-spacing-eyebrow);
+
+  text-transform: uppercase;
+
+  color: var(--color-ink-muted);
+
+}
+
+
+
+.gate-title {
+
+  margin: 0 0 0.5rem;
+
+  font-size: 1.35rem;
+
+  line-height: var(--line-height-tight);
+
+}
+
+
+
+.gate-hint {
+
+  margin: 0 0 1rem;
+
+  font-size: 0.92rem;
+
+  color: var(--color-ink-muted);
+
+}
+
+
+
+.gate-form {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 0.5rem;
+
+}
+
+
+
+.gate-input {
+
+  flex: 1 1 10rem;
+
+  min-width: 0;
+
+  padding: 0.65rem 0.85rem;
+
+  border: var(--inset-border);
+
+  border-radius: var(--radius-small-chips);
+
+  font: inherit;
+
+  background: var(--color-surface-inset);
+
+  color: var(--color-ink);
+
+}
+
+
+
+.gate-button {
+
+  padding: 0.65rem 1.1rem;
+
+  border: none;
+
+  border-radius: var(--radius-buttons);
+
+  font: inherit;
+
+  font-weight: var(--font-weight-bold);
+
+  cursor: pointer;
+
+  background: var(--color-pine);
+
+  color: var(--color-snow);
+
+}
+
+
+
+.gate-button:hover {
+
+  background: var(--color-charcoal);
+
+}
+
+
+
+.gate-error {
+
+  margin: 0.75rem 0 0;
+
+  font-size: 0.88rem;
+
+  font-weight: var(--font-weight-semibold);
+
+  color: var(--color-ember);
+
+}
+
+
+
+.gate-sr-only {
+
+  position: absolute;
+
+  width: 1px;
+
+  height: 1px;
+
+  padding: 0;
+
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
+
+}
+
+
+
+body.gate-locked > main {
+
+  visibility: hidden;
+
+}
+
+
+
+:focus-visible {
+
+  outline: var(--focus-outline-width) solid var(--focus-outline-color);
+
+  outline-offset: var(--focus-outline-offset);
+
+}
+
+

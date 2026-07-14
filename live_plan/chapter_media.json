@@ -3,24 +3,39 @@
     "title": "",
     "description": "",
     "hero_image": "media/chapters/thailand/hero-bdd6c53242.png",
+    "page_bg": "",
     "badges": [],
     "highlights": [],
-    "day_overrides": {}
+    "day_overrides": {},
+    "karl": {
+      "panel_a": "Таиланд",
+      "sky": "#3bbaa1",
+      "globe": "#aaa983",
+      "ink": "#445dc1"
+    }
   },
   "vietnam": {
     "title": "",
     "description": "",
     "hero_image": "media/chapters/vietnam/hero-ca3fa4b16c.png",
+    "page_bg": "",
     "badges": [],
     "highlights": [],
-    "day_overrides": {}
+    "day_overrides": {},
+    "karl": {
+      "panel_a": "Вьетнам"
+    }
   },
   "china": {
     "title": "",
     "description": "",
     "hero_image": "media/chapters/china/hero-a6f66aa14e.png",
+    "page_bg": "",
     "badges": [],
     "highlights": [],
-    "day_overrides": {}
+    "day_overrides": {},
+    "karl": {
+      "panel_a": "Китай"
+    }
   }
 }

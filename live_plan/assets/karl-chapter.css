@@ -1,0 +1,238 @@
+/* Corner link back to tile map (index.html) */
+.karl-chapter-home {
+  position: fixed;
+  top: max(0.75rem, env(safe-area-inset-top, 0px));
+  left: max(0.75rem, env(safe-area-inset-left, 0px));
+  z-index: 9000;
+  display: inline-block;
+  padding: 0.4rem 0.75rem;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--karl-ink, #333333);
+  background: color-mix(in srgb, var(--karl-sky, #ffffff) 88%, white);
+  border: 1.5px solid color-mix(in srgb, var(--karl-ink, #333333) 30%, transparent);
+  border-radius: 6px;
+  opacity: 0.88;
+  transition: opacity 0.15s ease, color 0.15s ease;
+  pointer-events: auto;
+}
+
+.karl-chapter-home:hover {
+  opacity: 1;
+  color: var(--karl-text-on-sky, #333333);
+  text-decoration: none;
+}
+
+body.gate-locked .karl-chapter-home {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Gate overlay on Karl chapter pages (no site main.css — keeps Webflow 3D intact). */
+
+.gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(35, 33, 44, 0.55);
+  padding: 1.25rem;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.gate-overlay__panel {
+  width: min(100%, 28rem);
+  padding: 1.5rem 1.25rem;
+  background: #efe4cf;
+  border-radius: 12px;
+  border: 2px solid #23212c;
+}
+
+.gate-eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, #23212c 72%, white);
+}
+
+.gate-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.35rem;
+  line-height: 1.2;
+  color: #23212c;
+}
+
+.gate-hint {
+  margin: 0 0 1rem;
+  font-size: 0.92rem;
+  color: color-mix(in srgb, #23212c 72%, white);
+}
+
+.gate-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gate-input {
+  flex: 1 1 10rem;
+  min-width: 0;
+  padding: 0.65rem 0.85rem;
+  border: 2px solid #23212c;
+  border-radius: 6px;
+  font: inherit;
+  background: #f5edd9;
+  color: #23212c;
+}
+
+.gate-button {
+  padding: 0.65rem 1.1rem;
+  border: none;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  background: #006434;
+  color: #fff;
+}
+
+.gate-button:hover {
+  background: #23212c;
+}
+
+.gate-error {
+  margin: 0.75rem 0 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #dd5000;
+}
+
+.gate-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hidden,
+[hidden] {
+  display: none !important;
+}
+
+/* Karl chapter day panels — one label visible at a time */
+body.chapter-karl .page_panel {
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
+}
+
+body.chapter-karl .page_panel .item.pages {
+  opacity: 0;
+  visibility: hidden;
+  will-change: opacity, transform;
+  transition: none;
+}
+
+body.chapter-karl .page_panel.page_a .item.pages {
+  opacity: 1;
+  visibility: visible;
+}
+
+body.chapter-karl .page_panel.page_day .karl-day-link {
+  color: var(--karl-ink) !important;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.9);
+  paint-order: stroke fill;
+  text-shadow:
+    0 0 14px rgba(255, 255, 255, 0.95),
+    0 0 28px rgba(255, 255, 255, 0.75),
+    0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+body.chapter-karl .page_panel.page_day .karl-day-link:hover {
+  color: var(--karl-text-on-sky) !important;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.95);
+}
+
+/* Text panels must paint above the globe disc */
+body.chapter-karl .world.axis {
+  z-index: 1;
+}
+
+body.chapter-karl .pages.tilt.axis {
+  z-index: 2;
+}
+
+body.chapter-karl .page_panel .text_a,
+body.chapter-karl .page_panel .karl-day-link {
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
+}
+
+body.chapter-karl .karl-day-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+body.chapter-karl .karl-day-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+/* Top nav from original Karl template — not used on chapter pages */
+body.chapter-karl .section_top {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* Original Karl contact/vimeo hit areas block day links */
+body.chapter-karl .button_holder {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* Balloon duplicate layer (second section_middle) — not the globe */
+body.chapter-karl .section_middle + .section_middle {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+body.chapter-karl .section:has(.footer) {
+  pointer-events: none;
+}
+
+body.chapter-karl .section:has(.footer) .footer,
+body.chapter-karl .section:has(.footer) .footer * {
+  pointer-events: auto;
+}
+
+/* Day links: decorative 3D layers ignore clicks, text panels stay clickable */
+body.chapter-karl .section_top + .section_middle .camera {
+  pointer-events: none;
+}
+
+body.chapter-karl .section_top + .section_middle .pages.tilt.axis,
+body.chapter-karl .section_top + .section_middle .pages.tilt.axis * {
+  pointer-events: auto;
+}
+
+body.chapter-karl .karl-day-link {
+  position: relative;
+  z-index: 800;
+  display: block;
+  width: 100%;
+  padding: 0.35em 0;
+  text-align: center;
+}

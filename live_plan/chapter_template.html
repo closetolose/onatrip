@@ -3,52 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="{{ theme_color }}">
+  <meta name="theme-color" content="{{ vibe.sky }}">
   <title>{{ chapter.title }} · {{ period }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Changa+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/tokens.css">
   <link rel="stylesheet" href="../assets/theme.css">
+  <link rel="stylesheet" href="../assets/main.css">
   <link rel="stylesheet" href="../assets/chapter.css">
   <link rel="stylesheet" href="../assets/layout.css">
 </head>
-<body class="chapter-body" style="--chapter-accent: {{ chapter.bg }}; --chapter-ink: {{ chapter.accent }};">
-  <main class="chapter-page">
-    <a class="chapter-back" data-section="back_link" href="../index.html">{{ copy.chapter_back }}</a>
+<body
+  class="chapter-body diorama-chapter"
+  data-chapter-id="{{ chapter.id }}"
+  style="
+    --chapter-sky: {{ vibe.sky }};
+    --chapter-globe: {{ vibe.globe }};
+    --chapter-accent-art: {{ vibe.accent_art }};
+    --chapter-ink: {{ vibe.ink }};
+    --chapter-text-on-globe: {{ vibe.text_on_globe }};
+    --chapter-text-on-sky: {{ vibe.text_on_sky }};
+    --chapter-hero-rotate: {{ vibe.hero_rotate }}deg;
+    --chapter-sign-rotate: {{ vibe.sign_rotate }}deg;
+  "
+>
+  <nav class="diorama-nav" aria-label="Навигация по главам">
+    <a class="diorama-nav__link" href="../index.html">Главная</a>
+    <span class="diorama-nav__link is-active" aria-current="page">{{ chapter.title | upper }}</span>
+  </nav>
 
-    <header class="chapter-hero">
-      {% if chapter.hero_image %}
-      <div class="chapter-hero-media" data-section="hero_media" style="background-image: url('{{ chapter.hero_image }}');"></div>
-      {% endif %}
-      <div class="chapter-hero-content" data-section="hero_content">
-        <h1>{{ chapter.title }}</h1>
-        <p class="chapter-dates">{{ chapter.date_from }} — {{ chapter.date_to }} · {{ chapter.day_count }} дн.</p>
-        {% if chapter.cities %}<p class="chapter-route">{{ chapter.cities | join(' → ') }}</p>{% endif %}
-        <div class="chapter-badges" data-section="badges">
-          {% for badge in badges %}
-          <span class="chapter-badge">{{ badge }}</span>
-          {% endfor %}
-        </div>
+  <section class="diorama-hero" data-section="hero">
+    <div class="diorama-scene" aria-hidden="true">
+      <span class="diorama-cloud diorama-cloud--1"></span>
+      <span class="diorama-cloud diorama-cloud--2"></span>
+      <span class="diorama-cloud diorama-cloud--3"></span>
+      <div class="diorama-globe"></div>
+      <div class="diorama-building diorama-building--1">
+        <span class="diorama-building__roof"></span>
+        <span class="diorama-building__body"></span>
       </div>
-    </header>
+      <div class="diorama-building diorama-building--2">
+        <span class="diorama-building__roof"></span>
+        <span class="diorama-building__body"></span>
+      </div>
+      <div class="diorama-building diorama-building--3">
+        <span class="diorama-building__roof"></span>
+        <span class="diorama-building__body"></span>
+      </div>
+      <div class="diorama-building diorama-building--4">
+        <span class="diorama-building__roof"></span>
+        <span class="diorama-building__body"></span>
+      </div>
+    </div>
 
-    <section class="chapter-timeline" data-section="day_timeline" aria-label="{{ copy.chapter_timeline_title }}">
-      <h2 class="timeline-title" data-section="timeline_title">{{ copy.chapter_timeline_title }}</h2>
-      <ol class="day-timeline">
-        {% for d in chapter.days %}
-        <li class="day-card-item">
-          <a class="day-card" href="{{ d.page_url }}">
-            <span class="day-card-marker" aria-hidden="true"></span>
-            <span class="day-card-inner">
-              <span class="day-card-top">
-                <span class="day-card-num">День {{ d.num }}</span>
-                <span class="day-card-date">{{ d.date_short }}</span>
-              </span>
-              <span class="day-card-city">{{ d.city }}</span>
-              <span class="day-card-cta">{{ copy.chapter_cta }}</span>
-            </span>
-          </a>
-        </li>
-        {% endfor %}
-      </ol>
-    </section>
-  </main>
+    <p class="diorama-eyebrow" data-section="hero_eyebrow">{{ vibe.tagline }}</p>
+
+    <div class="diorama-sky-meta" data-section="hero_meta">
+      <p class="diorama-meta">{{ chapter.date_from }} — {{ chapter.date_to }}</p>
+      {% if chapter.cities %}<p class="diorama-route">{{ chapter.cities | join(' → ') }}</p>{% endif %}
+      {% if badges %}
+      <p class="diorama-badges" data-section="badges">{{ badges | join(' · ') }}</p>
+      {% endif %}
+    </div>
+
+    <div class="diorama-globe-title" data-section="hero_content">
+      <h1 class="diorama-display">
+        <span class="diorama-display__line diorama-display__line--1">{{ chapter.title }}</span>
+        <span class="diorama-display__line diorama-display__line--2">{{ chapter.day_count }} дн.</span>
+      </h1>
+    </div>
+  </section>
+
+  {% if chapter.highlights %}
+  <section class="diorama-panel diorama-panel--highlights" data-section="highlights" aria-label="Ключевые события">
+    <h2 class="diorama-panel__title">Главное</h2>
+    <ul class="diorama-highlights">
+      {% for item in chapter.highlights %}
+      <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <section class="diorama-panel diorama-panel--days" data-section="day_timeline" aria-label="{{ copy.chapter_timeline_title }}">
+    <h2 class="diorama-panel__title">{{ copy.chapter_timeline_title }}</h2>
+    <ol class="diorama-timeline">
+      {% for d in chapter.days %}
+      <li>
+        <a class="diorama-day" href="{{ d.page_url }}">
+          <span class="diorama-day__num">День {{ d.num }}</span>
+          <span class="diorama-day__date">{{ d.date_short }}</span>
+          <span class="diorama-day__city">{{ d.city }}</span>
+          <span class="diorama-day__cta">{{ copy.chapter_cta }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+
+  {% include "gate_fragment.html" %}
+
+  <script src="../assets/app.js"></script>
 </body>
 </html>

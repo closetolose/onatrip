@@ -11,16 +11,21 @@ from pathlib import Path
 
 from flask import Flask, jsonify, request, send_from_directory
 
-from live_plan.blocks import clean_blocks, normalize_blocks
+from live_plan.blocks import clean_blocks, clean_hero, normalize_blocks
+from live_plan.day_pages import default_hero
+from live_plan.image_utils import optimize_image_file
 from live_plan.chapter_media import (
+    _sanitize_hex_color,
     chapter_entry,
     load_chapter_media,
     save_chapter_media,
     sanitize_chapter_media,
 )
+from live_plan.chapter_vibes import karl_defaults_for_admin
 from live_plan.layout import admin_schema, load_layout, render_layout_css, save_layout
 from live_plan.site_settings import admin_payload, load_site_settings, save_site_settings
-from live_plan.steps import clean_meta
+
+from trip_parser import REGION
 
 ROOT = Path(__file__).parent
 LIVE_DIR = ROOT / "live_plan"
@@ -34,6 +39,13 @@ STATUS_PATH = LIVE_DIR / "status.json"
 CONFIG_PATH = LIVE_DIR / "config.json"
 
 app = Flask(__name__, static_folder=str(ADMIN_DIR), static_url_path="")
+
+
+@app.after_request
+def admin_no_cache(response):
+    if request.path.endswith((".js", ".html", ".css")):
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+    return response
 
 
 def load_day_media() -> dict:
@@ -104,30 +116,57 @@ def get_raw_day(day_num: int) -> dict | None:
     return None
 
 
-def guide_payload(raw_day: dict) -> dict:
-    return {
-        "meta": {
-            "totals": raw_day.get("totals", ""),
-        },
-    }
+def entry_hero(entry: dict) -> dict[str, str] | None:
+    """Saved hero text, or None when nothing was stored yet."""
+    if "hero" not in entry:
+        return None
+    cleaned = clean_hero(entry.get("hero"))
+    if not any(cleaned.values()):
+        return None
+    return cleaned
+
+
+def admin_hero_for_entry(entry: dict, guide: dict, region_name: str) -> dict[str, str]:
+    """Hero fields for the admin form."""
+    saved = entry_hero(entry)
+    if saved is not None:
+        return saved
+    return default_hero(guide, region_name)
 
 
 def day_media_response(day_num: int) -> dict:
     media = load_day_media()
     entry = day_entry(media, day_num)
-    raw = get_raw_day(day_num) or {}
-    guide = guide_payload(raw)
-
-    meta = guide["meta"].copy()
-    if entry.get("meta"):
-        meta.update(clean_meta(entry["meta"]))
-
+    guide = guide_day_for(day_num)
+    region_name = region_display_name(guide.get("region", "travel"), day_num)
     return {
         "day": day_num,
+        "hero": admin_hero_for_entry(entry, guide, region_name),
+        "defaults": default_hero(guide, region_name),
         "blocks": normalize_blocks(entry),
-        "meta": meta,
-        "guide_meta": guide["meta"],
     }
+
+
+def guide_day_for(day_num: int) -> dict:
+    for day in load_days():
+        if day["num"] == day_num:
+            return {
+                "num": day["num"],
+                "date": day.get("date", ""),
+                "weekday": day.get("weekday", ""),
+                "city": day.get("city", ""),
+                "region": day.get("region", "travel"),
+            }
+    raw = get_raw_day(day_num)
+    if raw:
+        return raw
+    return {"num": day_num, "date": "", "weekday": "", "city": "", "region": "travel"}
+
+
+def region_display_name(region_key: str, day_num: int) -> str:
+    if day_num == 1:
+        region_key = "th"
+    return REGION.get(region_key, REGION["travel"])["name"]
 
 
 def day_entry(media: dict, day_num: int) -> dict:
@@ -137,6 +176,15 @@ def day_entry(media: dict, day_num: int) -> dict:
 def write_day_entry(media: dict, day_num: int, entry: dict) -> None:
     media[str(day_num)] = entry
     save_day_media(media)
+
+
+def save_day_entry(media: dict, day_num: int, hero: dict, blocks: list) -> dict:
+    entry = {
+        "hero": clean_hero(hero),
+        "blocks": clean_blocks(blocks),
+    }
+    write_day_entry(media, day_num, entry)
+    return entry
 
 
 def safe_filename(name: str) -> str:
@@ -172,6 +220,7 @@ def api_chapter_get(chapter_id: str):
     return jsonify({
         "chapter": chapter,
         "override": chapter_entry(chapter_id, load_chapter_media()),
+        "karl_defaults": karl_defaults_for_admin(chapter_id),
     })
 
 
@@ -183,9 +232,11 @@ def api_chapter_put(chapter_id: str):
         "title": str(payload.get("title", "")).strip(),
         "description": str(payload.get("description", "")).strip(),
         "hero_image": str(payload.get("hero_image", "")).strip(),
+        "page_bg": _sanitize_hex_color(payload.get("page_bg", "")),
         "badges": [str(item).strip() for item in payload.get("badges", []) if str(item).strip()],
         "highlights": [str(item).strip() for item in payload.get("highlights", []) if str(item).strip()],
         "day_overrides": payload.get("day_overrides") or {},
+        "karl": payload.get("karl") or {},
     }
     cleaned = sanitize_chapter_media({**media, chapter_id: entry})
     save_chapter_media(cleaned)
@@ -276,6 +327,11 @@ def api_days():
     return jsonify(load_days())
 
 
+@app.get("/api/version")
+def api_version():
+    return jsonify({"version": 3, "features": ["hero", "blocks"]})
+
+
 @app.get("/api/media")
 def api_media_all():
     return jsonify(load_day_media())
@@ -287,15 +343,18 @@ def api_media_day(day_num: int):
 
 
 @app.put("/api/media/<int:day_num>")
+@app.post("/api/media/<int:day_num>/save")
 def api_save_day(day_num: int):
     payload = request.get_json(force=True)
     media = load_day_media()
-    entry = {
-        "blocks": clean_blocks(payload.get("blocks", [])),
-        "meta": clean_meta(payload.get("meta", {})),
-    }
-    write_day_entry(media, day_num, entry)
-    return jsonify({"ok": True})
+    hero = payload.get("hero", {})
+    blocks = payload.get("blocks", [])
+    saved_entry = save_day_entry(media, day_num, hero, blocks)
+    response = day_media_response(day_num)
+    response["ok"] = True
+    response["hero_written"] = saved_entry.get("hero", clean_hero(hero))
+    response["blocks_written"] = saved_entry.get("blocks", [])
+    return jsonify(response)
 
 
 @app.post("/api/media/<int:day_num>/reset-schedule")
@@ -330,6 +389,7 @@ def api_upload(day_num: int):
     filename = f"{uuid.uuid4().hex[:10]}{ext}"
     target = day_dir / filename
     file.save(target)
+    optimize_image_file(target)
 
     url = f"media/day-{day_num:02d}/{filename}"
     return jsonify({"url": url, "caption": ""})
@@ -351,6 +411,7 @@ def api_crop(day_num: int):
     filename = f"{uuid.uuid4().hex[:10]}-crop{ext}"
     target = day_dir / filename
     file.save(target)
+    optimize_image_file(target)
 
     return jsonify({"url": f"media/day-{day_num:02d}/{filename}"})
 

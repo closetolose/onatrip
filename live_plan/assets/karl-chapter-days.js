@@ -1,0 +1,139 @@
+(function () {
+  "use strict";
+
+  if (!document.body.classList.contains("chapter-karl")) return;
+
+  var rotateEl = document.querySelector(".pages.rotate.axis");
+  var scrollPages = document.querySelectorAll(".section_behind .page");
+  var panels = Array.prototype.slice.call(
+    document.querySelectorAll(".page_panel")
+  );
+  if (!rotateEl || !scrollPages.length || !panels.length) return;
+
+  var total = scrollPages.length;
+  var step = total > 1 ? 360 / (total - 1) : 0;
+
+  function scrollProgress() {
+    var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    if (maxScroll <= 0) return 0;
+    return Math.max(0, Math.min(1, window.scrollY / maxScroll));
+  }
+
+  function panelProgress() {
+    return scrollProgress() * (total - 1);
+  }
+
+  /** Child panel slot on the ring (matches build in karl_index.py). */
+  function panelSlotAngle(index) {
+    if (total <= 1) return -180;
+    return -180 + step * index;
+  }
+
+  /**
+   * Parent rotation must NEGATE the active slot so that panel faces the camera.
+   * (Original Webflow: parent 180° → -180° while children stay at fixed slots.)
+   */
+  function parentAngleForProgress(progress) {
+    return -panelSlotAngle(progress);
+  }
+
+  function panelOpacity(panelIndex, progress) {
+    var dist = Math.abs(progress - panelIndex);
+    if (dist >= 1) return 0;
+    return Math.max(0, Math.cos(dist * (Math.PI / 2)));
+  }
+
+  function setPanelVisual(panel, opacity) {
+    var item = panel.querySelector(".item.pages");
+    if (!item) return;
+    item.style.opacity = String(opacity);
+    item.style.visibility = opacity > 0.04 ? "visible" : "hidden";
+    item.style.pointerEvents = opacity > 0.2 ? "auto" : "none";
+    var scale = 0.9 + opacity * 0.1;
+    item.style.transform =
+      "translate3d(0px, -50vw, 2vw) scale(" + scale + ")";
+    var link = panel.querySelector(".karl-day-link");
+    if (link) {
+      link.style.pointerEvents = opacity > 0.2 ? "auto" : "none";
+      link.style.cursor = opacity > 0.2 ? "pointer" : "default";
+    }
+  }
+
+  function accessKey() {
+    try {
+      var fromStorage = sessionStorage.getItem("liveplan_access_key");
+      if (fromStorage) return fromStorage.trim();
+    } catch (e) {}
+    try {
+      return (new URLSearchParams(window.location.search).get("k") || "").trim();
+    } catch (e2) {
+      return "";
+    }
+  }
+
+  function dayUrl(href) {
+    if (!href) return "";
+    var key = accessKey();
+    if (!key) return href;
+    try {
+      var url = new URL(href, window.location.href);
+      if (!url.searchParams.has("k")) {
+        url.searchParams.set("k", key);
+      }
+      var path = url.pathname;
+      var base = window.location.pathname.replace(/[^/]+$/, "");
+      if (base && path.indexOf(base) === 0) {
+        path = path.slice(base.length);
+      }
+      return path + url.search + url.hash;
+    } catch (e) {
+      return href;
+    }
+  }
+
+  function bindDayLinks() {
+    document.addEventListener("click", function (e) {
+      var link = e.target.closest(".karl-day-link");
+      if (!link) return;
+      if (link.style.pointerEvents === "none") {
+        e.preventDefault();
+        return;
+      }
+      var href = dayUrl(link.getAttribute("href"));
+      if (!href) return;
+      e.preventDefault();
+      window.location.assign(href);
+    });
+  }
+
+  function applyFrame() {
+    var progress = panelProgress();
+    var angle = parentAngleForProgress(progress);
+    var transform = "rotateX(" + angle + "deg) rotateY(0deg) rotateZ(0deg)";
+
+    rotateEl.style.transform = transform;
+    rotateEl.style.webkitTransform = transform;
+    rotateEl.style.transformStyle = "preserve-3d";
+    rotateEl.style.webkitTransformStyle = "preserve-3d";
+
+    panels.forEach(function (panel, index) {
+      setPanelVisual(panel, panelOpacity(index, progress));
+    });
+  }
+
+  window.addEventListener("scroll", applyFrame, { passive: true });
+  window.addEventListener("resize", applyFrame);
+  window.addEventListener("load", function () {
+    if (window.LivePlanGate && window.LivePlanGate.propagateKeyToLinks) {
+      window.LivePlanGate.propagateKeyToLinks();
+    }
+    bindDayLinks();
+    applyFrame();
+  });
+  bindDayLinks();
+  applyFrame();
+  requestAnimationFrame(function loop() {
+    applyFrame();
+    requestAnimationFrame(loop);
+  });
+})();

@@ -3,45 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="{{ theme_color }}">
-  <title>День {{ day.num }} · {{ day.date[:5] }} · {{ day.city }}</title>
-  <link rel="stylesheet" href="../assets/theme.css">
+  <meta name="theme-color" content="#e4e0db">
+  <title>День {{ day.num }} · {{ day.hero_title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/day.css">
-  <link rel="stylesheet" href="../assets/layout.css">
 </head>
-<body class="day-body" style="--region-accent: {{ region.bg }}; --region-ink: {{ region.accent }}; --region-color: {{ region.color }};">
+<body class="day-body day-longread">
   <main class="day-page">
-    <a class="day-back" data-section="back_link" href="../chapters/{{ chapter.id }}.html">{{ copy.day_back }}</a>
+    <div class="day-shell">
+      <a class="day-back" data-section="back_link" href="../chapters/{{ chapter.id }}.html">{{ copy.day_back }}</a>
 
-    <header class="day-hero" data-section="hero">
-      <span class="day-badge">День {{ day.num }}</span>
-      <h1>{{ day.date[:5] }} · {{ day.weekday }}</h1>
-      <p class="day-city">{{ day.city }}</p>
-      <span class="day-region">{{ region.name }}</span>
-    </header>
+      <header class="day-hero" data-section="hero">
+        <p class="day-hero-eyebrow">{{ day.hero_eyebrow }}</p>
+        <h1 class="day-hero-title">{{ day.hero_title }}</h1>
+        <p class="day-hero-meta">{{ day.hero_meta }}</p>
+      </header>
+    </div>
 
-    {% if photos %}
-    <section class="day-gallery" data-section="gallery" aria-label="{{ copy.label_photo_block }}">
-      {% for photo in photos %}
-      <figure class="day-photo">
-        <img src="{{ photo.url }}" alt="{{ day.city }}" loading="lazy">
-        {% if photo.caption %}<figcaption>{{ photo.caption }}</figcaption>{% endif %}
-      </figure>
+    <div class="day-flow" data-section="content">
+      {% for block in blocks %}
+        {% if block.type == 'text' %}
+        <section class="day-block day-block--text">
+          <div class="day-shell">
+            <div class="day-prose">{{ block.content }}</div>
+          </div>
+        </section>
+        {% elif block.type == 'photo' %}
+        <figure class="day-block day-block--photo">
+          <div class="day-photo-frame">
+            <img src="{{ block.url }}" alt="{{ block.caption or day.city }}" loading="lazy" decoding="async">
+          </div>
+          {% if block.caption %}
+          <figcaption class="day-shell">{{ block.caption }}</figcaption>
+          {% endif %}
+        </figure>
+        {% elif block.type == 'side' %}
+        <section class="day-block day-block--side{% if block.side == 'right' %} day-block--side-reverse{% endif %}">
+          <div class="day-shell day-side-grid">
+            {% if block.url %}
+            <figure class="day-side-media">
+              <img src="{{ block.url }}" alt="{{ block.caption or day.city }}" loading="lazy" decoding="async">
+              {% if block.caption %}
+              <figcaption>{{ block.caption }}</figcaption>
+              {% endif %}
+            </figure>
+            {% endif %}
+            {% if block.content %}
+            <div class="day-side-prose day-prose">{{ block.content }}</div>
+            {% endif %}
+          </div>
+        </section>
+        {% elif block.type == 'carousel' %}
+        <section class="day-block day-block--carousel" data-carousel tabindex="0">
+          <div class="day-carousel" role="region" aria-roledescription="carousel" aria-label="Фото дня">
+            <div class="day-carousel-viewport">
+              <div class="day-carousel-track">
+                {% for slide in block.photos %}
+                <figure class="day-carousel-slide">
+                  <div class="day-carousel-frame">
+                    <img src="{{ slide.url }}" alt="{{ slide.caption or day.city }}" loading="lazy" decoding="async">
+                  </div>
+                  {% if slide.caption %}
+                  <figcaption class="day-shell">{{ slide.caption }}</figcaption>
+                  {% endif %}
+                </figure>
+                {% endfor %}
+              </div>
+              {% if block.photos|length > 1 %}
+              <div class="day-carousel-overlay" aria-hidden="true">
+                <button type="button" class="day-carousel-btn day-carousel-prev" aria-label="Предыдущее фото">←</button>
+                <div class="day-carousel-dots" role="tablist" aria-label="Слайды"></div>
+                <button type="button" class="day-carousel-btn day-carousel-next" aria-label="Следующее фото">→</button>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </section>
+        {% endif %}
       {% endfor %}
-    </section>
-    {% endif %}
+    </div>
 
-    <section class="day-card day-intro" data-section="intro">
-      <h2 class="day-card-label">{{ copy.day_intro_label }}</h2>
-      <p class="day-empty-field">{% if intro %}{{ intro }}{% else %}&nbsp;{% endif %}</p>
-    </section>
-
-    <section class="day-card day-totals" data-section="totals">
-      <h2 class="day-card-label">{{ copy.day_totals_label }}</h2>
-      <p class="day-empty-field">{% if day.totals %}{{ day.totals }}{% else %}&nbsp;{% endif %}</p>
-    </section>
-
-    <nav class="day-pager" data-section="pager" aria-label="Навигация по дням">
+    <nav class="day-pager day-shell" data-section="pager" aria-label="Навигация по дням">
       {% if prev_day %}
       <a class="day-pager-link" href="../days/{{ '%02d'|format(prev_day.num) }}.html">{{ pager_prev }}</a>
       {% else %}
@@ -52,5 +96,10 @@
       {% endif %}
     </nav>
   </main>
+
+  {% include "gate_fragment.html" %}
+
+  <script src="../assets/app.js"></script>
+  <script src="../assets/day.js"></script>
 </body>
 </html>

@@ -7,10 +7,13 @@
     title: "",
     description: "",
     hero_image: "",
+    page_bg: "",
     badges: [],
     highlights: [],
     day_overrides: {},
+    karl: {},
   };
+  var karlDefaults = {};
   var layoutData = null;
   var layoutSchema = null;
   var layoutSortable = null;
@@ -111,6 +114,130 @@
     });
   }
 
+  function syncChapterPageBgPicker() {
+    var text = document.getElementById("chapter-page-bg");
+    var picker = document.getElementById("chapter-page-bg-picker");
+    if (!text || !picker) return;
+    var value = (text.value || "").trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(value)) {
+      picker.value = value;
+    }
+  }
+
+  function updateChapterPageBgHint() {
+    var hint = document.getElementById("chapter-page-bg-hint");
+    var chapter = currentChapter();
+    if (!hint || !chapter) return;
+    var accent = chapter.bg || "#fcbd1c";
+    hint.textContent =
+      "Пусто — общий Paper из «Сайт». Акцент страны (бейджи, точки): " + accent + ".";
+  }
+
+  var KARL_TEXT_KEYS = [
+    "nav_home", "nav_route", "nav_main", "nav_play", "nav_contact",
+    "panel_a", "panel_b_a", "panel_b_b",
+    "panel_c_before", "panel_c_after",
+    "panel_d_b", "panel_d_c",
+    "panel_e_c", "panel_e_b",
+  ];
+
+  var KARL_COLOR_KEYS = ["sky", "globe", "ink", "text_on_globe", "text_on_sky"];
+
+  var KARL_KEYS = KARL_TEXT_KEYS.concat(KARL_COLOR_KEYS);
+
+  function karlEffective(key) {
+    var stored = chapterOverride.karl && chapterOverride.karl[key];
+    if (stored !== undefined && stored !== null && String(stored).trim() !== "") {
+      return String(stored).trim();
+    }
+    return karlDefaults[key] || "";
+  }
+
+  function syncKarlFromDom() {
+    var next = {};
+    document.querySelectorAll("#chapter-karl-panel [data-karl-key]").forEach(function (node) {
+      var key = node.dataset.karlKey;
+      if (node.type === "color") return;
+      var value = (node.value || "").trim();
+      if (!value) return;
+      var def = karlDefaults[key] || "";
+      if (value !== String(def)) {
+        next[key] = value;
+      }
+    });
+    document.querySelectorAll("#chapter-karl-colors-panel [data-karl-key]").forEach(function (node) {
+      var key = node.dataset.karlKey;
+      if (node.type !== "color") return;
+      var value = (node.value || "").trim();
+      if (!/^#[0-9a-fA-F]{6}$/.test(value)) return;
+      var def = karlDefaults[key] || "";
+      if (value !== String(def)) {
+        next[key] = value;
+      }
+    });
+    chapterOverride.karl = next;
+  }
+
+  function fillKarlForm() {
+    var textPanel = document.getElementById("chapter-karl-panel");
+    var colorsPanel = document.getElementById("chapter-karl-colors-panel");
+    var chapter = currentChapter();
+    var showKarl = chapter && ["thailand", "vietnam", "china"].indexOf(chapter.id) >= 0;
+    if (textPanel) textPanel.classList.toggle("hidden", !showKarl);
+    if (colorsPanel) colorsPanel.classList.toggle("hidden", !showKarl);
+    if (!showKarl) return;
+
+    document.querySelectorAll("#chapter-karl-panel [data-karl-key], #chapter-karl-colors-panel [data-karl-key]").forEach(function (node) {
+      var key = node.dataset.karlKey;
+      var value = karlEffective(key);
+      if (node.tagName === "TEXTAREA") {
+        node.value = value;
+        node.placeholder = karlDefaults[key] || node.placeholder || "";
+      } else if (node.type === "range") {
+        node.value = value || node.getAttribute("min") || "0";
+        var out = document.getElementById(node.id + "-val");
+        if (out) out.textContent = node.value;
+      } else if (node.type === "color") {
+        var colorVal = value;
+        if (!/^#[0-9a-fA-F]{6}$/.test(colorVal)) {
+          colorVal = karlDefaults[key] || "#333333";
+        }
+        node.value = colorVal;
+      } else {
+        node.value = value;
+        node.placeholder = karlDefaults[key] || node.placeholder || "";
+      }
+    });
+
+    var hint = document.getElementById("chapter-karl-hint");
+    if (hint && chapter) {
+      hint.textContent =
+        "Копия karlgonsalves.com для «" + chapter.title +
+        "». Пустое поле = пресет. Перенос строки в тексте = <br> на экране. После правок — «Собрать сайт».";
+    }
+  }
+
+  function resetKarlOverrides() {
+    var next = {};
+    if (chapterOverride.karl) {
+      KARL_COLOR_KEYS.forEach(function (key) {
+        if (chapterOverride.karl[key] !== undefined) next[key] = chapterOverride.karl[key];
+      });
+    }
+    chapterOverride.karl = next;
+    fillKarlForm();
+    setStatus("chapter-status", "Надписи Karl сброшены к пресету (не забудь сохранить)", "ok");
+  }
+
+  function resetKarlColors() {
+    if (!chapterOverride.karl) chapterOverride.karl = {};
+    KARL_COLOR_KEYS.forEach(function (key) {
+      delete chapterOverride.karl[key];
+    });
+    fillKarlForm();
+    setStatus("chapter-status", "Цвета сброшены к пресету (не забудь сохранить)", "ok");
+  }
+
   function renderChapterHeroPreview() {
     var preview = document.getElementById("chapter-hero-preview");
     if (!preview) return;
@@ -161,10 +288,14 @@
     document.getElementById("chapter-title").value = chapterOverride.title || "";
     document.getElementById("chapter-description").value = chapterOverride.description || "";
     document.getElementById("chapter-hero-url").value = chapterOverride.hero_image || "";
+    document.getElementById("chapter-page-bg").value = chapterOverride.page_bg || "";
+    syncChapterPageBgPicker();
+    updateChapterPageBgHint();
     renderTagList("chapter-badges-list", chapterOverride.badges, function () {});
     renderTagList("chapter-highlights-list", chapterOverride.highlights, function () {});
     renderChapterHeroPreview();
     renderDayOverrides();
+    fillKarlForm();
   }
 
   function selectChapter(chapterId) {
@@ -177,10 +308,13 @@
           title: data.override.title || "",
           description: data.override.description || "",
           hero_image: data.override.hero_image || "",
+          page_bg: data.override.page_bg || "",
           badges: (data.override.badges || []).slice(),
           highlights: (data.override.highlights || []).slice(),
           day_overrides: JSON.parse(JSON.stringify(data.override.day_overrides || {})),
+          karl: JSON.parse(JSON.stringify(data.override.karl || {})),
         };
+        karlDefaults = data.karl_defaults || {};
         fillChapterForm();
         setStatus("chapter-status", "");
       })
@@ -190,13 +324,20 @@
   function saveChapter() {
     if (!currentChapterId) return Promise.resolve();
     syncDayOverridesFromDom();
+    syncKarlFromDom();
     return fetch("/api/chapters/" + currentChapterId, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(chapterOverride),
     })
       .then(function (r) { return r.json(); })
-      .then(function () { setStatus("chapter-status", "Глава сохранена", "ok"); })
+      .then(function () {
+        setStatus(
+          "chapter-status",
+          "Глава сохранена. Нажми «Собрать сайт», затем обнови страницу (Ctrl+Shift+R).",
+          "ok"
+        );
+      })
       .catch(function () { setStatus("chapter-status", "Ошибка сохранения", "err"); });
   }
 
@@ -247,12 +388,8 @@
   }
 
   function renderLayoutTiles() {
-    var panel = document.getElementById("layout-tiles-panel");
     var list = document.getElementById("layout-tiles-list");
-    if (!panel || !list || !layoutData) return;
-    var isIndex = currentLayoutPage === "index";
-    panel.classList.toggle("hidden", !isIndex);
-    if (!isIndex) return;
+    if (!list || !layoutData) return;
     ensureTilesMap();
     list.innerHTML = "";
     TILE_CHAPTERS.forEach(function (tile) {
@@ -349,7 +486,7 @@
   }
 
   function saveLayout() {
-    setStatus("layout-status", "Сохранение…");
+    setStatus("tiles-status", "Сохранение…");
     return fetch("/api/layout", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -358,29 +495,33 @@
       .then(function (r) { return r.json(); })
       .then(function (data) {
         layoutData = data.layout;
-        setStatus("layout-status", "Макет сохранён", "ok");
+        setStatus("tiles-status", "Плитки сохранены", "ok");
       })
-      .catch(function () { setStatus("layout-status", "Ошибка сохранения", "err"); });
+      .catch(function () { setStatus("tiles-status", "Ошибка сохранения", "err"); });
   }
 
-  function previewLayout() {
-    var page = currentLayoutPage;
-    var url = page === "index" ? "/preview/index.html" :
-      page === "chapter" ? "/preview/chapters/thailand.html" :
-      "/preview/days/02.html";
-    window.open(url, "_blank");
+  function saveTiles() {
+    setStatus("tiles-status", "Сохранение…");
+    return saveLayout()
+      .then(function () {
+        return window.AdminCore && window.AdminCore.saveSiteAll
+          ? window.AdminCore.saveSiteAll()
+          : Promise.resolve();
+      })
+      .then(function () {
+        setStatus("tiles-status", "Сохранено", "ok");
+      })
+      .catch(function () {
+        setStatus("tiles-status", "Ошибка сохранения", "err");
+      });
   }
 
-  function resetLayout() {
-    if (!window.confirm("Сбросить макет всех страниц к умолчанию?")) return;
-    fetch("/api/layout/reset", { method: "POST" })
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        layoutData = data.layout;
-        renderLayoutSections();
-        setStatus("layout-status", "Макет сброшен", "ok");
-      })
-      .catch(function () { setStatus("layout-status", "Ошибка сброса", "err"); });
+  function previewTiles() {
+    if (window.AdminCore && window.AdminCore.previewSite) {
+      window.AdminCore.previewSite();
+    } else {
+      window.open("/preview/index.html", "_blank");
+    }
   }
 
   function loadChapters() {
@@ -409,10 +550,10 @@
       .then(function (data) {
         layoutData = data.layout;
         layoutSchema = data.schema;
-        syncLayoutPageFromSelect();
-        renderLayoutSections();
+        currentLayoutPage = "index";
+        renderLayoutTiles();
       })
-      .catch(function () { setStatus("layout-status", "Не удалось загрузить макет", "err"); });
+      .catch(function () { setStatus("tiles-status", "Не удалось загрузить плитки", "err"); });
   }
 
   function bindEvents() {
@@ -441,37 +582,57 @@
       chapterOverride.hero_image = e.target.value.trim();
       renderChapterHeroPreview();
     });
+    document.getElementById("chapter-page-bg").addEventListener("input", function (e) {
+      chapterOverride.page_bg = e.target.value.trim();
+      syncChapterPageBgPicker();
+    });
+    document.getElementById("chapter-page-bg-picker").addEventListener("input", function (e) {
+      chapterOverride.page_bg = e.target.value;
+      document.getElementById("chapter-page-bg").value = e.target.value;
+    });
+    document.getElementById("btn-clear-chapter-bg").addEventListener("click", function () {
+      chapterOverride.page_bg = "";
+      document.getElementById("chapter-page-bg").value = "";
+      syncChapterPageBgPicker();
+    });
     document.getElementById("chapter-hero-file").addEventListener("change", function (e) {
       if (e.target.files && e.target.files[0]) uploadChapterHero(e.target.files[0]);
       e.target.value = "";
     });
+    var btnResetKarl = document.getElementById("btn-reset-karl");
+    if (btnResetKarl) btnResetKarl.addEventListener("click", resetKarlOverrides);
+    var btnResetKarlColors = document.getElementById("btn-reset-karl-colors");
+    if (btnResetKarlColors) btnResetKarlColors.addEventListener("click", resetKarlColors);
+    document.querySelectorAll("#chapter-karl-panel [data-karl-key], #chapter-karl-colors-panel [data-karl-key]").forEach(function (node) {
+      node.addEventListener("input", function () {
+        if (node.type === "range") {
+          var out = document.getElementById(node.id + "-val");
+          if (out) out.textContent = node.value;
+        }
+      });
+    });
 
-    document.getElementById("layout-page-select").addEventListener("change", function (e) {
-      currentLayoutPage = e.target.value;
-      renderLayoutSections();
+    var btnSaveTiles = document.getElementById("btn-save-tiles");
+    if (btnSaveTiles) btnSaveTiles.addEventListener("click", saveTiles);
+    var btnBuildTiles = document.getElementById("btn-build-tiles");
+    if (btnBuildTiles) btnBuildTiles.addEventListener("click", function () {
+      saveTiles().then(buildSite);
     });
-    document.getElementById("btn-save-layout").addEventListener("click", saveLayout);
-    document.getElementById("btn-build-layout").addEventListener("click", function () {
-      saveLayout().then(buildSite);
+    var btnPreviewTiles = document.getElementById("btn-preview-tiles");
+    if (btnPreviewTiles) btnPreviewTiles.addEventListener("click", function () {
+      saveTiles().then(buildSite).then(previewTiles);
     });
-    document.getElementById("btn-preview-layout").addEventListener("click", function () {
-      saveLayout().then(buildSite).then(previewLayout);
-    });
-    document.getElementById("btn-reset-layout").addEventListener("click", resetLayout);
   }
 
   window.AdminPages = {
     onViewChange: function (view) {
-      if (view === "chapters" && !chapters.length) loadChapters();
-      if (view === "layout") {
+      if (view === "tiles") {
         if (!layoutData) loadLayout();
-        else {
-          syncLayoutPageFromSelect();
-          renderLayoutSections();
-        }
+        else renderLayoutTiles();
       }
-      if (view === "visual" && window.AdminVisual) window.AdminVisual.onActivate();
+      if (view === "chapters" && !chapters.length) loadChapters();
     },
+    saveTiles: saveTiles,
     getLayout: function () { return layoutData; },
     setLayout: function (data) { layoutData = data; },
     saveLayout: saveLayout,
