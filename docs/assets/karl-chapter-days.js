@@ -7,6 +7,7 @@
   var globeCamera = document.querySelector(
     ".section_top + .section_middle .camera"
   );
+  var worldEl = document.querySelector(".world.axis");
   var scrollPages = document.querySelectorAll(".section_behind .page");
   var panels = Array.prototype.slice.call(
     document.querySelectorAll(".page_panel")
@@ -73,6 +74,14 @@
     } else {
       panel.classList.remove("is-front");
     }
+  }
+
+  function resetSceneCameras() {
+    if (!coarsePointer) return;
+    document.querySelectorAll("body.chapter-karl .section_middle .camera").forEach(function (camera) {
+      camera.style.transform = "";
+      camera.style.webkitTransform = "";
+    });
   }
 
   function resetGlobeCameraParallax() {
@@ -156,9 +165,31 @@
       setPanelVisual(panel, panelOpacity(index, progress));
     });
 
+    if (worldEl) {
+      if (coarsePointer) {
+        var worldFade = Math.min(1, Math.max(0, (progress - 0.06) / 0.14));
+        worldEl.style.opacity = String(worldFade);
+        worldEl.style.visibility = worldFade > 0.02 ? "visible" : "hidden";
+      } else {
+        worldEl.style.opacity = "1";
+        worldEl.style.visibility = "visible";
+      }
+    }
+
     if (coarsePointer) {
       resetGlobeCameraParallax();
+      resetSceneCameras();
     }
+  }
+
+  var framePending = false;
+  function scheduleFrame() {
+    if (framePending) return;
+    framePending = true;
+    window.requestAnimationFrame(function () {
+      framePending = false;
+      applyFrame();
+    });
   }
 
   coarseMedia.addEventListener("change", function (e) {
@@ -193,8 +224,8 @@
   root.addEventListener("touchend", scheduleCameraReset);
   root.addEventListener("touchcancel", scheduleCameraReset);
 
-  window.addEventListener("scroll", applyFrame, { passive: true });
-  window.addEventListener("resize", applyFrame);
+  window.addEventListener("scroll", scheduleFrame, { passive: true });
+  window.addEventListener("resize", scheduleFrame);
   window.addEventListener("load", function () {
     if (window.LivePlanGate && window.LivePlanGate.propagateKeyToLinks) {
       window.LivePlanGate.propagateKeyToLinks();
@@ -204,8 +235,4 @@
   });
   bindDayLinks();
   applyFrame();
-  requestAnimationFrame(function loop() {
-    applyFrame();
-    requestAnimationFrame(loop);
-  });
 })();
