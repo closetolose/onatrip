@@ -220,9 +220,16 @@ body.chapter-karl .section_top + .section_middle .camera {
 }
 
 @media (pointer: coarse) {
-  body.chapter-karl .section_top + .section_middle .camera {
+  body.chapter-karl .section_top + .section_middle .camera,
+  body.chapter-karl .section_middle .camera {
     transform: none !important;
     -webkit-transform: none !important;
+  }
+
+  body.chapter-karl .world.axis {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: opacity, visibility;
   }
 }
 
@@ -243,7 +250,7 @@ body.chapter-karl .karl-day-link {
 @media screen and (max-width: 767px) {
   html,
   body.chapter-karl {
-    overflow-x: clip;
+    overflow-x: hidden;
   }
 
   body.chapter-karl .text_a,
