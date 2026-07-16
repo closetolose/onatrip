@@ -3,7 +3,7 @@
     "traveler": "Никита",
     "period": "28.07 — 25.08.2026",
     "subtitle": "Красноярск → Таиланд → Вьетнам → Китай → домой",
-    "built_at": "14.07.2026 17:09"
+    "built_at": "16.07.2026 13:52"
   },
   "chapters": [
     {
@@ -40,7 +40,12 @@
           "page_url": "../days/01.html",
           "chapter_id": "departure"
         }
-      ]
+      ],
+      "day_vibe": {
+        "sky": "#e3d5bc",
+        "ink": "#333333",
+        "globe": "#007fff"
+      }
     },
     {
       "id": "thailand",
@@ -165,7 +170,12 @@
           "page_url": "../days/10.html",
           "chapter_id": "thailand"
         }
-      ]
+      ],
+      "day_vibe": {
+        "sky": "#3bbaa1",
+        "ink": "#445dc1",
+        "globe": "#aaa983"
+      }
     },
     {
       "id": "vietnam",
@@ -301,7 +311,12 @@
           "page_url": "../days/20.html",
           "chapter_id": "vietnam"
         }
-      ]
+      ],
+      "day_vibe": {
+        "sky": "#b8e8ff",
+        "ink": "#333333",
+        "globe": "#006434"
+      }
     },
     {
       "id": "china",
@@ -428,7 +443,12 @@
           "page_url": "../days/29.html",
           "chapter_id": "china"
         }
-      ]
+      ],
+      "day_vibe": {
+        "sky": "#efe4cf",
+        "ink": "#333333",
+        "globe": "#c8102e"
+      }
     }
   ],
   "current_chapter_id": null
