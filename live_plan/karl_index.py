@@ -274,6 +274,8 @@ def _render_karl_html(
 
     html = TEMPLATE.read_text(encoding="utf-8")
     html = _strip_tracking(html)
+    if not re.search(r"<html[^>]*\blang=", html, re.I):
+        html = re.sub(r"<html\b", '<html lang="ru"', html, count=1)
     html = _prefix_assets(html, asset_prefix)
 
     colors = None

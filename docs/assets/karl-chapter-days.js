@@ -8,6 +8,9 @@
     ".section_top + .section_middle .camera"
   );
   var worldEl = document.querySelector(".world.axis");
+  var introLayers = Array.prototype.slice.call(
+    document.querySelectorAll(".buildings.tilt.axis, .clouds.tilt.axis")
+  );
   var scrollPages = document.querySelectorAll(".section_behind .page");
   var panels = Array.prototype.slice.call(
     document.querySelectorAll(".page_panel")
@@ -51,6 +54,18 @@
     if (dist >= cutoff) return 0;
     var falloff = coarsePointer ? 2.4 : 1.5;
     return Math.pow(Math.max(0, Math.cos(dist * (Math.PI / 2))), falloff);
+  }
+
+  function setIntroLayers(progress) {
+    if (!coarsePointer || !introLayers.length) return;
+    var introOpacity = 1;
+    if (progress > 0.28) {
+      introOpacity = Math.max(0, 1 - (progress - 0.28) / 0.32);
+    }
+    introLayers.forEach(function (layer) {
+      layer.style.opacity = String(introOpacity);
+      layer.style.visibility = introOpacity > 0.04 ? "visible" : "hidden";
+    });
   }
 
   function setPanelVisual(panel, opacity) {
@@ -167,14 +182,15 @@
 
     if (worldEl) {
       if (coarsePointer) {
-        var worldFade = Math.min(1, Math.max(0, (progress - 0.06) / 0.14));
-        worldEl.style.opacity = String(worldFade);
-        worldEl.style.visibility = worldFade > 0.02 ? "visible" : "hidden";
+        worldEl.style.opacity = "0";
+        worldEl.style.visibility = "hidden";
       } else {
         worldEl.style.opacity = "1";
         worldEl.style.visibility = "visible";
       }
     }
+
+    setIntroLayers(progress);
 
     if (coarsePointer) {
       resetGlobeCameraParallax();
