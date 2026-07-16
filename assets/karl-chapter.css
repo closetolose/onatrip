@@ -227,9 +227,14 @@ body.chapter-karl .section_top + .section_middle .camera {
   }
 
   body.chapter-karl .world.axis {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    will-change: opacity, visibility;
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+
+  body.chapter-karl .buildings.tilt.axis,
+  body.chapter-karl .clouds.tilt.axis {
+    will-change: opacity;
   }
 }
 
