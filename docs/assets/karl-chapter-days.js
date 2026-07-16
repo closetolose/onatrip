@@ -4,13 +4,11 @@
   if (!document.body.classList.contains("chapter-karl")) return;
 
   var rotateEl = document.querySelector(".pages.rotate.axis");
+  var cloudsRotateEl = document.querySelector(".clouds.tilt.axis .rotate.axis");
   var globeCamera = document.querySelector(
     ".section_top + .section_middle .camera"
   );
   var worldEl = document.querySelector(".world.axis");
-  var introLayers = Array.prototype.slice.call(
-    document.querySelectorAll(".buildings.tilt.axis, .clouds.tilt.axis")
-  );
   var scrollPages = document.querySelectorAll(".section_behind .page");
   var panels = Array.prototype.slice.call(
     document.querySelectorAll(".page_panel")
@@ -49,30 +47,26 @@
   }
 
   function panelOpacity(panelIndex, progress) {
-    var dist = Math.abs(progress - panelIndex);
-    var cutoff = coarsePointer ? 0.26 : 0.4;
-    if (dist >= cutoff) return 0;
-    var falloff = coarsePointer ? 2.4 : 1.5;
-    return Math.pow(Math.max(0, Math.cos(dist * (Math.PI / 2))), falloff);
-  }
-
-  function setIntroLayers(progress) {
-    if (!coarsePointer || !introLayers.length) return;
-    var introOpacity = 1;
-    if (progress > 0.28) {
-      introOpacity = Math.max(0, 1 - (progress - 0.28) / 0.32);
+    var nearest = Math.round(progress);
+    if (panelIndex !== nearest) {
+      return 0;
     }
-    introLayers.forEach(function (layer) {
-      layer.style.opacity = String(introOpacity);
-      layer.style.visibility = introOpacity > 0.04 ? "visible" : "hidden";
-    });
+
+    var dist = Math.abs(progress - nearest);
+    var falloff = coarsePointer ? 2.2 : 1.5;
+    var opacity = Math.pow(
+      Math.max(0, Math.cos(dist * (Math.PI / 2))),
+      falloff
+    );
+    var minOpacity = coarsePointer ? 0.92 : 0.82;
+    return Math.max(opacity, minOpacity);
   }
 
   function setPanelVisual(panel, opacity) {
     var item = panel.querySelector(".item.pages");
     if (!item) return;
     item.style.opacity = String(opacity);
-    var visibilityAt = coarsePointer ? 0.15 : 0.08;
+    var visibilityAt = coarsePointer ? 0.24 : 0.08;
     item.style.visibility = opacity > visibilityAt ? "visible" : "hidden";
     var interactAt = coarsePointer ? 0.52 : 0.35;
     item.style.pointerEvents = opacity > interactAt ? "auto" : "none";
@@ -89,14 +83,6 @@
     } else {
       panel.classList.remove("is-front");
     }
-  }
-
-  function resetSceneCameras() {
-    if (!coarsePointer) return;
-    document.querySelectorAll("body.chapter-karl .section_middle .camera").forEach(function (camera) {
-      camera.style.transform = "";
-      camera.style.webkitTransform = "";
-    });
   }
 
   function resetGlobeCameraParallax() {
@@ -166,35 +152,33 @@
     });
   }
 
+  function applyRotationTransform(el, transform) {
+    if (!el) return;
+    el.style.transform = transform;
+    el.style.webkitTransform = transform;
+    el.style.transformStyle = "preserve-3d";
+    el.style.webkitTransformStyle = "preserve-3d";
+  }
+
   function applyFrame() {
     var progress = panelProgress();
     var angle = parentAngleForProgress(progress);
     var transform = "rotateX(" + angle + "deg) rotateY(0deg) rotateZ(0deg)";
 
-    rotateEl.style.transform = transform;
-    rotateEl.style.webkitTransform = transform;
-    rotateEl.style.transformStyle = "preserve-3d";
-    rotateEl.style.webkitTransformStyle = "preserve-3d";
+    applyRotationTransform(rotateEl, transform);
+    applyRotationTransform(cloudsRotateEl, transform);
 
     panels.forEach(function (panel, index) {
       setPanelVisual(panel, panelOpacity(index, progress));
     });
 
     if (worldEl) {
-      if (coarsePointer) {
-        worldEl.style.opacity = "0";
-        worldEl.style.visibility = "hidden";
-      } else {
-        worldEl.style.opacity = "1";
-        worldEl.style.visibility = "visible";
-      }
+      worldEl.style.opacity = "1";
+      worldEl.style.visibility = "visible";
     }
-
-    setIntroLayers(progress);
 
     if (coarsePointer) {
       resetGlobeCameraParallax();
-      resetSceneCameras();
     }
   }
 

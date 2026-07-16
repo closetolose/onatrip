@@ -136,20 +136,17 @@ body.gate-locked .karl-chapter-home {
 
 /* Karl chapter day panels — one label visible at a time */
 body.chapter-karl .page_panel {
-  backface-visibility: visible;
-  -webkit-backface-visibility: visible;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 body.chapter-karl .page_panel .item.pages {
   opacity: 0;
   visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   will-change: opacity, transform;
   transition: none;
-}
-
-body.chapter-karl .page_panel.page_a .item.pages {
-  opacity: 1;
-  visibility: visible;
 }
 
 body.chapter-karl .page_panel.page_day .karl-day-link {
@@ -172,8 +169,17 @@ body.chapter-karl .pages.tilt.axis {
 
 body.chapter-karl .page_panel .text_a,
 body.chapter-karl .page_panel .karl-day-link {
-  backface-visibility: visible;
-  -webkit-backface-visibility: visible;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Globe disc and skyline must stay visible on touch (customer requirement). */
+body.chapter-karl .world.axis,
+body.chapter-karl .axis.world,
+body.chapter-karl .buildings.tilt.axis {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block;
 }
 
 body.chapter-karl .karl-day-link {
@@ -219,25 +225,6 @@ body.chapter-karl .section_top + .section_middle .camera {
   pointer-events: none;
 }
 
-@media (pointer: coarse) {
-  body.chapter-karl .section_top + .section_middle .camera,
-  body.chapter-karl .section_middle .camera {
-    transform: none !important;
-    -webkit-transform: none !important;
-  }
-
-  body.chapter-karl .world.axis {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-  }
-
-  body.chapter-karl .buildings.tilt.axis,
-  body.chapter-karl .clouds.tilt.axis {
-    will-change: opacity;
-  }
-}
-
 body.chapter-karl .section_top + .section_middle .pages.tilt.axis,
 body.chapter-karl .section_top + .section_middle .pages.tilt.axis * {
   pointer-events: auto;
@@ -253,11 +240,6 @@ body.chapter-karl .karl-day-link {
 }
 
 @media screen and (max-width: 767px) {
-  html,
-  body.chapter-karl {
-    overflow-x: hidden;
-  }
-
   body.chapter-karl .text_a,
   body.chapter-karl .karl-day-link.text_a {
     font-size: clamp(1.75rem, 9vw, 2.5rem) !important;

@@ -240,6 +240,10 @@ def _chapter_color_style(colors: dict[str, str], chapter_id: str) -> str:
   body.chapter-karl-{chapter_id} .text_c {{
     color: var(--karl-text-on-globe);
   }}
+  body.chapter-karl-{chapter_id} .page_panel.page_a .text_a {{
+    color: var(--karl-ink) !important;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.35);
+  }}
   body.chapter-karl-{chapter_id} .menu_button {{
     color: var(--karl-ink);
   }}
