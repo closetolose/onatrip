@@ -52,6 +52,8 @@ DEFAULTS: dict[str, Any] = {
         "chapter_timeline_title": "Маршрут по дням",
         "chapter_cta": "Подробнее →",
         "day_back": "← К маршруту",
+        "karl_chapter_home": "← к карте",
+        "day_empty_placeholder": "Запись появится позже — пока только обложка дня.",
         "day_intro_label": "О дне",
         "day_schedule_label": "Расписание дня",
         "day_pager_prev": "← День {n}",

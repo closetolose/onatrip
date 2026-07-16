@@ -265,6 +265,7 @@ def _render_karl_html(
     media: dict | None,
     gate_html: str,
     extra_body: str,
+    home_label: str = "← Главная",
 ) -> str:
     if not TEMPLATE.exists():
         raise FileNotFoundError(
@@ -304,7 +305,7 @@ def _render_karl_html(
             f'  <meta name="theme-color" content="{colors["sky"]}">\n  '
             f"{_chapter_color_style(colors, chapter_id)}\n</head>",
         )
-        html = _inject_chapter_home_link(html)
+        html = _inject_chapter_home_link(html, home_label)
     elif chapter_id and gate_html:
         html = html.replace(
             '<link href="../karl/css/karlgonsalves.webflow.css" rel="stylesheet" type="text/css">',
@@ -325,6 +326,7 @@ def render_karl_chapter(
     page_title: str,
     gate_html: str,
     media: dict | None = None,
+    home_label: str = "← Главная",
 ) -> str:
     del vibe  # copy comes from karl_texts(), not trip fields
     return _render_karl_html(
@@ -334,6 +336,7 @@ def render_karl_chapter(
         chapter=chapter,
         media=media,
         gate_html=gate_html,
+        home_label=home_label,
         extra_body=(
             '  <script src="../assets/karl-chapter-days.js"></script>\n'
             '  <script src="../assets/app.js"></script>'
@@ -356,17 +359,20 @@ def render_karl_mirror() -> str:
 
 KARL_CHAPTER_IDS = frozenset({"thailand", "vietnam", "china"})
 
-_HOME_LINK = (
-    '<a href="../index.html" class="karl-chapter-home" aria-label="На главную с плитками">'
-    "← Главная</a>"
-)
+def _home_link_html(label: str) -> str:
+    text = label.strip() or "← Главная"
+    return (
+        '<a href="../index.html" class="karl-chapter-home" aria-label="На главную с плитками">'
+        f"{escape(text)}</a>"
+    )
 
 
-def _inject_chapter_home_link(html: str) -> str:
-    """Small corner control back to the tile map (index.html)."""
+def _inject_chapter_home_link(html: str, home_label: str) -> str:
+    """Corner home control back to the tile map."""
+    link = _home_link_html(home_label)
     return re.sub(
         r"(<body[^>]*chapter-karl[^>]*>)",
-        rf"\1\n  {_HOME_LINK}",
+        rf"\1\n  {link}",
         html,
         count=1,
     )

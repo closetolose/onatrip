@@ -1,6 +1,10 @@
 (function () {
   "use strict";
 
+  function prefersReducedMotion() {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
   function initCarousel(root) {
     var track = root.querySelector(".day-carousel-track");
     var slides = Array.prototype.slice.call(root.querySelectorAll(".day-carousel-slide"));
@@ -82,5 +86,94 @@
     updateDots();
   }
 
+  function initReveal() {
+    if (prefersReducedMotion()) return;
+
+    var blocks = Array.prototype.slice.call(
+      document.querySelectorAll(".day-story > .day-block")
+    );
+    if (!blocks.length) return;
+
+    blocks.forEach(function (block) {
+      block.classList.add("day-reveal-pending");
+    });
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("day-reveal-visible");
+          entry.target.classList.remove("day-reveal-pending");
+          observer.unobserve(entry.target);
+        });
+      },
+      { root: null, rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
+    );
+
+    blocks.forEach(function (block) {
+      observer.observe(block);
+    });
+  }
+
+  function initParallax() {
+    if (prefersReducedMotion()) return;
+
+    var cover = document.querySelector(".day-cover--has-image");
+    var coverInner = cover ? cover.querySelector(".day-cover-inner") : null;
+    var photoFrames = Array.prototype.slice.call(
+      document.querySelectorAll("[data-parallax-photo]")
+    );
+    var ticking = false;
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function update() {
+      var scrollY = window.scrollY || window.pageYOffset;
+      var viewportH = window.innerHeight;
+
+      if (cover) {
+        var coverRect = cover.getBoundingClientRect();
+        var coverHeight = cover.offsetHeight || 1;
+        var localScroll = clamp(scrollY, 0, coverHeight);
+        var progress = localScroll / coverHeight;
+
+        cover.style.setProperty("--day-cover-shift", (localScroll * 0.38) + "px");
+        cover.style.setProperty("--day-cover-scale", String(1.08 + progress * 0.05));
+
+        if (coverInner) {
+          cover.style.setProperty("--day-cover-text-shift", (localScroll * 0.16) + "px");
+          cover.style.setProperty(
+            "--day-cover-text-opacity",
+            String(1 - clamp(progress * 1.15, 0, 1))
+          );
+        }
+      }
+
+      photoFrames.forEach(function (frame) {
+        var rect = frame.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > viewportH) return;
+        var center = rect.top + rect.height * 0.5;
+        var offset = (center - viewportH * 0.5) * 0.14;
+        frame.style.setProperty("--day-photo-shift", offset.toFixed(2) + "px");
+      });
+
+      ticking = false;
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+  }
+
   document.querySelectorAll("[data-carousel]").forEach(initCarousel);
+  initReveal();
+  initParallax();
 })();

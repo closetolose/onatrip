@@ -1001,6 +1001,33 @@ input[type="text"]:focus {
   min-height: 120px;
 }
 
+.block-section .section-fields {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.block-section .section-kicker,
+.block-section .section-title,
+.block-section .section-content {
+  width: 100%;
+  font: inherit;
+}
+
+.block-section .section-kicker,
+.block-section .section-title {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.block-section .section-content {
+  padding: 0.65rem 0.7rem;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  resize: vertical;
+  min-height: 120px;
+}
+
 @media (max-width: 720px) {
   .block-side .side-layout {
     grid-template-columns: 1fr;

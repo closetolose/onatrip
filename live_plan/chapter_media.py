@@ -24,7 +24,7 @@ DEFAULT_ENTRY: dict[str, Any] = {
     "karl": {},
 }
 
-from live_plan.chapter_vibes import KARL_COLOR_KEYS, KARL_TEXT_KEYS
+from live_plan.chapter_vibes import KARL_COLOR_KEYS, KARL_TEXT_KEYS, chapter_vibe, karl_colors
 
 KARL_KEYS = KARL_TEXT_KEYS + KARL_COLOR_KEYS
 
@@ -129,6 +129,17 @@ def public_image_url(url: str) -> str:
     return url
 
 
+def day_page_vibe(chapter_id: str, media: dict[str, Any] | None = None) -> dict[str, str]:
+    """Sky / ink / globe tokens for NYT day pages (Karl + diorama chapters)."""
+    from live_plan.karl_index import KARL_CHAPTER_IDS
+
+    if chapter_id in KARL_CHAPTER_IDS:
+        colors = karl_colors(chapter_id, media)
+        return {"sky": colors["sky"], "ink": colors["ink"], "globe": colors["globe"]}
+    vibe = chapter_vibe(chapter_id, media)
+    return {"sky": vibe["sky"], "ink": vibe["ink"], "globe": vibe["globe"]}
+
+
 def apply_chapter_overrides(chapter: dict, media: dict[str, Any] | None = None) -> dict:
     entry = chapter_entry(chapter["id"], media)
     result = deepcopy(chapter)
@@ -154,4 +165,5 @@ def apply_chapter_overrides(chapter: dict, media: dict[str, Any] | None = None) 
                 day_copy[key] = override[key]
         days.append(day_copy)
     result["days"] = days
+    result["day_vibe"] = day_page_vibe(chapter["id"], media)
     return result

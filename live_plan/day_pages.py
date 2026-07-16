@@ -137,15 +137,19 @@ def public_day_tag(_city: str = "", _steps: list[dict] | None = None) -> str:
     return ""
 
 
-def default_hero(day: dict, region_name: str) -> dict[str, str]:
+def hero_meta(day: dict) -> str:
+    """Canonical hero meta: `{date_short} · {weekday}`."""
     date = day.get("date", "")
     date_short = date[:5] if len(date) >= 5 else date
     weekday = day.get("weekday", "")
-    meta = f"{date_short} · {weekday}".strip(" ·")
+    return f"{date_short} · {weekday}".strip(" ·")
+
+
+def default_hero(day: dict, region_name: str) -> dict[str, str]:
     return {
         "eyebrow": f"День {day.get('num', '')} · {region_name}".strip(" ·"),
         "title": sanitize_text(day.get("city", "")),
-        "meta": meta,
+        "meta": hero_meta(day),
     }
 
 
@@ -157,7 +161,7 @@ def hero_from_entry(entry: dict, day: dict, region_name: str) -> dict[str, str]:
     return {
         "eyebrow": saved["eyebrow"] or defaults["eyebrow"],
         "title": saved["title"] or defaults["title"],
-        "meta": saved["meta"] or defaults["meta"],
+        "meta": hero_meta(day),
     }
 
 
@@ -195,6 +199,27 @@ def _public_photo_block(block: dict) -> dict:
     }
 
 
+def dedupe_cover_photo(blocks: list[dict], cover_url: str) -> list[dict]:
+    """Drop the first photo block when it duplicates the hero cover."""
+    if not cover_url or not blocks:
+        return blocks
+    for index, block in enumerate(blocks):
+        if block.get("type") == "photo":
+            if block.get("url") == cover_url:
+                return blocks[:index] + blocks[index + 1 :]
+            break
+        if block.get("type") == "carousel":
+            photos = block.get("photos") or []
+            if photos and photos[0].get("url") == cover_url:
+                if len(photos) == 1:
+                    return blocks[:index] + blocks[index + 1 :]
+                trimmed = dict(block)
+                trimmed["photos"] = photos[1:]
+                return blocks[:index] + [trimmed] + blocks[index + 1 :]
+            break
+    return blocks
+
+
 def public_blocks(day_num: int, region: str, city: str, entry: dict) -> list[dict]:
     """Ordered longread blocks for the public day page."""
     result: list[dict] = []
@@ -228,8 +253,54 @@ def public_blocks(day_num: int, region: str, city: str, entry: dict) -> list[dic
                 "caption": sanitize_text(block.get("caption", "")),
                 "content": content,
             })
+        elif block_type == "section":
+            kicker = sanitize_text(block.get("kicker", ""))
+            title = sanitize_text(block.get("title", ""))
+            content = sanitize_text(block.get("content", ""))
+            if not kicker and not title and not content:
+                continue
+            result.append({
+                "type": "section",
+                "kicker": kicker,
+                "title": title,
+                "content": content,
+            })
 
     return result
+
+
+def public_blocks_with_cover(
+    day_num: int,
+    region: str,
+    city: str,
+    entry: dict,
+) -> tuple[list[dict], str]:
+    """Public blocks plus hero cover URL (deduped against the same cover)."""
+    blocks = public_blocks(day_num, region, city, entry)
+    cover = cover_image_url(entry, blocks)
+    return dedupe_cover_photo(blocks, cover), cover
+
+
+def is_story_empty(blocks: list[dict]) -> bool:
+    return not blocks
+
+
+def cover_image_url(entry: dict, blocks: list[dict]) -> str:
+    """Hero cover: explicit hero.cover or first photo in blocks."""
+    hero = entry.get("hero") or {}
+    explicit = str(hero.get("cover") or hero.get("cover_url") or "").strip()
+    if explicit:
+        return public_photo_url(explicit)
+    for block in blocks:
+        if block.get("type") == "photo" and block.get("url"):
+            return block["url"]
+        if block.get("type") == "carousel":
+            photos = block.get("photos") or []
+            if photos and photos[0].get("url"):
+                return photos[0]["url"]
+        if block.get("type") == "side" and block.get("url"):
+            return block["url"]
+    return ""
 
 
 def photos_from_media(day_num: int, region: str, city: str, entry: dict) -> list[dict]:

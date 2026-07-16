@@ -1,3 +1,5 @@
+@import "tokens.css";
+
 /* Corner link back to tile map (index.html) */
 .karl-chapter-home {
   position: fixed;
@@ -41,7 +43,7 @@ body.gate-locked .karl-chapter-home {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(35, 33, 44, 0.55);
+  background: var(--gate-backdrop);
   padding: 1.25rem;
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
@@ -49,9 +51,9 @@ body.gate-locked .karl-chapter-home {
 .gate-overlay__panel {
   width: min(100%, 28rem);
   padding: 1.5rem 1.25rem;
-  background: #efe4cf;
-  border-radius: 12px;
-  border: 2px solid #23212c;
+  background: var(--gate-surface);
+  border-radius: var(--gate-radius);
+  border: 2px solid var(--color-charcoal);
 }
 
 .gate-eyebrow {
@@ -60,20 +62,20 @@ body.gate-locked .karl-chapter-home {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: color-mix(in srgb, #23212c 72%, white);
+  color: color-mix(in srgb, var(--color-charcoal) 72%, white);
 }
 
 .gate-title {
   margin: 0 0 0.5rem;
   font-size: 1.35rem;
   line-height: 1.2;
-  color: #23212c;
+  color: var(--color-charcoal);
 }
 
 .gate-hint {
   margin: 0 0 1rem;
   font-size: 0.92rem;
-  color: color-mix(in srgb, #23212c 72%, white);
+  color: color-mix(in srgb, var(--color-charcoal) 72%, white);
 }
 
 .gate-form {
@@ -86,11 +88,11 @@ body.gate-locked .karl-chapter-home {
   flex: 1 1 10rem;
   min-width: 0;
   padding: 0.65rem 0.85rem;
-  border: 2px solid #23212c;
+  border: 2px solid var(--color-charcoal);
   border-radius: 6px;
   font: inherit;
-  background: #f5edd9;
-  color: #23212c;
+  background: var(--color-surface-inset);
+  color: var(--color-charcoal);
 }
 
 .gate-button {
@@ -100,19 +102,19 @@ body.gate-locked .karl-chapter-home {
   font: inherit;
   font-weight: 700;
   cursor: pointer;
-  background: #006434;
-  color: #fff;
+  background: var(--color-pine);
+  color: var(--color-snow);
 }
 
 .gate-button:hover {
-  background: #23212c;
+  background: var(--color-charcoal);
 }
 
 .gate-error {
   margin: 0.75rem 0 0;
   font-size: 0.88rem;
   font-weight: 600;
-  color: #dd5000;
+  color: var(--color-ember);
 }
 
 .gate-sr-only {
@@ -152,17 +154,11 @@ body.chapter-karl .page_panel.page_a .item.pages {
 
 body.chapter-karl .page_panel.page_day .karl-day-link {
   color: var(--karl-ink) !important;
-  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.9);
-  paint-order: stroke fill;
-  text-shadow:
-    0 0 14px rgba(255, 255, 255, 0.95),
-    0 0 28px rgba(255, 255, 255, 0.75),
-    0 2px 6px rgba(0, 0, 0, 0.35);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
 }
 
 body.chapter-karl .page_panel.page_day .karl-day-link:hover {
   color: var(--karl-text-on-sky) !important;
-  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.95);
 }
 
 /* Text panels must paint above the globe disc */
@@ -223,6 +219,13 @@ body.chapter-karl .section_top + .section_middle .camera {
   pointer-events: none;
 }
 
+@media (pointer: coarse) {
+  body.chapter-karl .section_top + .section_middle .camera {
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+}
+
 body.chapter-karl .section_top + .section_middle .pages.tilt.axis,
 body.chapter-karl .section_top + .section_middle .pages.tilt.axis * {
   pointer-events: auto;
@@ -235,4 +238,32 @@ body.chapter-karl .karl-day-link {
   width: 100%;
   padding: 0.35em 0;
   text-align: center;
+}
+
+@media screen and (max-width: 767px) {
+  html,
+  body.chapter-karl {
+    overflow-x: clip;
+  }
+
+  body.chapter-karl .text_a,
+  body.chapter-karl .karl-day-link.text_a {
+    font-size: clamp(1.75rem, 9vw, 2.5rem) !important;
+    line-height: 1.15 !important;
+  }
+
+  body.chapter-karl .karl-day-link {
+    padding: 0.65em 0.25em;
+    min-height: 2.75rem;
+  }
+
+  .karl-chapter-home {
+    top: max(0.65rem, env(safe-area-inset-top, 0px));
+    left: max(0.65rem, env(safe-area-inset-left, 0px));
+    padding: 0.55rem 0.85rem;
+    font-size: 13px;
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+  }
 }

@@ -22,7 +22,7 @@ from live_plan.day_pages import (
     load_day_media,
     media_entry,
     missing_media_files,
-    public_blocks,
+    public_blocks_with_cover,
     verify_day_output,
 )
 from live_plan.layout import load_layout, render_layout_css
@@ -124,6 +124,7 @@ def render_chapter_pages(trip: dict, site: dict, theme_color: str) -> None:
                 page_title=f"{chapter['title']} · {meta['period']}",
                 gate_html=gate_html,
                 media=chapter_media,
+                home_label=copy.get("karl_chapter_home", "← Главная"),
             )
         else:
             html = diorama_template.render(
@@ -172,7 +173,9 @@ def render_day_pages(trip: dict, site: dict, theme_color: str, day_media: dict) 
         region_name = REGION[region_key]["name"]
         public_day = blank_public_day(raw, entry, region_name)
 
-        blocks_out = public_blocks(day_num, public_day["region"], public_day["city"], entry)
+        blocks_out, cover_url = public_blocks_with_cover(
+            day_num, public_day["region"], public_day["city"], entry
+        )
         verify_day_output({"day": public_day, "blocks": blocks_out})
 
         html = template.render(
@@ -180,6 +183,7 @@ def render_day_pages(trip: dict, site: dict, theme_color: str, day_media: dict) 
             chapter=chapter,
             region=REGION[region_key],
             blocks=blocks_out,
+            cover_url=cover_url,
             prev_day=prev_day,
             next_day=next_day,
             copy=copy,

@@ -73,6 +73,17 @@ def clean_blocks(blocks: list) -> list[dict]:
                     "caption": (block.get("caption") or "").strip(),
                     "content": content,
                 })
+        elif block_type == "section":
+            kicker = (block.get("kicker") or "").strip()
+            title = (block.get("title") or "").strip()
+            content = (block.get("content") or "").strip()
+            if kicker or title or content:
+                cleaned.append({
+                    "type": "section",
+                    "kicker": kicker,
+                    "title": title,
+                    "content": content,
+                })
     return cleaned
 
 

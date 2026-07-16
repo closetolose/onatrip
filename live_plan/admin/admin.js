@@ -129,6 +129,17 @@
         content: sideTa ? sideTa.value.trim() : (block.content || "").trim(),
       };
     }
+    if (block.type === "section") {
+      var kickerInput = node.querySelector(".section-kicker");
+      var titleInput = node.querySelector(".section-title");
+      var sectionTa = node.querySelector(".section-content");
+      return {
+        type: "section",
+        kicker: kickerInput ? kickerInput.value.trim() : (block.kicker || "").trim(),
+        title: titleInput ? titleInput.value.trim() : (block.title || "").trim(),
+        content: sectionTa ? sectionTa.value.trim() : (block.content || "").trim(),
+      };
+    }
     return null;
   }
 
@@ -240,6 +251,21 @@
           '<textarea class="side-content" rows="5" placeholder="Текст рядом с фото"></textarea>' +
           "</div>";
         item.querySelector(".side-content").value = block.content || "";
+      } else if (block.type === "section") {
+        item.innerHTML =
+          '<div class="block-head">' +
+          '<span class="block-type">Секция</span>' +
+          '<span class="drag-handle">⠿</span>' +
+          '<button type="button" class="icon-btn block-delete" title="Удалить">✕</button>' +
+          "</div>" +
+          '<div class="section-fields">' +
+          '<input type="text" class="section-kicker" placeholder="Место / время (напр. Утро, Бангкок)" value="' +
+          escapeAttr(block.kicker || "") + '">' +
+          '<input type="text" class="section-title" placeholder="Заголовок секции" value="' +
+          escapeAttr(block.title || "") + '">' +
+          '<textarea class="section-content" rows="5" placeholder="Текст секции"></textarea>' +
+          "</div>";
+        item.querySelector(".section-content").value = block.content || "";
       }
 
       item.querySelector(".block-delete").addEventListener("click", function (e) {
@@ -395,6 +421,14 @@
           content: b.content || "",
         };
       }
+      if (b.type === "section") {
+        return {
+          type: "section",
+          kicker: b.kicker || "",
+          title: b.title || "",
+          content: b.content || "",
+        };
+      }
       return null;
     }).filter(Boolean);
 
@@ -471,6 +505,18 @@
             content: sideText,
           });
         }
+      } else if (block.type === "section") {
+        var kicker = (block.kicker || "").trim();
+        var title = (block.title || "").trim();
+        var sectionText = (block.content || "").trim();
+        if (kicker || title || sectionText) {
+          cleaned.push({
+            type: "section",
+            kicker: kicker,
+            title: title,
+            content: sectionText,
+          });
+        }
       }
     });
     return cleaned;
@@ -506,6 +552,14 @@
             caption: (photo.caption || "").trim(),
           };
         }),
+      };
+    }
+    if (block.type === "section") {
+      return {
+        type: "section",
+        kicker: (block.kicker || "").trim(),
+        title: (block.title || "").trim(),
+        content: (block.content || "").trim(),
       };
     }
     return block;
@@ -616,6 +670,15 @@
         setStatus("Фото добавлено в карусель. Нажми «Сохранить».", "ok");
       })
       .catch(function () { setStatus("Ошибка загрузки", "err"); });
+  }
+
+  function addSectionBlock() {
+    syncBlocksFromDomIfPresent();
+    blocks.push({ type: "section", kicker: "", title: "", content: "" });
+    renderBlocks();
+    var last = els.blocksList.querySelector(".block-item:last-child .section-kicker");
+    if (last) last.focus();
+    setStatus("Секция добавлена — как в NYT: место, заголовок, текст.", "ok");
   }
 
   function addCarouselBlock() {
@@ -892,6 +955,7 @@
   }
 
   document.getElementById("btn-add-text").addEventListener("click", addTextBlock);
+  document.getElementById("btn-add-section").addEventListener("click", addSectionBlock);
   document.getElementById("btn-add-carousel").addEventListener("click", addCarouselBlock);
   document.getElementById("btn-add-side").addEventListener("click", addSideBlock);
   document.getElementById("btn-save").addEventListener("click", saveDay);
